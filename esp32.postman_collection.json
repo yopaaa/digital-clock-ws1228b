@@ -1,0 +1,299 @@
+{
+	"info": {
+		"_postman_id": "b3b85949-c798-47df-a29b-2779deeba401",
+		"name": "esp32",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/led2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/led2?state=on",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"led2"
+					],
+					"query": [
+						{
+							"key": "state",
+							"value": "on"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/listdir",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/led2?state=on",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"led2"
+					],
+					"query": [
+						{
+							"key": "state",
+							"value": "on"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/led2?state=on",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"led2"
+					],
+					"query": [
+						{
+							"key": "state",
+							"value": "on"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/mode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/led2?state=on",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"led2"
+					],
+					"query": [
+						{
+							"key": "state",
+							"value": "on"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/color",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/color?red=100&green=100&blue=0",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"color"
+					],
+					"query": [
+						{
+							"key": "red",
+							"value": "100"
+						},
+						{
+							"key": "green",
+							"value": "100"
+						},
+						{
+							"key": "blue",
+							"value": "0"
+						},
+						{
+							"key": "brightness",
+							"value": "200",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/brightness",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/color?red=100&green=100&blue=0",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"color"
+					],
+					"query": [
+						{
+							"key": "red",
+							"value": "100"
+						},
+						{
+							"key": "green",
+							"value": "100"
+						},
+						{
+							"key": "blue",
+							"value": "0"
+						},
+						{
+							"key": "brightness",
+							"value": "200",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/timeformat",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/color?red=100&green=100&blue=0",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"color"
+					],
+					"query": [
+						{
+							"key": "red",
+							"value": "100"
+						},
+						{
+							"key": "green",
+							"value": "100"
+						},
+						{
+							"key": "blue",
+							"value": "0"
+						},
+						{
+							"key": "brightness",
+							"value": "200",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/resetall",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/resetall",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"resetall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/restart",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/resetall",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"resetall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/set/wifi",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/set/wifi?ssid=vivo1904&password=pYH7ZZRBWTwxLfxKELvJfDeDduYcQ4kM8eTdTJrJsJ2Q2evCwB",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"set",
+						"wifi"
+					],
+					"query": [
+						{
+							"key": "ssid",
+							"value": "vivo1904"
+						},
+						{
+							"key": "password",
+							"value": "pYH7ZZRBWTwxLfxKELvJfDeDduYcQ4kM8eTdTJrJsJ2Q2evCwB"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/wifi/scan",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ip}}/set/wifi?ssid=vivo1904&password=pYH7ZZRBWTwxLfxKELvJfDeDduYcQ4kM8eTdTJrJsJ2Q2evCwB",
+					"host": [
+						"{{ip}}"
+					],
+					"path": [
+						"set",
+						"wifi"
+					],
+					"query": [
+						{
+							"key": "ssid",
+							"value": "vivo1904"
+						},
+						{
+							"key": "password",
+							"value": "pYH7ZZRBWTwxLfxKELvJfDeDduYcQ4kM8eTdTJrJsJ2Q2evCwB"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

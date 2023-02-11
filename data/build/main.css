@@ -1,0 +1,1 @@
+@font-face{font-family:MyFont;src:url(/UbuntuMono.ttf) format("truetype")}*{font-family:MyFont}body{background-color:#902b00}.color-container>input{height:100px;width:100px}.sketchpicker{-webkit-user-select:none;user-select:none}.navigation-container{display:flex;justify-content:space-evenly;padding-bottom:20px;text-decoration:underline}
