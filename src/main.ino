@@ -16,7 +16,7 @@
 #define DOTS_PIN 12
 #define NUM_DOTS 2
 
-String CodeVersion = "v1.2.0";
+String CodeVersion = "v1.3.1";
 // VARIABLE FOR WIFI AP
 String ssid = "";
 String password = "";
@@ -57,7 +57,8 @@ const int Frame[][7] = {
     {1, 1, 1, 1, 1, 0, 1}, // Number 9
     {0, 0, 0, 0, 0, 0, 0}, // Digit off
     {1, 1, 0, 0, 1, 1, 1}, // Alfabet E
-    {1, 1, 0, 0, 0, 1, 0}  // Alfabet r
+    {1, 1, 0, 0, 0, 1, 0}, // Alfabet r
+    {0, 0, 0, 0, 1, 0, 0}, // Simbol _
 };
 
 byte RED = 255;
@@ -82,9 +83,15 @@ void setup()
   EEPROM.begin(512);
   SPIFFS.begin();
   Wire.begin();
+  initPin();
   FastLED.addLeds<LED_TYPE, LED_PIN, GRB>(leds, NUM_LEDS);
   FastLED.addLeds<LED_TYPE, DOTS_PIN, GRB>(Dots, NUM_DOTS);
   FastLED.setBrightness(BRIGHTNESS); // SET BRIGHTNESS FROM EEPROM VALUE
+
+  if (!SPIFFS.begin(true)) {
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
   if (EEPROM.read(1) == 0) defaultState(); // TO SETUP FIRST RUNING EEPROM
   if (EEPROM.read(TIME_FORMAT_ADDRESS) == 0){
     timeFormat = 24;
@@ -106,8 +113,12 @@ void setup()
   listDir("/", 0);
   startWifi(0); // STA WIFI
   httpHandler();
+}
+
+void initPin(){
   pinMode(2, OUTPUT);
   pinMode(startWifiApBtn, INPUT);
+  return;
 }
 
 void defaultState()
@@ -146,6 +157,7 @@ void saveWifiCredentials(const char *ssid, const char *password) {
   // Commit the changes to EEPROM
   EEPROM.commit();
 }
+
 void startWifi(int wifiMode){
   if (wifiMode == 1)
   { // wifi access point mode if mode = 1
@@ -178,7 +190,7 @@ void startWifi(int wifiMode){
       Serial.println(ssid);
       // Serial.print("----- pwd:");
       // Serial.println(password);
-
+      digitalWrite(2, HIGH); // turn on led 
       int buttonState = digitalRead(startWifiApBtn);
       if (buttonState == HIGH) {
         startWifi(1);
@@ -193,10 +205,44 @@ void startWifi(int wifiMode){
       delay(1000);
     }
 
+    digitalWrite(2, LOW); // turn off led
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
     Serial.println("Connected to WiFi");
     Serial.print("Ip address : ");
-    Serial.println(WiFi.localIP());
+
+    IPAddress localIP = WiFi.localIP();
+    Serial.println(localIP); 
+
+    // print ip address to display
+    for (int i = 0; i < 4; i++)
+    {
+      int octet = (int)localIP[i];
+      BlankDisplay(50);
+      if (octet > 99) // example 123
+      {
+        int firstDigit = octet / 100;
+        int secondDigit = (octet % 100) / 10;
+        int thirdDigit = octet % 10;
+
+        SetNumber(1, 13); // print _
+        SetNumber(2, firstDigit);
+        SetNumber(3, secondDigit);
+        SetNumber(4, thirdDigit);
+      } else if (octet > 9) // example 67
+      {
+        int firstDigit = octet / 10;
+        int secondDigit = octet % 10;
+
+        SetNumber(2, 13); // print _
+        SetNumber(3, firstDigit);
+        SetNumber(4, secondDigit);
+      } else { // example 8
+        SetNumber(2, 13); // print _
+        SetNumber(4, octet);
+      }
+      delay(1000);
+    }
+    delay(2000);
     return;
   }
 }
@@ -205,6 +251,15 @@ void startWifi(int wifiMode){
 void httpHandler()
 {
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/build/index.html", "text/html"); 
+  });
+  server.on("/color", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/build/index.html", "text/html"); 
+  });
+  server.on("/mode", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/build/index.html", "text/html"); 
+  });
+  server.on("/setting", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(SPIFFS, "/build/index.html", "text/html"); 
   });
   server.serveStatic("/", SPIFFS, "/build");
@@ -326,6 +381,7 @@ void httpHandler()
   server.onNotFound([](AsyncWebServerRequest *request) {
     request->send(404, "application/json", "{\"status\": \"Not found\"}"); 
   });
+
 
   server.begin();
   Serial.println("Server started");
@@ -535,12 +591,14 @@ void BlinkDots(){
   isBlink = !isBlink;
   return;
 }
+
 void BlankDots(){
   for (int i = 0; i < NUM_DOTS; i++) {
     Dots[i] = CRGB(0, 0, 0);
   }
   return;
 }
+
 void ShowDots(){
   for (int i = 0; i < NUM_DOTS; i++) {
     Dots[i] = CRGB(RED, GREEN, BLUE);
