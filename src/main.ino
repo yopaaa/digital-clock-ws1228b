@@ -362,6 +362,7 @@ void httpHandler()
         counterLimit = limit;
         BlankDots();
       } else if (mode == 3) { // count down mode
+        BlankDisplay(0);
         countDownCount = limit;
         BlankDots();
       }
@@ -485,7 +486,6 @@ void printCountDown()
   {
     if (countDownCount < 10)
     { // 0-9
-      BlankDisplay(0);
       SetNumber(4, countDownCount);
     }
     else if ((countDownCount > 9) && (countDownCount < 100))
