@@ -3,6 +3,7 @@
 #include <EEPROM.h>
 #include <AsyncElegantOTA.h>
 #include <FastLED.h>
+#include <ArduinoJson.h>
 #include "HttpHandler.h"
 #include "EEPROMFunc.h"
 #include "../Var.h"
@@ -11,18 +12,78 @@
 AsyncWebServer server(3000);
 bool LED2_State = false;
 
-// WEB SERVER FUNCTION
+void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+  // Check if this is the first data packet
+  if (index == 0)
+  {
+    // Create a DynamicJsonDocument object with the same size as the incoming JSON data
+    DynamicJsonDocument jsonDoc(len);
+    // Parse the incoming JSON data into the DynamicJsonDocument object
+    DeserializationError error = deserializeJson(jsonDoc, data);
+    // Check if the JSON parsing was successful
+    if (error)
+    {
+      // Return a bad request response if the JSON is invalid
+      request->send(400, "text/plain", "Bad Request");
+      return;
+    }
+
+    DynamicJsonDocument json(1024);
+    json["name"] = jsonDoc["name"].as<String>();
+    json["age"] = jsonDoc["age"].as<int>();
+    json["message"] = "OK";
+    json["version"] = request->version();
+    json["method"] = request->method();
+    json["url"] = request->url();
+    json["host"] = request->host();
+    json["contentType"] = request->contentType();
+    json["contentLength"] = request->contentLength();
+    json["multipart"] = request->multipart();
+
+    String jsonString;
+    serializeJson(json, jsonString);
+
+    request->send(200, "application/json", jsonString);
+  }
+}
+
+void handlePing(AsyncWebServerRequest *request)
+{
+  DynamicJsonDocument json(1024);
+  json["message"] = "OK";
+  json["CodeVersion"] = CodeVersion;
+  json["CycleCount"] = ESP.getCycleCount();
+  json["ChipModel"] = ESP.getChipModel();
+  json["SketchSize"] = ESP.getSketchSize();
+  json["version"] = request->version();
+  json["method"] = request->method();
+  json["url"] = request->url();
+  json["host"] = request->host();
+  json["contentType"] = request->contentType();
+  json["contentLength"] = request->contentLength();
+  json["multipart"] = request->multipart();
+
+  String jsonString;
+  serializeJson(json, jsonString);
+
+  request->send(200, "application/json", jsonString);
+}
+
 void httpHandler()
 {
-    server.on("/resetall", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "content-type");
+
+  server.on("/resetall", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     defaultState();
     request->send(200, "application/json", "{}"); 
     delay(500);
     ESP.restart(); });
 
-    server.on("/wifi/set", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
+  server.on("/wifi/set", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     bool valuesExist = (request->hasArg("ssid")) && (request->hasArg("password"));
 
     if (valuesExist){
@@ -36,18 +97,18 @@ void httpHandler()
     } else {
       request->send(400, "application/json", "{\"status\": \"Bad request\"}");
     } });
+  server.onRequestBody(handleRequest);
 
-    server.on("/ping", HTTP_GET, [](AsyncWebServerRequest *request)
-              { request->send(200, "application/json", "{\"status\": \"OK\"}"); });
+  server.on("/ping", HTTP_GET, handlePing);
 
-    server.on("/led2", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
+  server.on("/led2", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     LED2_State = !LED2_State;
     digitalWrite(2, LED2_State);
     request->send(200, "application/json", "{\"status\": \"OK\"}"); });
 
-    server.on("/color/change", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
+  server.on("/color/change", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     bool valuesExist = (request->hasArg("red")) && (request->hasArg("green")) && (request->hasArg("blue")) && (request->hasArg("brightness"));
 
     if (valuesExist){
@@ -80,16 +141,15 @@ void httpHandler()
       request->send(400, "application/json", "{\"status\": \"Bad request\"}");
     } });
 
-    server.on("/color/mode", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
+  server.on("/color/mode", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
                   String mode = request->arg("mode");
 
                   ColorMode = mode;
-                  request->send(200, "application/json", "{\"status\": \"OK\"}");
-              });
+                  request->send(200, "application/json", "{\"status\": \"OK\"}"); });
 
-    server.on("/brightness", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
+  server.on("/brightness", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     bool valuesExist = (request->hasArg("brightness"));
 
     if (valuesExist){
@@ -101,8 +161,8 @@ void httpHandler()
       request->send(400, "application/json", "{\"status\": \"Bad request\"}");
     } });
 
-    server.on("/timeformat", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
+  server.on("/timeformat", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     if (request->hasArg("format")){
       int mode = atoi(request->arg("format").c_str());
       timeFormat = mode;
@@ -114,8 +174,8 @@ void httpHandler()
       request->send(400, "application/json", "{\"status\": \"Bad request\"}");
     } });
 
-    server.on("/mode", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
+  server.on("/mode", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     if (request->hasArg("mode")){
       int mode = atoi(request->arg("mode").c_str());
       int limit = atoi(request->arg("limit").c_str());
@@ -136,16 +196,16 @@ void httpHandler()
       request->send(400, "application/json", "{\"status\": \"Bad request\"}");
     } });
 
-    server.on("/restart", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
+  server.on("/restart", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
     request->send(200, "application/json", "{\"status\": \"OK\"}");
     delay(500);
     ESP.restart(); });
 
-    server.onNotFound([](AsyncWebServerRequest *request)
-                      { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });
+  server.onNotFound([](AsyncWebServerRequest *request)
+                    { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });
 
-    AsyncElegantOTA.begin(&server, APssid, APpassword);
-    server.begin();
-    Serial.println("Server started");
+  AsyncElegantOTA.begin(&server, APssid, APpassword);
+  server.begin();
+  Serial.println("Server started");
 }

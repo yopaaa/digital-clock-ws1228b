@@ -15,4 +15,8 @@ void refreshColor();
 void ErrorDisplay(int one, int two);
 void SetNumber(int segment, int num);
 
+void printLocalTime();
+void printCounter();
+void printCountDown();
+
 #endif

@@ -11,22 +11,6 @@
 #define DOTS_PIN 12
 #define NUM_DOTS 2
 
-const int Frame[][7] = {
-    {1, 1, 1, 1, 1, 1, 0}, // Number 0
-    {0, 0, 1, 1, 0, 0, 0}, // Number 1
-    {0, 1, 1, 0, 1, 1, 1}, // Number 2
-    {0, 1, 1, 1, 1, 0, 1}, // Number 3
-    {1, 0, 1, 1, 0, 0, 1}, // Number 4
-    {1, 1, 0, 1, 1, 0, 1}, // Number 5
-    {1, 1, 0, 1, 1, 1, 1}, // Number 6
-    {0, 1, 1, 1, 0, 0, 0}, // Number 7
-    {1, 1, 1, 1, 1, 1, 1}, // Number 8
-    {1, 1, 1, 1, 1, 0, 1}, // Number 9
-    {0, 0, 0, 0, 0, 0, 0}, // Digit off
-    {1, 1, 0, 0, 1, 1, 1}, // Alfabet E
-    {1, 1, 0, 0, 0, 1, 0}, // Alfabet r
-    {0, 0, 0, 0, 1, 0, 0}, // Simbol _
-};
 
 extern String CodeVersion;
 extern String ssid;
