@@ -50,7 +50,7 @@ void startWifiSta()
         Serial.println(ssid);
         ShowDotsRgb(0, 0, 255);
 
-        if (digitalRead(startWifiApBtn) == LOW)
+        if (digitalRead(WIFI_AP_BTN) == LOW)
         {
             startWifiAp();
             return;

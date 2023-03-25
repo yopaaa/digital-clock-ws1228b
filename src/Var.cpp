@@ -26,7 +26,6 @@ byte BLUE = 0;
 byte BRIGHTNESS = 100;
 
 String ColorMode = "";
-const int startWifiApBtn = 2;
 
 String displayMode = "clock";
 int RefreshDelay = 1000;

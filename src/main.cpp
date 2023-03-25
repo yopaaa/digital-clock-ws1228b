@@ -10,7 +10,6 @@
 #include "./lib/EEPROMFunc.h"
 #include "./lib/WifiFunc.h"
 
-// SETUP FUNCTION
 void setup()
 {
   Serial.begin(9600);
@@ -18,26 +17,16 @@ void setup()
   Wire.begin();
   FastLED.addLeds<LED_TYPE, LED_PIN, GRB>(leds, NUM_LEDS);
   FastLED.addLeds<LED_TYPE, DOTS_PIN, GRB>(Dots, NUM_DOTS);
-  FastLED.setBrightness(BRIGHTNESS); // SET BRIGHTNESS FROM EEPROM VALUE
+  FastLED.setBrightness(BRIGHTNESS);
 
   if (EEPROM.read(1) == 0)
-    defaultState(); // TO SETUP FIRST RUNING EEPROM
-  if (EEPROM.read(TIME_FORMAT_ADDRESS) == 0)
-  {
-    timeFormat = 24;
-  }
-  else
-  {
-    timeFormat = EEPROM.read(TIME_FORMAT_ADDRESS);
-  }
+    defaultState();
 
-  // Read the saved SSID and password from EEPROM
+  EEPROM.read(TIME_FORMAT_ADDRESS) == 12 ? timeFormat = 12 : timeFormat = 24;
+
   readWifiCredentials();
-  
-
   pinMode(2, OUTPUT);
-  pinMode(startWifiApBtn, INPUT_PULLUP);
-
+  pinMode(WIFI_AP_BTN, INPUT_PULLUP);
   TestStartUp();
   startWifiSta(); // STA WIFI
   httpHandler();
@@ -46,7 +35,7 @@ void setup()
 // LOOP FUNCTION
 void loop()
 {
-  int buttonState = digitalRead(startWifiApBtn);
+  int buttonState = digitalRead(WIFI_AP_BTN);
   if (buttonState == LOW)
   {
     startWifiAp();
