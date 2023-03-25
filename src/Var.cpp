@@ -26,12 +26,12 @@ byte BLUE = 0;
 byte BRIGHTNESS = 100;
 
 String ColorMode = "";
-const int startWifiApBtn = 5;
+const int startWifiApBtn = 2;
 
-int displayMode = 1;
+String displayMode = "clock";
 int RefreshDelay = 1000;
 int counterCount = 0;
-int counterLimit = 60;
+int counterLimit = 120;
 int countDownCount = 100;
 int timeFormat = 24;
 

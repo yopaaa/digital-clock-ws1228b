@@ -1,6 +1,7 @@
 #ifndef WIFI_FUNC
 #define WIFI_FUNC
 
-void startWifi(int wifiMode);
+void startWifiAp();
+void startWifiSta();
 
 #endif

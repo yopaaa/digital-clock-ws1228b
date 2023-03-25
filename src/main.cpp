@@ -20,28 +20,26 @@ void setup()
   FastLED.addLeds<LED_TYPE, DOTS_PIN, GRB>(Dots, NUM_DOTS);
   FastLED.setBrightness(BRIGHTNESS); // SET BRIGHTNESS FROM EEPROM VALUE
 
-  if (EEPROM.read(1) == 0) defaultState(); // TO SETUP FIRST RUNING EEPROM
-  if (EEPROM.read(TIME_FORMAT_ADDRESS) == 0){
+  if (EEPROM.read(1) == 0)
+    defaultState(); // TO SETUP FIRST RUNING EEPROM
+  if (EEPROM.read(TIME_FORMAT_ADDRESS) == 0)
+  {
     timeFormat = 24;
-  }else{
+  }
+  else
+  {
     timeFormat = EEPROM.read(TIME_FORMAT_ADDRESS);
   }
 
   // Read the saved SSID and password from EEPROM
-  for (int i = SSID_ADDRESS; i < SSID_ADDRESS + 32; i++)
-  {
-    ssid += char(EEPROM.read(i));
-  }
-  for (int i = PASSWORD_ADDRESS; i < PASSWORD_ADDRESS + 64; i++)
-  {
-    password += char(EEPROM.read(i));
-  }
+  readWifiCredentials();
+  
 
   pinMode(2, OUTPUT);
-  pinMode(startWifiApBtn, INPUT);
+  pinMode(startWifiApBtn, INPUT_PULLUP);
 
   TestStartUp();
-  startWifi(0); // STA WIFI
+  startWifiSta(); // STA WIFI
   httpHandler();
 }
 
@@ -49,15 +47,23 @@ void setup()
 void loop()
 {
   int buttonState = digitalRead(startWifiApBtn);
-  if (buttonState == HIGH) startWifi(1);
+  if (buttonState == LOW)
+  {
+    startWifiAp();
+  }
 
-  if (displayMode == 1) {
+  if (displayMode == "clock")
+  {
     printLocalTime();
     delay(RefreshDelay);
-  } else if (displayMode == 2) {
+  }
+  else if (displayMode == "counter")
+  {
     printCounter();
     delay(1000);
-  } else if (displayMode == 3) {
+  }
+  else if (displayMode == "countdown")
+  {
     printCountDown();
     delay(1000);
   }

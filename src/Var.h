@@ -7,8 +7,8 @@
 #define NUMBER_SEGMENT 4
 #define LEDS_PER_SEGMENT 7
 #define NUM_LEDS 28
-#define LED_PIN 13
-#define DOTS_PIN 12
+#define LED_PIN 0
+#define DOTS_PIN 3
 #define NUM_DOTS 2
 
 
@@ -39,7 +39,7 @@ extern byte BRIGHTNESS;
 extern String ColorMode;
 extern const int startWifiApBtn;
 
-extern int displayMode;
+extern String displayMode;
 extern int RefreshDelay;
 extern int counterCount;
 extern int counterLimit;

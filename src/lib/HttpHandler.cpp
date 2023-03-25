@@ -24,14 +24,14 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
     // Check if the JSON parsing was successful
     if (error)
     {
-      // Return a bad request response if the JSON is invalid
       request->send(400, "text/plain", "Bad Request");
       return;
     }
 
     DynamicJsonDocument json(1024);
-    json["name"] = jsonDoc["name"].as<String>();
-    json["age"] = jsonDoc["age"].as<int>();
+    // json["name"] = jsonDoc["name"].as<String>();
+    // json["age"] = jsonDoc["age"].as<int>();
+    json["code"] = 200;
     json["message"] = "OK";
     json["version"] = request->version();
     json["method"] = request->method();
@@ -41,10 +41,22 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
     json["contentLength"] = request->contentLength();
     json["multipart"] = request->multipart();
 
+    const String url = request->url();
+    if (url == "/led2")
+    {
+      json["pesan"] = jsonDoc["pesan"].as<String>();
+      LED2_State = !LED2_State;
+      digitalWrite(2, LED2_State);
+    }
+    else
+    {
+      json["code"] = 404;
+      json["message"] = "NOT FOUND";
+    }
+
     String jsonString;
     serializeJson(json, jsonString);
-
-    request->send(200, "application/json", jsonString);
+    request->send(json["code"].as<int>(), "application/json", jsonString);
   }
 }
 
@@ -54,7 +66,7 @@ void handlePing(AsyncWebServerRequest *request)
   json["message"] = "OK";
   json["CodeVersion"] = CodeVersion;
   json["CycleCount"] = ESP.getCycleCount();
-  json["ChipModel"] = ESP.getChipModel();
+  // json["ChipModel"] = ESP.getChipModel();
   json["SketchSize"] = ESP.getSketchSize();
   json["version"] = request->version();
   json["method"] = request->method();
@@ -70,10 +82,12 @@ void handlePing(AsyncWebServerRequest *request)
   request->send(200, "application/json", jsonString);
 }
 
-void httpHandler()
+ void httpHandler()
 {
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "content-type");
+
+  server.onRequestBody(handleRequest);
 
   server.on("/resetall", HTTP_POST, [](AsyncWebServerRequest *request)
             {
@@ -82,8 +96,9 @@ void httpHandler()
     delay(500);
     ESP.restart(); });
 
-  server.on("/wifi/set", HTTP_POST, [](AsyncWebServerRequest *request)
-            {
+
+      server.on("/wifi/set", HTTP_POST, [](AsyncWebServerRequest *request)
+                {
     bool valuesExist = (request->hasArg("ssid")) && (request->hasArg("password"));
 
     if (valuesExist){
@@ -97,7 +112,6 @@ void httpHandler()
     } else {
       request->send(400, "application/json", "{\"status\": \"Bad request\"}");
     } });
-  server.onRequestBody(handleRequest);
 
   server.on("/ping", HTTP_GET, handlePing);
 
@@ -177,15 +191,15 @@ void httpHandler()
   server.on("/mode", HTTP_POST, [](AsyncWebServerRequest *request)
             {
     if (request->hasArg("mode")){
-      int mode = atoi(request->arg("mode").c_str());
+      String mode = request->arg("mode");
       int limit = atoi(request->arg("limit").c_str());
       displayMode = mode;
 
-      if (mode == 2){ // counter mode
+      if (mode == "counter"){ // counter mode
         counterCount = 0;
         counterLimit = limit;
         BlankDots();
-      } else if (mode == 3) { // count down mode
+      } else if (mode == "countdown") { // count down mode
         BlankDisplay(0);
         countDownCount = limit;
         BlankDots();

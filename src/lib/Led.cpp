@@ -90,6 +90,10 @@ void BlankDisplay(int gap)
     return;
 }
 
+void BlankSegment(int no)
+{
+    SetNumber(no, 10);
+}
 // DOTS FUNCTION
 void BlinkDots()
 {
@@ -123,8 +127,18 @@ void ShowDots()
     return;
 }
 
+void ShowDotsRgb(byte Red, byte Green, byte Blue)
+{
+    for (int i = 0; i < NUM_DOTS; i++)
+    {
+        Dots[i] = CRGB(Red, Green, Blue);
+    }
+    return;
+}
+
 void printLocalTime()
 {
+    BlinkDots();
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
     {
@@ -132,14 +146,12 @@ void printLocalTime()
         ErrorDisplay(0, 2);
         return;
     }
-    Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
-    int second = timeinfo.tm_sec;
+    // Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+    // int second = timeinfo.tm_sec;
     int minute = timeinfo.tm_min;
     int hour = timeinfo.tm_hour;
     if ((timeFormat == 12) && (hour > 12))
-    {
         hour = hour - 12;
-    }
 
     if (ColorMode == "random")
     {
@@ -148,15 +160,31 @@ void printLocalTime()
         BLUE = random(1, 255);
     }
 
-    SetNumber(1, hour / 10);
-    SetNumber(2, hour % 10);
-    SetNumber(3, minute / 10);
-    SetNumber(4, minute % 10);
-    // SetNumber(1, minute / 10);
-    // SetNumber(2, minute % 10);
+    // Print hour
+    if (hour < 10)
+    {
+        BlankSegment(1);
+        SetNumber(2, hour);
+    }
+    else
+    {
+        SetNumber(1, hour / 10);
+        SetNumber(2, hour % 10);
+    }
+
+    // Print minute
+    if (minute < 10)
+    {
+        BlankSegment(4);
+        SetNumber(3, minute);
+    }
+    else
+    {
+        SetNumber(3, minute / 10);
+        SetNumber(4, minute % 10);
+    }
     // SetNumber(3, second / 10);
     // SetNumber(4, second % 10);
-    BlinkDots();
 }
 
 void printCounter()

@@ -43,3 +43,15 @@ void saveWifiCredentials(const char *ssid, const char *password)
     // Commit the changes to EEPROM
     EEPROM.commit();
 }
+
+void readWifiCredentials()
+{
+    for (int i = SSID_ADDRESS; i < SSID_ADDRESS + 32; i++)
+    {
+        ssid += char(EEPROM.read(i));
+    }
+    for (int i = PASSWORD_ADDRESS; i < PASSWORD_ADDRESS + 64; i++)
+    {
+        password += char(EEPROM.read(i));
+    }
+}
