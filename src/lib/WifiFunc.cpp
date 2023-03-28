@@ -32,8 +32,20 @@ void startWifiAp()
     Serial.println(APssid);
     Serial.print("----- pwd:");
     Serial.println(APpassword);
-    Serial.println(WiFi.softAPIP());
+    
+    IPAddress localIP = WiFi.softAPIP();
+    Serial.println(localIP);
+
+    // print ip address to display
+    for (int i = 0; i < 4; i++)
+    {
+        int octet = (int)localIP[i];
+        BlankDisplay(50);
+        PrintNumber(octet, "full");
+        delay(1500);
+    }
     displayMode = "counter";
+    return;
 }
 
 void startWifiSta()
@@ -78,33 +90,8 @@ void startWifiSta()
     {
         int octet = (int)localIP[i];
         BlankDisplay(50);
-        if (octet > 99) // example 123
-        {
-            int firstDigit = octet / 100;
-            int secondDigit = (octet % 100) / 10;
-            int thirdDigit = octet % 10;
-
-            SetNumber(1, 13); // print _
-            SetNumber(2, firstDigit);
-            SetNumber(3, secondDigit);
-            SetNumber(4, thirdDigit);
-        }
-        else if (octet > 9) // example 67
-        {
-            int firstDigit = octet / 10;
-            int secondDigit = octet % 10;
-
-            SetNumber(2, 13); // print _
-            SetNumber(3, firstDigit);
-            SetNumber(4, secondDigit);
-        }
-        else
-        {                     // example 8
-            SetNumber(2, 13); // print _
-            SetNumber(4, octet);
-        }
-        delay(1000);
+        PrintNumber(octet, "full");
+        delay(1500);
     }
-    delay(2000);
     return;
 }

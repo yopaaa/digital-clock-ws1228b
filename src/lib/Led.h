@@ -17,6 +17,8 @@ void TestStartUp();
 void refreshColor();
 void ErrorDisplay(int one, int two);
 void SetNumber(int segment, int num);
+void PrintNumber(int num, String segment);
+
 
 void printLocalTime();
 void printCounter();

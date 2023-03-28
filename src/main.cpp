@@ -25,7 +25,6 @@ void setup()
   EEPROM.read(TIME_FORMAT_ADDRESS) == 12 ? timeFormat = 12 : timeFormat = 24;
 
   readWifiCredentials();
-  pinMode(2, OUTPUT);
   pinMode(WIFI_AP_BTN, INPUT_PULLUP);
   TestStartUp();
   startWifiSta(); // STA WIFI

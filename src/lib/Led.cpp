@@ -45,6 +45,75 @@ void SetNumber(int segment, int num)
     }
 }
 
+void PrintNumber(int num, String segment)
+{
+    if (segment == "full")
+    {
+        BlankDisplay(1);
+        if (num < 10) // 0-9
+        {
+            SetNumber(4, num);
+        }
+        else if ((num > 9) && (num < 100)) // 9-99
+        {
+            int firstDigit = num / 10;
+            int secondDigit = num % 10;
+
+            SetNumber(3, firstDigit);
+            SetNumber(4, secondDigit);
+        }
+        else if ((num > 99) && (num < 1000)) // 99-999
+        {
+            int firstDigit = num / 100;
+            int secondDigit = (num % 100) / 10;
+            int thirdDigit = num % 10;
+
+            SetNumber(2, firstDigit);
+            SetNumber(3, secondDigit);
+            SetNumber(4, thirdDigit);
+        }
+        else if ((num > 999) && (num < 10000)) // 999-9999
+        {
+            int firstDigit = num / 1000;
+            int secondDigit = (num % 1000) / 100;
+            int thirdDigit = (num % 100) / 10;
+            int fourthDigit = num % 10;
+
+            SetNumber(1, firstDigit);
+            SetNumber(2, secondDigit);
+            SetNumber(3, thirdDigit);
+            SetNumber(4, fourthDigit);
+        }
+    }
+    else if (segment == "right")
+    {
+        if (num < 10)
+        {
+            BlankSegment(3);
+            SetNumber(4, num);
+        }
+        else
+        {
+            SetNumber(3, num / 10);
+            SetNumber(4, num % 10);
+        }
+    }
+    else if (segment == "left")
+    {
+        if (num < 10)
+        {
+            BlankSegment(1);
+            SetNumber(2, num);
+        }
+        else
+        {
+            SetNumber(1, num / 10);
+            SetNumber(2, num % 10);
+        }
+    }
+    return;
+}
+
 void ErrorDisplay(int one, int two)
 {
     SetNumber(1, 11);
@@ -54,7 +123,6 @@ void ErrorDisplay(int one, int two)
     return;
 }
 
-// SEGEMNT FUNCTION
 void refreshColor()
 {
     RED = EEPROM.read(RED_ADDRESS);
@@ -94,7 +162,7 @@ void BlankSegment(int no)
 {
     SetNumber(no, 10);
 }
-// DOTS FUNCTION
+
 void BlinkDots()
 {
     if (isBlink == true)
@@ -115,6 +183,7 @@ void BlankDots()
     {
         Dots[i] = CRGB(0, 0, 0);
     }
+    FastLED.show();
     return;
 }
 
@@ -124,6 +193,7 @@ void ShowDots()
     {
         Dots[i] = CRGB(RED, GREEN, BLUE);
     }
+    FastLED.show();
     return;
 }
 
@@ -133,6 +203,7 @@ void ShowDotsRgb(byte Red, byte Green, byte Blue)
     {
         Dots[i] = CRGB(Red, Green, Blue);
     }
+    FastLED.show();
     return;
 }
 
@@ -160,29 +231,8 @@ void printLocalTime()
         BLUE = random(1, 255);
     }
 
-    // Print hour
-    if (hour < 10)
-    {
-        BlankSegment(1);
-        SetNumber(2, hour);
-    }
-    else
-    {
-        SetNumber(1, hour / 10);
-        SetNumber(2, hour % 10);
-    }
-
-    // Print minute
-    if (minute < 10)
-    {
-        BlankSegment(4);
-        SetNumber(3, minute);
-    }
-    else
-    {
-        SetNumber(3, minute / 10);
-        SetNumber(4, minute % 10);
-    }
+    PrintNumber(hour, "left");
+    PrintNumber(minute, "right");
     // SetNumber(3, second / 10);
     // SetNumber(4, second % 10);
 }
@@ -191,41 +241,7 @@ void printCounter()
 {
     if (counterCount <= counterLimit)
     {
-        if (counterCount < 10)
-        { // 0-9
-            BlankDisplay(0);
-            SetNumber(4, counterCount);
-        }
-        else if ((counterCount > 9) && (counterCount < 100))
-        { // 9-99
-            int firstDigit = counterCount / 10;
-            int secondDigit = counterCount % 10;
-
-            SetNumber(3, firstDigit);
-            SetNumber(4, secondDigit);
-        }
-        else if ((counterCount > 99) && (counterCount < 1000))
-        { // 99-999
-            int firstDigit = counterCount / 100;
-            int secondDigit = (counterCount % 100) / 10;
-            int thirdDigit = counterCount % 10;
-
-            SetNumber(2, firstDigit);
-            SetNumber(3, secondDigit);
-            SetNumber(4, thirdDigit);
-        }
-        else if ((counterCount > 999) && (counterCount < 10000))
-        { // 999-9999
-            int firstDigit = counterCount / 1000;
-            int secondDigit = (counterCount % 1000) / 100;
-            int thirdDigit = (counterCount % 100) / 10;
-            int fourthDigit = counterCount % 10;
-
-            SetNumber(1, firstDigit);
-            SetNumber(2, secondDigit);
-            SetNumber(3, thirdDigit);
-            SetNumber(4, fourthDigit);
-        }
+        PrintNumber(counterCount, "full");
         counterCount++;
         return;
     }
@@ -236,41 +252,7 @@ void printCountDown()
 {
     if (countDownCount >= 0)
     {
-        if (countDownCount < 10)
-        { // 0-9
-            SetNumber(4, countDownCount);
-        }
-        else if ((countDownCount > 9) && (countDownCount < 100))
-        { // 9-99
-            int firstDigit = countDownCount / 10;
-            int secondDigit = countDownCount % 10;
-
-            SetNumber(3, firstDigit);
-            SetNumber(4, secondDigit);
-        }
-        else if ((countDownCount > 99) && (countDownCount < 1000))
-        { // 99-999
-            int firstDigit = countDownCount / 100;
-            int secondDigit = (countDownCount % 100) / 10;
-            int thirdDigit = countDownCount % 10;
-
-            SetNumber(2, firstDigit);
-            SetNumber(3, secondDigit);
-            SetNumber(4, thirdDigit);
-        }
-        else if ((countDownCount > 999) && (countDownCount < 10000))
-        { // 999-9999
-            int firstDigit = countDownCount / 1000;
-            int secondDigit = (countDownCount % 1000) / 100;
-            int thirdDigit = (countDownCount % 100) / 10;
-            int fourthDigit = countDownCount % 10;
-
-            SetNumber(1, firstDigit);
-            SetNumber(2, secondDigit);
-            SetNumber(3, thirdDigit);
-            SetNumber(4, fourthDigit);
-        }
-        BlankDisplay(0);
+        PrintNumber(countDownCount, "full");
         countDownCount--;
         return;
     }

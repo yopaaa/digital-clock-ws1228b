@@ -23,4 +23,3 @@ lib_deps =
 	fastled/FastLED@^3.5.0
 	ayushsharma82/AsyncElegantOTA@^2.2.7
 	bblanchon/ArduinoJson @ ^6.21.0
-
