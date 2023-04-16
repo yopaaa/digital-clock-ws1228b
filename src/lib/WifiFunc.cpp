@@ -22,7 +22,7 @@ void startWifiAp()
 {
     WiFi.mode(WIFI_AP);
     WiFi.softAPConfig(local_ip, gateway, subnet);
-    WiFi.softAP(APssid, APpassword, 1, 0, 1);
+    WiFi.softAP(APssid, APpassword);
 
     Serial.println("");
     Serial.println(""); // print space
@@ -51,19 +51,23 @@ void startWifiAp()
 void startWifiSta()
 {
     int trying = 1;
-
     // Connect to Wi-Fi using the saved SSID and password
     WiFi.mode(WIFI_STA);
+    WiFi.setHostname(APssid); // define hostname
     WiFi.begin(ssid.c_str(), password.c_str());
+
     while (WiFi.status() != WL_CONNECTED)
     {
         Serial.println(String(trying) + "." + "Connecting to WiFi...");
         Serial.print("----- ssid:");
         Serial.println(ssid);
+        Serial.print("----- password:");
+        Serial.println(password);
         ShowDotsRgb(0, 0, 255);
 
         if (digitalRead(WIFI_AP_BTN) == LOW)
         {
+            BlankDots();
             startWifiAp();
             return;
         };

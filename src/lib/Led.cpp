@@ -1,7 +1,8 @@
 #include "Led.h"
 #include <Arduino.h>
-#include <EEPROM.h>
 #include "../Var.h"
+#include "./WifiFunc.h"
+#include "./EEPROMFunc.h"
 #include <FastLED.h>
 
 CRGB leds[NUM_LEDS];
@@ -24,6 +25,14 @@ const int Frame[][7] = {
     {1, 1, 0, 0, 0, 1, 0}, // Alfabet r
     {0, 0, 0, 0, 1, 0, 0}, // Simbol _
 };
+
+void setupLED()
+{
+    FastLED.addLeds<LED_TYPE, LED_PIN, GRB>(leds, NUM_LEDS);
+    FastLED.addLeds<LED_TYPE, DOTS_PIN, GRB>(Dots, NUM_DOTS);
+    FastLED.setBrightness(BRIGHTNESS);
+    return;
+}
 
 void SetNumber(int segment, int num)
 {
@@ -123,22 +132,20 @@ void ErrorDisplay(int one, int two)
     return;
 }
 
-void refreshColor()
-{
-    RED = EEPROM.read(RED_ADDRESS);
-    GREEN = EEPROM.read(GREEN_ADDRESS);
-    BLUE = EEPROM.read(BLUE_ADDRESS);
-}
-
 void TestStartUp()
 {
     Serial.println("");
     Serial.print("Code Version : ");
     Serial.println(CodeVersion);
-    refreshColor();
+    readColor();
     BlankDisplay(0);
     for (int i = 0; i < NUM_LEDS; i++)
     {
+        int buttonState = digitalRead(WIFI_AP_BTN);
+        if (buttonState == LOW)
+        {
+            startWifiAp();
+        }
         leds[i] = CRGB(RED, GREEN, BLUE);
         FastLED.show();
         delay(200);

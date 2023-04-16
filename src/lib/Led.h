@@ -6,6 +6,8 @@
 extern CRGB leds[];
 extern CRGB Dots[];
 
+void setupLED();
+
 void BlinkDots();
 void BlankDots();
 void ShowDots();
@@ -14,11 +16,9 @@ void ShowDotsRgb(byte Red, byte Green, byte Blue);
 void BlankDisplay(int gap);
 void BlankSegment(int no);
 void TestStartUp();
-void refreshColor();
 void ErrorDisplay(int one, int two);
 void SetNumber(int segment, int num);
 void PrintNumber(int num, String segment);
-
 
 void printLocalTime();
 void printCounter();

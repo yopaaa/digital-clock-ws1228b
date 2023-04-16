@@ -50,10 +50,6 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
-    else if (url == "/elegantOTA")
-    {
-      AsyncElegantOTA.begin(&server, APssid, APpassword);
-    }
     else if (url == "/restart")
     {
       String jsonString;
@@ -142,7 +138,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         EEPROM.put(GREEN_ADDRESS, green);
         EEPROM.put(BLUE_ADDRESS, blue);
         EEPROM.commit();
-        refreshColor();
+        readColor();
 
         payload["red"] = red;
         payload["green"] = green;
@@ -222,6 +218,7 @@ void httpHandler()
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });
 
+  AsyncElegantOTA.begin(&server, APssid, APpassword);
   server.begin();
   Serial.println("Server started");
 }

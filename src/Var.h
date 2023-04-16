@@ -8,9 +8,10 @@
 #define LEDS_PER_SEGMENT 7
 #define NUM_LEDS 28
 #define NUM_DOTS 2
-#define LED_PIN 0     // Seven segment pin
-#define DOTS_PIN 3    // Dots pin
-#define WIFI_AP_BTN 2 // Start wifi mode AP pin button
+
+#define LED_PIN 23    // Seven segment pin
+#define DOTS_PIN 13   // Dots pin
+#define WIFI_AP_BTN 4 // Start wifi mode AP pin button
 
 extern String CodeVersion;
 extern String ssid;
@@ -25,6 +26,7 @@ extern const int RED_ADDRESS;
 extern const int GREEN_ADDRESS;
 extern const int BLUE_ADDRESS;
 extern const int TIME_FORMAT_ADDRESS;
+extern const int IP_ADDRESS_START_ADDRESS;
 
 extern const char *ntpServer;
 extern const long gmtOffset_sec; // UTC+7
