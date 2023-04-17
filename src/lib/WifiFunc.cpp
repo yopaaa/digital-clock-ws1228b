@@ -1,18 +1,7 @@
 #include "WifiFunc.h"
 #include "../Var.h"
 #include "Led.h"
-#include <Arduino.h>
-
-#if defined(ESP8266)
-#include <ESP8266WiFi.h>
-#include <ESPAsyncTCP.h>
-#elif defined(ESP32)
-#include <WiFi.h>
-#include <AsyncTCP.h>
-#endif
-
-#include <ESPAsyncWebServer.h>
-// WIFI FUNCTION
+#include "EEPROMFunc.h"
 
 IPAddress local_ip(192, 168, 0, 1);
 IPAddress gateway(192, 168, 0, 1);

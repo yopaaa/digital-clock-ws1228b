@@ -6,13 +6,15 @@
 
 void setupEEPROM();
 
-void saveWifiCredentials(const char *ssid, const char *password);
+void saveWifiCredentials(String ssid, String password);
 void defaultState();
 void readWifiCredentials();
 
 void readColor();
-void writeIPAddressToEEPROM(int address, const IPAddress &ip);
-IPAddress readIPAddressFromEEPROM(int address);
-bool isIPAddressSet();
+void writeStaticIp(const IPAddress &ip);
+IPAddress readStaticIp();
+void writeString(int address, String value);
+void writeBool(int address, bool value);
+String readString(int address);
 
 #endif

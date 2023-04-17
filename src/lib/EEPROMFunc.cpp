@@ -3,14 +3,21 @@
 #include <EEPROM.h>
 #include "../Var.h"
 
-void setupEEPROM()
+void writeString(int address, String value)
 {
-    EEPROM.begin(512);
-    if (EEPROM.read(1) == 0)
-        defaultState();
+    EEPROM.writeString(address, value);
+    EEPROM.commit();
+}
 
-    EEPROM.read(TIME_FORMAT_ADDRESS) == 12 ? timeFormat = 12 : timeFormat = 24;
-    return;
+void writeBool(int address, bool value)
+{
+    EEPROM.writeBool(address, value);
+    EEPROM.commit();
+}
+
+String readString(int address)
+{
+    return EEPROM.readString(address);
 }
 
 void defaultState()
@@ -26,79 +33,53 @@ void defaultState()
     Serial.println("all state is been reset...");
 }
 
-void saveWifiCredentials(const char *ssid, const char *password)
+void saveWifiCredentials(String ssid = "max-Length-15", String password = "max-Length-32")
 {
-    // Save the SSID to EEPROM
-    int i = 0;
-    for (; i < strlen(ssid); i++)
-    {
-        EEPROM.write(SSID_ADDRESS + i, ssid[i]);
-    }
-    for (; i < 12; i++)
-    {
-        EEPROM.write(SSID_ADDRESS + i, 0);
-    }
-
-    // Save the password to EEPROM
-    i = 0;
-    for (; i < strlen(password); i++)
-    {
-        EEPROM.write(PASSWORD_ADDRESS + i, password[i]);
-    }
-    for (; i < 32; i++)
-    {
-        EEPROM.write(PASSWORD_ADDRESS + i, 0);
-    }
-
-    // Commit the changes to EEPROM
-    EEPROM.commit();
+    writeString(SSID_ADDRESS, ssid);
+    writeString(PASSWORD_ADDRESS, password);
 }
 
 void readWifiCredentials()
 {
-    for (int i = SSID_ADDRESS; i < SSID_ADDRESS + 12; i++)
-    {
-        ssid += char(EEPROM.read(i));
-    }
-    for (int i = PASSWORD_ADDRESS; i < PASSWORD_ADDRESS + 32; i++)
-    {
-        password += char(EEPROM.read(i));
-    }
+    ssid = readString(SSID_ADDRESS);
+    password = readString(PASSWORD_ADDRESS);
 }
 
 void readColor()
 {
-    RED = EEPROM.read(RED_ADDRESS);
-    GREEN = EEPROM.read(GREEN_ADDRESS);
-    BLUE = EEPROM.read(BLUE_ADDRESS);
+    RED = EEPROM.readByte(RED_ADDRESS);
+    GREEN = EEPROM.readByte(GREEN_ADDRESS);
+    BLUE = EEPROM.readByte(BLUE_ADDRESS);
     return;
 }
 
-
-void writeIPAddressToEEPROM(int address, const IPAddress &ip)
+void writeStaticIp(const IPAddress &ip)
 {
     for (int i = 0; i < 4; i++)
     {
-        EEPROM.write(address + i, ip[i]);
+        EEPROM.write(IP_ADDRESS_START_ADDRESS + i, ip[i]);
     }
+    EEPROM.commit();
 }
 
-IPAddress readIPAddressFromEEPROM(int address)
-{
-    byte ipAddress[4];
-    for (int i = 0; i < 4; i++)
-    {
-        ipAddress[i] = EEPROM.read(address + i);
-    }
-    return IPAddress(ipAddress);
-}
-
-bool isIPAddressSet()
+IPAddress readStaticIp()
 {
     byte ipAddress[4];
     for (int i = 0; i < 4; i++)
     {
         ipAddress[i] = EEPROM.read(IP_ADDRESS_START_ADDRESS + i);
     }
-    return IPAddress(ipAddress) != IPAddress(0, 0, 0, 0);
+    return IPAddress(ipAddress);
+}
+
+void setupEEPROM()
+{
+    EEPROM.begin(512);
+    if (EEPROM.read(1) == 0)
+        defaultState();
+
+    EEPROM.read(TIME_FORMAT_ADDRESS) == 12 ? timeFormat = 12 : timeFormat = 24;
+    isStaticIP = EEPROM.readBool(IP_ADDRESS_START_ADDRESS);
+    staticIP = readStaticIp();
+    return;
 }

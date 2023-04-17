@@ -1,9 +1,4 @@
-#include <Arduino.h>
-#include <ESPAsyncWebServer.h>
-#include <EEPROM.h>
 #include <AsyncElegantOTA.h>
-#include <FastLED.h>
-#include <ArduinoJson.h>
 #include "HttpHandler.h"
 #include "EEPROMFunc.h"
 #include "../Var.h"
@@ -19,7 +14,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
     DeserializationError error = deserializeJson(jsonDoc, data);
     if (error)
     {
-      request->send(400, "text/plain", "Bad Request");
+      request->send(500, "text/plain", "500 Internal Server Error");
       return;
     }
 
@@ -40,9 +35,11 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
       {
         String ssid = jsonDoc["ssid"].as<String>();
         String password = jsonDoc["password"].as<String>();
+        IPAddress nullIP(0, 0, 0, 0);
 
-        saveWifiCredentials(ssid.c_str(), password.c_str());
-        payload["ssis"] = ssid;
+        saveWifiCredentials(ssid, password);
+        writeStaticIp(nullIP);
+        payload["ssid"] = ssid;
       }
       else
       {
@@ -165,6 +162,29 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
+    else if (url == "/staticIp")
+    {
+      if ((jsonDoc.containsKey("isStaticIP")))
+      {
+        bool extractisStaticIP = jsonDoc["isStaticIP"].as<bool>();
+        byte ip1 = jsonDoc["ip1"].as<byte>() || 0;
+        byte ip2 = jsonDoc["ip2"].as<byte>() || 0;
+        byte ip3 = jsonDoc["ip3"].as<byte>() || 0;
+        byte ip4 = jsonDoc["ip4"].as<byte>() || 0;
+        IPAddress combineIp(ip1, ip2, ip3, ip4);
+
+        writeBool(IS_STATIC_IP_ADDRESS, extractisStaticIP);
+        writeStaticIp(combineIp);
+
+        payload["ip"] = combineIp;
+        payload["isStaticIP"] = extractisStaticIP;
+      }
+      else
+      {
+        json["code"] = 400;
+        json["message"] = "Bad Request";
+      }
+    }
     else // NOT FOUND Handle
     {
       json["code"] = 404;
@@ -199,6 +219,39 @@ void handlePing(AsyncWebServerRequest *request)
   request->send(200, "application/json", jsonString);
 }
 
+void handleVariable(AsyncWebServerRequest *request)
+{
+  DynamicJsonDocument json(1224);
+  JsonObject payload = json.createNestedObject("payload");
+  json["code"] = 200;
+  json["message"] = "OK";
+  json["method"] = request->method();
+  json["url"] = request->url();
+  json["host"] = request->host();
+
+  payload["CodeVersion"] = CodeVersion;
+  payload["ssid"] = ssid;
+  payload["APssid"] = APssid;
+  payload["APpassword"] = APpassword;
+
+  payload["RED"] = RED;
+  payload["GREEN"] = GREEN;
+  payload["BLUE"] = BLUE;
+  payload["BRIGHTNESS"] = BRIGHTNESS;
+
+  payload["timeFormat"] = timeFormat;
+  payload["displayMode"] = displayMode;
+  payload["ColorMode"] = ColorMode;
+
+  payload["isStaticIP"] = isStaticIP;
+  payload["staticIP"] = staticIP;
+
+  String jsonString;
+  serializeJson(json, jsonString);
+
+  request->send(200, "application/json", jsonString);
+}
+
 void httpHandler()
 {
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
@@ -214,6 +267,7 @@ void httpHandler()
     ESP.restart(); });
 
   server.on("/ping", HTTP_GET, handlePing);
+  server.on("/variable", HTTP_GET, handleVariable);
 
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });

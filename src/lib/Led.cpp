@@ -1,9 +1,7 @@
 #include "Led.h"
-#include <Arduino.h>
 #include "../Var.h"
-#include "./WifiFunc.h"
-#include "./EEPROMFunc.h"
-#include <FastLED.h>
+#include "WifiFunc.h"
+#include "EEPROMFunc.h"
 
 CRGB leds[NUM_LEDS];
 CRGB Dots[NUM_DOTS];
@@ -216,6 +214,12 @@ void ShowDotsRgb(byte Red, byte Green, byte Blue)
 
 void printLocalTime()
 {
+    if (ColorMode == "random")
+    {
+        RED = random(1, 255);
+        GREEN = random(1, 255);
+        BLUE = random(1, 255);
+    }
     BlinkDots();
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
@@ -230,13 +234,6 @@ void printLocalTime()
     int hour = timeinfo.tm_hour;
     if ((timeFormat == 12) && (hour > 12))
         hour = hour - 12;
-
-    if (ColorMode == "random")
-    {
-        RED = random(1, 255);
-        GREEN = random(1, 255);
-        BLUE = random(1, 255);
-    }
 
     PrintNumber(hour, "left");
     PrintNumber(minute, "right");

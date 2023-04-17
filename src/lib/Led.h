@@ -2,6 +2,7 @@
 #define LED
 
 #include <FastLED.h>
+#include <Arduino.h>
 
 extern CRGB leds[];
 extern CRGB Dots[];
