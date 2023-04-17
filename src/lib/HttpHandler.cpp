@@ -149,12 +149,12 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
     }
     else if (url == "/color/mode")
     {
-      if ((jsonDoc.containsKey("format")))
+      if ((jsonDoc.containsKey("mode")))
       {
-        String format = jsonDoc["format"].as<String>();
+        String mode = jsonDoc["mode"].as<String>();
 
-        ColorMode = format;
-        payload["format"] = format;
+        ColorMode = mode;
+        payload["mode"] = mode;
       }
       else
       {
@@ -167,10 +167,10 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
       if ((jsonDoc.containsKey("isStaticIP")))
       {
         bool extractisStaticIP = jsonDoc["isStaticIP"].as<bool>();
-        byte ip1 = jsonDoc["ip1"].as<byte>() || 0;
-        byte ip2 = jsonDoc["ip2"].as<byte>() || 0;
-        byte ip3 = jsonDoc["ip3"].as<byte>() || 0;
-        byte ip4 = jsonDoc["ip4"].as<byte>() || 0;
+        int ip1 = jsonDoc["ip1"].as<int>() || 0;
+        int ip2 = jsonDoc["ip2"].as<int>() || 0;
+        int ip3 = jsonDoc["ip3"].as<int>() || 0;
+        int ip4 = jsonDoc["ip4"].as<int>() || 0;
         IPAddress combineIp(ip1, ip2, ip3, ip4);
 
         writeBool(IS_STATIC_IP_ADDRESS, extractisStaticIP);

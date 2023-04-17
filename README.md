@@ -3,18 +3,9 @@
 Hi this is my project with esp32,
 this code made with platformIO envirotment 
 
-### what library use in this code ?
 
-    use WiFi.h 
-    use AsyncTCP.h
-    use ESPAsyncWebServer.h
-    use EEPROM.h
-    use time.h
-    use FastLED.h
-    use Wire.h
-    use FS.h
-    use SPIFFS.h
-
+## Application Programming Interface.
+This code uses an API to control a device, please see the API. [Documentation](./src/api.md)
 
 
 ## Installation
