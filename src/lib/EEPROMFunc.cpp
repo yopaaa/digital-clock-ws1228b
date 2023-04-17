@@ -79,7 +79,7 @@ void setupEEPROM()
         defaultState();
 
     EEPROM.read(TIME_FORMAT_ADDRESS) == 12 ? timeFormat = 12 : timeFormat = 24;
-    isStaticIP = EEPROM.readBool(IP_ADDRESS_START_ADDRESS);
+    isStaticIP = EEPROM.readBool(IS_STATIC_IP_ADDRESS);
     staticIP = readStaticIp();
     return;
 }

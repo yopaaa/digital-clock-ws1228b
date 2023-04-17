@@ -1,4 +1,3 @@
-#include "Arduino.h"
 #include <Wire.h>
 #include "Var.h"
 #include "./lib/HttpHandler.h"

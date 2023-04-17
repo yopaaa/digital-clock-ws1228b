@@ -167,16 +167,20 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
       if ((jsonDoc.containsKey("isStaticIP")))
       {
         bool extractisStaticIP = jsonDoc["isStaticIP"].as<bool>();
-        int ip1 = jsonDoc["ip1"].as<int>() || 0;
-        int ip2 = jsonDoc["ip2"].as<int>() || 0;
-        int ip3 = jsonDoc["ip3"].as<int>() || 0;
-        int ip4 = jsonDoc["ip4"].as<int>() || 0;
-        IPAddress combineIp(ip1, ip2, ip3, ip4);
+
+        if ((jsonDoc.containsKey("ip1")))
+        {
+          int ip1 = jsonDoc["ip1"].as<int>();
+          int ip2 = jsonDoc["ip2"].as<int>();
+          int ip3 = jsonDoc["ip3"].as<int>();
+          int ip4 = jsonDoc["ip4"].as<int>();
+          IPAddress combineIp(ip1, ip2, ip3, ip4);
+
+          writeStaticIp(combineIp);
+          payload["ip"] = combineIp.toString();
+        }
 
         writeBool(IS_STATIC_IP_ADDRESS, extractisStaticIP);
-        writeStaticIp(combineIp);
-
-        payload["ip"] = combineIp;
         payload["isStaticIP"] = extractisStaticIP;
       }
       else

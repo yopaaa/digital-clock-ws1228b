@@ -69,12 +69,21 @@ void startWifiSta()
         trying++;
         delay(1000);
     }
-
+ 
     BlankDots();
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
     Serial.println("Connected to WiFi");
-    Serial.print("Ip address : ");
 
+    if (isStaticIP)
+    {
+        IPAddress staticGateway = WiFi.gatewayIP();    // Gateway
+        IPAddress staticSubnet = WiFi.subnetMask();
+
+        WiFi.config(staticIP, staticGateway, staticSubnet);
+        Serial.print("Use static ip");
+    }
+
+    Serial.print("Ip address : ");
     IPAddress localIP = WiFi.localIP();
     Serial.println(localIP);
 
