@@ -1,0 +1,93 @@
+# @hostname = 192.168.0.5
+@port = 3000
+@host = {{hostname}}:{{port}}
+
+
+GET http://{{host}}/ping HTTP/1.1
+
+
+
+###
+GET http://{{host}}/variable HTTP/1.1
+
+
+###
+POST http://{{host}}/wifi/set HTTP/1.1
+Content-Type: application/json
+
+{
+    "ssid": "your_ssid" ,
+    "password": "your_password"
+}
+
+
+###
+POST http://{{host}}/restart HTTP/1.1
+Content-Type: application/json
+
+{
+
+}
+
+
+###
+POST http://{{host}}/mode HTTP/1.1
+Content-Type: application/json
+
+{
+    "mode": "clock",
+    "limit": 100
+}
+
+
+###
+POST http://{{host}}/timeformat HTTP/1.1
+Content-Type: application/json
+
+{
+    "format": 12
+}
+
+
+###
+POST http://{{host}}/brightness HTTP/1.1
+Content-Type: application/json
+
+{
+    "brightness": 100
+}
+
+
+###
+POST http://{{host}}/color/change HTTP/1.1
+Content-Type: application/json
+
+{
+    "red": 100,
+    "green": 110,
+    "blue": 0,
+    "brightness": 100
+}
+
+
+###
+POST http://{{host}}/color/mode HTTP/1.1
+Content-Type: application/json
+
+{
+    "mode": "random"
+}
+
+
+###
+POST http://{{host}}/staticIp HTTP/1.1
+Content-Type: application/json
+
+{
+    "isStaticIP": true,
+    "ip1": 192,
+    "ip2": 168,
+    "ip3": 0,
+    "ip4": 1
+}
+

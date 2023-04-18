@@ -50,8 +50,8 @@ void startWifiSta()
         Serial.println(String(trying) + "." + "Connecting to WiFi...");
         Serial.print("----- ssid:");
         Serial.println(ssid);
-        Serial.print("----- password:");
-        Serial.println(password);
+        // Serial.print("----- password:");
+        // Serial.println(password);
         ShowDotsRgb(0, 0, 255);
 
         if (digitalRead(WIFI_AP_BTN) == LOW)
