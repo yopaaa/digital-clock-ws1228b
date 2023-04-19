@@ -66,7 +66,7 @@ Content-Type: application/json
         "displayMode": "clock",
         "ColorMode": "",
         "isStaticIP": true,
-        "staticIP": "1.1.0.1"
+        "IP": "1.1.0.1"
     },
     "code": 200,
     "message": "OK",

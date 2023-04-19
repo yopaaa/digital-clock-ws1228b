@@ -3,8 +3,23 @@
 #include "EEPROMFunc.h"
 #include "../Var.h"
 #include "Led.h"
+#include "WifiFunc.h"
 
 AsyncWebServer server(3000);
+
+void stringToIP(String ipAddress, int ipArray[])
+{
+  int dot1 = ipAddress.indexOf(".");
+  ipArray[0] = ipAddress.substring(0, dot1).toInt();
+
+  int dot2 = ipAddress.indexOf(".", dot1 + 1);
+  ipArray[1] = ipAddress.substring(dot1 + 1, dot2).toInt();
+
+  int dot3 = ipAddress.indexOf(".", dot2 + 1);
+  ipArray[2] = ipAddress.substring(dot2 + 1, dot3).toInt();
+
+  ipArray[3] = ipAddress.substring(dot3 + 1).toInt();
+}
 
 void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
@@ -38,7 +53,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         IPAddress nullIP(0, 0, 0, 0);
 
         saveWifiCredentials(ssid, password);
-        writeStaticIp(nullIP);
+        writeStaticIp(nullIP, nullIP, nullIP);
         payload["ssid"] = ssid;
       }
       else
@@ -168,19 +183,32 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
       {
         bool extractisStaticIP = jsonDoc["isStaticIP"].as<bool>();
 
-        if ((jsonDoc.containsKey("ip1")))
+        bool isChangeStaticIp = (jsonDoc.containsKey("ip")) && (jsonDoc.containsKey("gateway")) && (jsonDoc.containsKey("subnet"));
+        if (isChangeStaticIp)
         {
-          int ip1 = jsonDoc["ip1"].as<int>();
-          int ip2 = jsonDoc["ip2"].as<int>();
-          int ip3 = jsonDoc["ip3"].as<int>();
-          int ip4 = jsonDoc["ip4"].as<int>();
-          IPAddress combineIp(ip1, ip2, ip3, ip4);
+          String ip = jsonDoc["ip"].as<String>();
+          String gateway = jsonDoc["gateway"].as<String>();
+          String subnet = jsonDoc["subnet"].as<String>();
 
-          writeStaticIp(combineIp);
-          payload["ip"] = combineIp.toString();
+          int octetIp[4];
+          int octetGateway[4];
+          int octetSubnet[4];
+
+          stringToIP(ip, octetIp);
+          stringToIP(gateway, octetGateway);
+          stringToIP(subnet, octetSubnet);
+
+          IPAddress combineIp(octetIp[0], octetIp[1], octetIp[2], octetIp[3]);
+          IPAddress combineGateway(octetGateway[0], octetGateway[1], octetGateway[2], octetGateway[3]);
+          IPAddress combineSubnet(octetSubnet[0], octetSubnet[1], octetSubnet[2], octetSubnet[3]);
+
+          writeStaticIp(combineIp, combineGateway, combineSubnet);
+          writeBool(IS_STATIC_IP_ADDRESS, extractisStaticIP);
+          payload["ip"] = combineIp;
+          payload["gateway"] = combineGateway;
+          payload["subnet"] = combineSubnet;
         }
 
-        writeBool(IS_STATIC_IP_ADDRESS, extractisStaticIP);
         payload["isStaticIP"] = extractisStaticIP;
       }
       else
@@ -248,7 +276,27 @@ void handleVariable(AsyncWebServerRequest *request)
   payload["ColorMode"] = ColorMode;
 
   payload["isStaticIP"] = isStaticIP;
-  payload["staticIP"] = staticIP;
+  payload["IP"] = IP;
+  payload["Gateway"] = Gateway;
+  payload["Subnet"] = Subnet;
+
+  String jsonString;
+  serializeJson(json, jsonString);
+
+  request->send(200, "application/json", jsonString);
+}
+
+void handleTestInternetConnection(AsyncWebServerRequest *request)
+{
+  DynamicJsonDocument json(1224);
+  JsonObject payload = json.createNestedObject("payload");
+  json["code"] = 200;
+  json["message"] = "OK";
+  json["method"] = request->method();
+  json["url"] = request->url();
+  json["host"] = request->host();
+
+  payload["isInternetConnection"] = isInternetConnection();
 
   String jsonString;
   serializeJson(json, jsonString);
@@ -272,6 +320,7 @@ void httpHandler()
 
   server.on("/ping", HTTP_GET, handlePing);
   server.on("/variable", HTTP_GET, handleVariable);
+  server.on("/isInternetConnection", HTTP_GET, handleTestInternetConnection);
 
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });

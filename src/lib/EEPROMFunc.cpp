@@ -53,23 +53,33 @@ void readColor()
     return;
 }
 
-void writeStaticIp(const IPAddress &ip)
+void writeStaticIp(const IPAddress &ip, const IPAddress &gateway, const IPAddress &subnet)
 {
     for (int i = 0; i < 4; i++)
     {
         EEPROM.write(IP_ADDRESS_START_ADDRESS + i, ip[i]);
+        EEPROM.write(GATEWAY_START_ADDRESS + i, gateway[i]);
+        EEPROM.write(SUBNET_START_ADDRESS + i, subnet[i]);
     }
     EEPROM.commit();
 }
 
-IPAddress readStaticIp()
+void readStaticIp()
 {
-    byte ipAddress[4];
+    byte octetIp[4];
+    byte octetGateway[4];
+    byte octetSubnet[4];
+
     for (int i = 0; i < 4; i++)
     {
-        ipAddress[i] = EEPROM.read(IP_ADDRESS_START_ADDRESS + i);
+        octetIp[i] = EEPROM.read(IP_ADDRESS_START_ADDRESS + i);
+        octetGateway[i] = EEPROM.read(GATEWAY_START_ADDRESS + i);
+        octetSubnet[i] = EEPROM.read(SUBNET_START_ADDRESS + i);
     }
-    return IPAddress(ipAddress);
+    IP = IPAddress(octetIp);
+    Gateway = IPAddress(octetGateway);
+    Subnet = IPAddress(octetSubnet);
+    return;
 }
 
 void setupEEPROM()
@@ -80,6 +90,6 @@ void setupEEPROM()
 
     EEPROM.read(TIME_FORMAT_ADDRESS) == 12 ? timeFormat = 12 : timeFormat = 24;
     isStaticIP = EEPROM.readBool(IS_STATIC_IP_ADDRESS);
-    staticIP = readStaticIp();
+    readStaticIp();
     return;
 }

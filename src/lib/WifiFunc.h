@@ -13,5 +13,6 @@
 
 void startWifiAp();
 void startWifiSta();
+bool isInternetConnection();
 
 #endif

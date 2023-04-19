@@ -21,7 +21,7 @@ void startWifiAp()
     Serial.println(APssid);
     Serial.print("----- pwd:");
     Serial.println(APpassword);
-    
+
     IPAddress localIP = WiFi.softAPIP();
     Serial.println(localIP);
 
@@ -69,18 +69,18 @@ void startWifiSta()
         trying++;
         delay(1000);
     }
- 
     BlankDots();
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
     Serial.println("Connected to WiFi");
 
     if (isStaticIP)
     {
-        IPAddress staticGateway = WiFi.gatewayIP();    // Gateway
-        IPAddress staticSubnet = WiFi.subnetMask();
-
-        WiFi.config(staticIP, staticGateway, staticSubnet);
+        WiFi.config(IP, Gateway, Subnet);
         Serial.print("Use static ip");
+    }else{
+        IP = WiFi.localIP();
+        Gateway = WiFi.gatewayIP();
+        Subnet = WiFi.subnetMask();
     }
 
     Serial.print("Ip address : ");
@@ -96,4 +96,31 @@ void startWifiSta()
         delay(1500);
     }
     return;
+}
+
+bool isInternetConnection()
+{
+    WiFiClient client;
+
+    // Connect to a test website
+    if (!client.connect("www.google.com", 80))
+        return false;
+
+    // Send a HTTP GET request
+    client.print("GET / HTTP/1.1\r\nHost: www.google.com\r\n\r\n");
+
+    // Wait for response
+    while (!client.available())
+    {
+        delay(10);
+    }
+
+    // Read response headers
+    String headers = client.readStringUntil('\n');
+
+    // Check if response is OK
+    if (headers.indexOf("200 OK") == -1)
+        return false;
+
+    return true;
 }
