@@ -7,20 +7,6 @@
 
 AsyncWebServer server(3000);
 
-void stringToIP(String ipAddress, int ipArray[])
-{
-  int dot1 = ipAddress.indexOf(".");
-  ipArray[0] = ipAddress.substring(0, dot1).toInt();
-
-  int dot2 = ipAddress.indexOf(".", dot1 + 1);
-  ipArray[1] = ipAddress.substring(dot1 + 1, dot2).toInt();
-
-  int dot3 = ipAddress.indexOf(".", dot2 + 1);
-  ipArray[2] = ipAddress.substring(dot2 + 1, dot3).toInt();
-
-  ipArray[3] = ipAddress.substring(dot3 + 1).toInt();
-}
-
 void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
   if (index == 0)
@@ -40,7 +26,6 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
     json["message"] = "OK";
     json["method"] = request->method();
     json["url"] = request->url();
-    json["host"] = request->host();
 
     const String url = request->url();
 
@@ -190,7 +175,16 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
 
           int octetIp[4];
 
-          stringToIP(ip, octetIp);
+          int dot1 = ip.indexOf(".");
+          octetIp[0] = ip.substring(0, dot1).toInt();
+
+          int dot2 = ip.indexOf(".", dot1 + 1);
+          octetIp[1] = ip.substring(dot1 + 1, dot2).toInt();
+
+          int dot3 = ip.indexOf(".", dot2 + 1);
+          octetIp[2] = ip.substring(dot2 + 1, dot3).toInt();
+
+          octetIp[3] = ip.substring(dot3 + 1).toInt();
 
           IPAddress combineIp(octetIp[0], octetIp[1], octetIp[2], octetIp[3]);
 
@@ -249,7 +243,6 @@ void handleVariable(AsyncWebServerRequest *request)
   json["message"] = "OK";
   json["method"] = request->method();
   json["url"] = request->url();
-  json["host"] = request->host();
 
   payload["CodeVersion"] = CodeVersion;
   payload["ssid"] = ssid;
@@ -285,7 +278,6 @@ void handleTestInternetConnection(AsyncWebServerRequest *request)
   json["message"] = "OK";
   json["method"] = request->method();
   json["url"] = request->url();
-  json["host"] = request->host();
 
   payload["isInternetConnection"] = isInternetConnection();
 
