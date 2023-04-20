@@ -91,9 +91,7 @@ Content-Type: application/json
 
 {
   "isStaticIP": true,
-  "ip": "10.10.10.30",
-  "gateway": "10.10.10.10",
-  "subnet": "255.255.255.192"
+  "ip": "10.10.10.50"
 }
 
 

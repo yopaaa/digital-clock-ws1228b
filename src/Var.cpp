@@ -1,6 +1,6 @@
 #include "Var.h"
 
-String CodeVersion = "v3.4.19";
+String CodeVersion = "v3.4.20";
 String ssid = "";
 String password = "";
 
@@ -16,9 +16,7 @@ const int BLUE_ADDRESS = 103;
 
 const int TIME_FORMAT_ADDRESS = 120;
 const int IP_ADDRESS_START_ADDRESS = 200;
-const int GATEWAY_START_ADDRESS = 205;
-const int SUBNET_START_ADDRESS = 210;
-const int IS_STATIC_IP_ADDRESS = 215;
+const int IS_STATIC_IP_ADDRESS = 205;
 
 const char *ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = 7 * 3600; // UTC+7
@@ -42,3 +40,4 @@ bool isStaticIP = false;
 IPAddress IP(0, 0, 0, 0);
 IPAddress Gateway(0, 0, 0, 0);
 IPAddress Subnet(0, 0, 0, 0);
+IPAddress DNS1(0, 0, 0, 0);

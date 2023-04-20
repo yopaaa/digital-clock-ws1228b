@@ -4,9 +4,6 @@
 #include <FastLED.h>
 #include <Arduino.h>
 
-extern CRGB leds[];
-extern CRGB Dots[];
-
 void setupLED();
 
 void BlinkDots();

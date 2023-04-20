@@ -28,8 +28,6 @@ extern const int GREEN_ADDRESS;
 extern const int BLUE_ADDRESS;
 extern const int TIME_FORMAT_ADDRESS;
 extern const int IP_ADDRESS_START_ADDRESS;
-extern const int GATEWAY_START_ADDRESS;
-extern const int SUBNET_START_ADDRESS;
 extern const int IS_STATIC_IP_ADDRESS;
 
 extern const char *ntpServer;
@@ -54,4 +52,6 @@ extern bool isStaticIP;
 extern IPAddress IP;
 extern IPAddress Gateway;
 extern IPAddress Subnet;
+extern IPAddress DNS1;
+
 #endif

@@ -73,14 +73,17 @@ void startWifiSta()
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
     Serial.println("Connected to WiFi");
 
+    Gateway = WiFi.gatewayIP();
+    Subnet = WiFi.subnetMask();
+    DNS1 = WiFi.dnsIP();
     if (isStaticIP)
     {
-        WiFi.config(IP, Gateway, Subnet);
+        WiFi.config(IP, Gateway, Subnet, DNS1);
         Serial.print("Use static ip");
-    }else{
+    }
+    else
+    {
         IP = WiFi.localIP();
-        Gateway = WiFi.gatewayIP();
-        Subnet = WiFi.subnetMask();
     }
 
     Serial.print("Ip address : ");

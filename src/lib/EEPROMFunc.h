@@ -11,7 +11,7 @@ void defaultState();
 void readWifiCredentials();
 
 void readColor();
-void writeStaticIp(const IPAddress &ip, const IPAddress &gateway, const IPAddress &subnet);
+void writeStaticIp(const IPAddress &ip);
 void writeString(int address, String value);
 void writeBool(int address, bool value);
 String readString(int address);

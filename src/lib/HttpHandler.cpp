@@ -53,7 +53,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         IPAddress nullIP(0, 0, 0, 0);
 
         saveWifiCredentials(ssid, password);
-        writeStaticIp(nullIP, nullIP, nullIP);
+        writeStaticIp(nullIP);
         payload["ssid"] = ssid;
       }
       else
@@ -183,30 +183,20 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
       {
         bool extractisStaticIP = jsonDoc["isStaticIP"].as<bool>();
 
-        bool isChangeStaticIp = (jsonDoc.containsKey("ip")) && (jsonDoc.containsKey("gateway")) && (jsonDoc.containsKey("subnet"));
+        bool isChangeStaticIp = (jsonDoc.containsKey("ip"));
         if (isChangeStaticIp)
         {
           String ip = jsonDoc["ip"].as<String>();
-          String gateway = jsonDoc["gateway"].as<String>();
-          String subnet = jsonDoc["subnet"].as<String>();
 
           int octetIp[4];
-          int octetGateway[4];
-          int octetSubnet[4];
 
           stringToIP(ip, octetIp);
-          stringToIP(gateway, octetGateway);
-          stringToIP(subnet, octetSubnet);
 
           IPAddress combineIp(octetIp[0], octetIp[1], octetIp[2], octetIp[3]);
-          IPAddress combineGateway(octetGateway[0], octetGateway[1], octetGateway[2], octetGateway[3]);
-          IPAddress combineSubnet(octetSubnet[0], octetSubnet[1], octetSubnet[2], octetSubnet[3]);
 
-          writeStaticIp(combineIp, combineGateway, combineSubnet);
+          writeStaticIp(combineIp);
           writeBool(IS_STATIC_IP_ADDRESS, extractisStaticIP);
           payload["ip"] = combineIp;
-          payload["gateway"] = combineGateway;
-          payload["subnet"] = combineSubnet;
         }
 
         payload["isStaticIP"] = extractisStaticIP;
@@ -279,6 +269,7 @@ void handleVariable(AsyncWebServerRequest *request)
   payload["IP"] = IP;
   payload["Gateway"] = Gateway;
   payload["Subnet"] = Subnet;
+  payload["DNS1"] = DNS1;
 
   String jsonString;
   serializeJson(json, jsonString);
