@@ -69,10 +69,10 @@ POST http://{{host}}/color/change HTTP/1.1
 Content-Type: application/json
 
 {
-    "red": 100,
-    "green": 110,
+    "red": 220,
+    "green": 50,
     "blue": 0,
-    "brightness": 100
+    "brightness": 150
 }
 
 
@@ -95,5 +95,13 @@ Content-Type: application/json
 }
 
 
+
+###
+POST http://{{host}}/settime HTTP/1.1
+Content-Type: application/json
+
+{
+  "timestamp": 1682478266
+}
 
 

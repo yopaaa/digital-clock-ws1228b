@@ -71,8 +71,7 @@ Content-Type: application/json
     "code": 200,
     "message": "OK",
     "method": 1,
-    "url": "/variable",
-    "host": "<target ip>:3000"
+    "url": "/variable"
 }
 ```
 
@@ -106,8 +105,7 @@ Content-Type: application/json
     "code": 200,
     "message": "OK",
     "method": 2,
-    "url": "/wifi/set",
-    "host": "<target ip>:3000"
+    "url": "/wifi/set"
 }
 ```
 
@@ -136,8 +134,7 @@ Content-Type: application/json
     "code": 200,
     "message": "OK",
     "method": 2,
-    "url": "/restart",
-    "host": "<target ip>:3000
+    "url": "/restart"
 }
 ```
 
@@ -172,8 +169,7 @@ Content-Type: application/json
     "code": 200,
     "message": "OK",
     "method": 2,
-    "url": "/mode",
-    "host": "<target ip>:3000
+    "url": "/mode"
 }
 ```
 
@@ -206,8 +202,7 @@ Content-Type: application/json
     "code": 200,
     "message": "OK",
     "method": 2,
-    "url": "/timeformat",
-    "host": "<target ip>:3000
+    "url": "/timeformat"
 }
 ```
 
@@ -240,8 +235,7 @@ Content-Type: application/json
     "code": 200,
     "message": "OK",
     "method": 2,
-    "url": "/brightness",
-    "host": "<target ip>:3000
+    "url": "/brightness"
 }
 ```
 
@@ -279,8 +273,7 @@ Content-Type: application/json
     "code": 200,
     "message": "OK",
     "method": 2,
-    "url": "/color/change",
-    "host": "<target ip>:3000
+    "url": "/color/change"
 }
 ```
 
@@ -313,8 +306,7 @@ Content-Type: application/json
     "code": 200,
     "message": "OK",
     "method": 2,
-    "url": "/color/mode",
-    "host": "<target ip>:3000
+    "url": "/color/mode"
 }
 ```
 
@@ -352,8 +344,43 @@ Content-Type: application/json
     "code": 200,
     "message": "OK",
     "method": 2,
-    "url": "/staticIp",
-    "host": "<target ip>:3000"
+    "url": "/staticIp"
+}
 ```
 
 ---
+
+## POST /settime
+
+#### Example Request:
+
+```bash
+POST /settime HTTP/1.1
+Host: <target ip>:3000
+Content-Type: application/json
+
+{
+  "timestamp": 1682478266
+}
+```
+
+#### Example Response:
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "payload": {
+    "timestamp": 1682478266
+  },
+  "code": 200,
+  "message": "OK",
+  "method": 2,
+  "url": "/settime"
+}
+```
+
+---
+
+

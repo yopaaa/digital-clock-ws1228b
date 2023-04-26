@@ -101,6 +101,22 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
+    else if (url == "/settime")
+    {
+      if ((jsonDoc.containsKey("timestamp")))
+      {
+        int timestamp = jsonDoc["timestamp"].as<int>();
+        timeval tv = {timestamp, 0};
+        settimeofday(&tv, nullptr);
+
+        payload["timestamp"] = timestamp;
+      }
+      else
+      {
+        json["code"] = 400;
+        json["message"] = "Bad Request";
+      }
+    }
     else if (url == "/brightness")
     {
       if ((jsonDoc.containsKey("brightness")))

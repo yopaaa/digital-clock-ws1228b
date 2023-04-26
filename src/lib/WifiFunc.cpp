@@ -7,51 +7,6 @@ IPAddress softAPLocalIP(192, 168, 0, 1);
 IPAddress softAPGateway(192, 168, 0, 1);
 IPAddress softAPSubnet(255, 255, 255, 0);
 
-void startWifiAp()
-{
-    WiFi.mode(WIFI_AP);
-    WiFi.softAPConfig(softAPLocalIP, softAPGateway, softAPSubnet);
-    WiFi.softAP(APssid, APpassword);
-
-    Serial.println("Access Point started");
-    Serial.print("----- ssid:");
-    Serial.println(APssid);
-    Serial.print("----- pwd:");
-    Serial.println(APpassword);
-
-    IPAddress localIP = WiFi.softAPIP();
-    printIpAddressToDisplay(localIP);
-    displayMode = "counter";
-    return;
-}
-
-void startWifiSta()
-{
-    WiFi.mode(WIFI_STA);
-    WiFi.setHostname(APssid);                   // define hostname
-    WiFi.begin(ssid.c_str(), password.c_str()); // Connect to Wi-Fi using the saved SSID and password
-    checkIsWiFiConnected();
-    BlankDots();
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-
-    Gateway = WiFi.gatewayIP();
-    Subnet = WiFi.subnetMask();
-    DNS1 = WiFi.dnsIP();
-    if (isStaticIP)
-    {
-        WiFi.config(IP, Gateway, Subnet, DNS1);
-        Serial.print("Use static ip");
-    }
-    else
-    {
-        IP = WiFi.localIP();
-    }
-
-    IPAddress localIP = WiFi.localIP();
-    printIpAddressToDisplay(localIP);
-    return;
-}
-
 void printIpAddressToDisplay(IPAddress ip)
 {
     Serial.print("Ip address : ");
@@ -91,10 +46,54 @@ void checkIsWiFiConnected()
             return;
         }
         trying++;
-        WiFi.reconnect();
         delay(1000);
     }
     Serial.println("Connected to WiFi");
+    return;
+}
+
+void startWifiAp()
+{
+    WiFi.mode(WIFI_AP);
+    WiFi.softAPConfig(softAPLocalIP, softAPGateway, softAPSubnet);
+    WiFi.softAP(APssid, APpassword);
+
+    Serial.println("Access Point started");
+    Serial.print("----- ssid:");
+    Serial.println(APssid);
+    Serial.print("----- pwd:");
+    Serial.println(APpassword);
+
+    IPAddress localIP = WiFi.softAPIP();
+    printIpAddressToDisplay(localIP);
+    displayMode = "counter";
+    return;
+}
+
+void startWifiSta()
+{
+    WiFi.mode(WIFI_STA);
+    WiFi.setHostname(APssid);                   // define hostname
+    WiFi.begin(ssid.c_str(), password.c_str()); // Connect to Wi-Fi using the saved SSID and password
+    checkIsWiFiConnected();
+    BlankDots();
+    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+
+    Gateway = WiFi.gatewayIP();
+    Subnet = WiFi.subnetMask();
+    DNS1 = WiFi.dnsIP();
+    if (isStaticIP)
+    {
+        WiFi.config(IP, Gateway, Subnet, DNS1);
+        Serial.println("Use static ip");
+    }
+    else
+    {
+        IP = WiFi.localIP();
+    }
+
+    IPAddress localIP = WiFi.localIP();
+    printIpAddressToDisplay(localIP);
     return;
 }
 
