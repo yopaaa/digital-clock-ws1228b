@@ -1,6 +1,5 @@
 #include "Var.h"
 
-String CodeVersion = "v3.4.20";
 String ssid = "";
 String password = "";
 

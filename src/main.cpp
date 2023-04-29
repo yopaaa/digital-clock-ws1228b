@@ -1,9 +1,9 @@
 #include <Wire.h>
 #include "Var.h"
-#include "./lib/HttpHandler.h"
-#include "./lib/Led.h"
-#include "./lib/EEPROMFunc.h"
-#include "./lib/WifiFunc.h"
+#include "HttpHandler.h"
+#include "Led.h"
+#include "EEPROMFunc.h"
+#include "WifiFunc.h"
 
 void setup()
 {

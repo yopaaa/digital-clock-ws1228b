@@ -1,7 +1,7 @@
 #include "EEPROMFunc.h"
 #include <Arduino.h>
 #include <EEPROM.h>
-#include "../Var.h"
+#include "Var.h"
 
 void writeString(int address, String value)
 {

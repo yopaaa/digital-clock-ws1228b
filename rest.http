@@ -35,6 +35,13 @@ Content-Type: application/json
 
 }
 
+###
+POST http://{{host}}/test HTTP/1.1
+Content-Type: application/json
+
+{
+
+}
 
 ###
 POST http://{{host}}/mode HTTP/1.1

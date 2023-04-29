@@ -1,5 +1,5 @@
 #include "WifiFunc.h"
-#include "../Var.h"
+#include "Var.h"
 #include "Led.h"
 #include "EEPROMFunc.h"
 

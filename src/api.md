@@ -23,7 +23,7 @@ Content-Type: application/json
 
 {
     "message": "OK",
-    "CodeVersion": "v3",
+    "CODE_VERSION": "v3",
     "CycleCount": 172085510,
     "SketchSize": 870976,
     "version": 1,
@@ -54,7 +54,7 @@ Content-Type: application/json
 
 {
     "payload": {
-        "CodeVersion": "v3",
+        "CODE_VERSION": "v3",
         "ssid": "ssid",
         "APssid": "digital_clock",
         "APpassword": "12345678zxcvbnm",

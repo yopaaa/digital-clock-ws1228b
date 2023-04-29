@@ -1,7 +1,7 @@
 #ifndef LED
 #define LED
 
-#include <FastLED.h>
+// #include <FastLED.h>
 #include <Arduino.h>
 
 void setupLED();

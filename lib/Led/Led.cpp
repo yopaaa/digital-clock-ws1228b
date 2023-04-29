@@ -1,7 +1,8 @@
 #include "Led.h"
-#include "../Var.h"
+#include "Var.h"
 #include "WifiFunc.h"
 #include "EEPROMFunc.h"
+#include "FastLED.h"
 
 CRGB leds[NUM_LEDS];
 CRGB Dots[NUM_DOTS];
@@ -134,7 +135,7 @@ void TestStartUp()
 {
     Serial.println("");
     Serial.print("Code Version : ");
-    Serial.println(CodeVersion);
+    Serial.println(CODE_VERSION);
     readColor();
     BlankDisplay(0);
     for (int i = 0; i < NUM_LEDS; i++)

@@ -1,7 +1,7 @@
 #include <AsyncElegantOTA.h>
 #include "HttpHandler.h"
 #include "EEPROMFunc.h"
-#include "../Var.h"
+#include "Var.h"
 #include "Led.h"
 #include "WifiFunc.h"
 
@@ -233,7 +233,7 @@ void handlePing(AsyncWebServerRequest *request)
 {
   DynamicJsonDocument json(1024);
   json["message"] = "OK";
-  json["CodeVersion"] = CodeVersion;
+  json["CODE_VERSION"] = CODE_VERSION;
   json["CycleCount"] = ESP.getCycleCount();
   // json["ChipModel"] = ESP.getChipModel();
   json["SketchSize"] = ESP.getSketchSize();
@@ -260,7 +260,7 @@ void handleVariable(AsyncWebServerRequest *request)
   json["method"] = request->method();
   json["url"] = request->url();
 
-  payload["CodeVersion"] = CodeVersion;
+  payload["CODE_VERSION"] = CODE_VERSION;
   payload["ssid"] = ssid;
   payload["APssid"] = APssid;
   payload["APpassword"] = APpassword;
