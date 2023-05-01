@@ -14,8 +14,7 @@
 #define DOTS_PIN 13   // Dots pin
 #define WIFI_AP_BTN 4 // Start wifi mode AP pin button
 
-#define CODE_VERSION "v3.4.29"
-// extern String CODE_VERSION;
+#define CODE_VERSION "v3.5.1"
 extern String ssid;
 extern String password;
 
@@ -48,6 +47,8 @@ extern int counterCount;
 extern int counterLimit;
 extern int countDownCount;
 extern int timeFormat;
+extern String segment1mode;
+extern String segment2mode;
 
 extern bool isStaticIP;
 extern IPAddress IP;

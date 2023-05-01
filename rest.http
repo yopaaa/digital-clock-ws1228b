@@ -52,6 +52,14 @@ Content-Type: application/json
     "limit": 100
 }
 
+###
+POST http://{{host}}/segment/mode HTTP/1.1
+Content-Type: application/json
+
+{
+   "segment1": "hour",
+   "segment2": "min"
+}
 
 ###
 POST http://{{host}}/timeformat HTTP/1.1
@@ -110,5 +118,6 @@ Content-Type: application/json
 {
   "timestamp": 1682478266
 }
+
 
 

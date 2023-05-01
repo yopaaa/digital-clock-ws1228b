@@ -217,6 +217,26 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
+    else if (url == "/segment/mode")
+    {
+      bool isValid = (jsonDoc.containsKey("segment1")) && (jsonDoc.containsKey("segment2"));
+      if (isValid)
+      {
+        String segment1 = jsonDoc["segment1"].as<String>();
+        String segment2 = jsonDoc["segment2"].as<String>();
+
+        segment1mode = segment1;
+        segment2mode = segment2;
+
+        payload["segment1"] = segment1;
+        payload["segment2"] = segment2;
+      }
+      else
+      {
+        json["code"] = 400;
+        json["message"] = "Bad Request";
+      }
+    }
     else // NOT FOUND Handle
     {
       json["code"] = 404;
@@ -279,6 +299,7 @@ void handleVariable(AsyncWebServerRequest *request)
   payload["Gateway"] = Gateway;
   payload["Subnet"] = Subnet;
   payload["DNS1"] = DNS1;
+  payload["uptime"] = millis() / 1000;
 
   String jsonString;
   serializeJson(json, jsonString);
