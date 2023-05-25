@@ -97,6 +97,41 @@ void startWifiSta()
     return;
 }
 
+bool pingGateway()
+{
+    WiFiClient client;
+    
+    if (client.connect(Gateway, 1))
+    {
+        Serial.println("Ping to gateway successful");
+        client.stop();
+        return true;
+    }
+    else
+    {
+        Serial.println("Ping to gateway failed");
+        return false;
+    }
+}
+
+void checkReConnectWifiSta()
+{
+    bool isConnecToGateway = pingGateway();
+
+    if (WiFi.getMode() == WIFI_STA && !isConnecToGateway)
+    {
+        Serial.println("WiFi connection lost. Reconnecting...");
+
+        WiFi.disconnect();
+        WiFi.begin(ssid.c_str(), password.c_str());
+
+        if (WiFi.status() != WL_CONNECTED)
+            Serial.println("Failed reconnected to WiFi...");
+
+        Serial.println("Reconnected to WiFi");
+    }
+}
+
 bool isInternetConnection()
 {
     WiFiClient client;
