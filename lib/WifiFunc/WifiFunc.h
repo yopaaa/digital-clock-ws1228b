@@ -14,6 +14,5 @@
 void startWifiAp();
 void startWifiSta();
 bool isInternetConnection();
-void checkReConnectWifiSta();
 
 #endif

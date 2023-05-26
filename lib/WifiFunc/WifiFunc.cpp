@@ -97,47 +97,6 @@ void startWifiSta()
     return;
 }
 
-bool pingGateway()
-{
-    WiFiClient client;
-    
-    // Connect to a test website
-    if (!client.connect(Gateway, 80))
-        return false;
-
-    // Send a HTTP GET request
-    client.print("GET / HTTP/1.1\r\nHost: www.google.com\r\n\r\n");
-
-    // Wait for response
-    if (!client.available())
-        return false;
-
-    // Read response headers
-    String headers = client.readStringUntil('\n');
-    if (!headers)
-        return false;
-
-    return true;
-}
-
-void checkReConnectWifiSta() // bug
-{
-    bool isConnecToGateway = pingGateway();
-
-    if (WiFi.getMode() == WIFI_STA && !isConnecToGateway)
-    {
-        Serial.println("WiFi connection lost. Reconnecting...");
-
-        WiFi.disconnect();
-        WiFi.begin(ssid.c_str(), password.c_str());
-
-        if (WiFi.status() != WL_CONNECTED)
-            Serial.println("Failed reconnected to WiFi...");
-
-        Serial.println("Reconnected to WiFi");
-    }
-}
-
 bool isInternetConnection()
 {
     WiFiClient client;

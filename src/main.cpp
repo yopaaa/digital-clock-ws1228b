@@ -22,8 +22,6 @@ void setup()
 // LOOP FUNCTION
 void loop()
 {
-  checkReConnectWifiSta();
-
   if (displayMode == "clock")
   {
     printLocalTime();
