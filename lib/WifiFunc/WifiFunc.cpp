@@ -101,20 +101,26 @@ bool pingGateway()
 {
     WiFiClient client;
     
-    if (client.connect(Gateway, 1))
-    {
-        Serial.println("Ping to gateway successful");
-        client.stop();
-        return true;
-    }
-    else
-    {
-        Serial.println("Ping to gateway failed");
+    // Connect to a test website
+    if (!client.connect(Gateway, 80))
         return false;
-    }
+
+    // Send a HTTP GET request
+    client.print("GET / HTTP/1.1\r\nHost: www.google.com\r\n\r\n");
+
+    // Wait for response
+    if (!client.available())
+        return false;
+
+    // Read response headers
+    String headers = client.readStringUntil('\n');
+    if (!headers)
+        return false;
+
+    return true;
 }
 
-void checkReConnectWifiSta()
+void checkReConnectWifiSta() // bug
 {
     bool isConnecToGateway = pingGateway();
 
@@ -151,8 +157,6 @@ bool isInternetConnection()
 
     // Read response headers
     String headers = client.readStringUntil('\n');
-
-    // Check if response is OK
     if (headers.indexOf("200 OK") == -1)
         return false;
 
