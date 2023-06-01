@@ -37,10 +37,12 @@ void SetNumber(int segment, int num)
 {
     int x = segment * LEDS_PER_SEGMENT - LEDS_PER_SEGMENT;
     int y = 0;
+    int oneSideSegment = LEDS_PER_SEGMENT / 7;
 
-    for (int i = x; i < segment * 7; i++)
+    for (int i = x; i < segment * LEDS_PER_SEGMENT; i++)
     {
-        if (Frame[num][y] == 1)
+        bool isOn = Frame[num][int(y / oneSideSegment)] == 1;
+        if (isOn)
         {
             leds[i] = CRGB(RED, GREEN, BLUE);
         }
