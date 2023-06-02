@@ -1,20 +1,20 @@
 {
   "version": 1,
-  "author": "Uri Shaked",
+  "author": "Alvin dennis",
   "editor": "wokwi",
   "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 465.5,
+      "left": 110.2,
+      "attrs": {}
+    },
     {
       "type": "wokwi-breadboard-mini",
       "id": "bb1",
       "top": 440.2,
       "left": -88.8,
-      "attrs": {}
-    },
-    {
-      "type": "wokwi-arduino-uno",
-      "id": "uno",
-      "top": 432.6,
-      "left": 95.4,
       "attrs": {}
     },
     {
@@ -212,9 +212,452 @@
       "top": 54.1,
       "left": 296.6,
       "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb29",
+      "top": 84.28,
+      "left": 489.92,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb30",
+      "top": 189.88,
+      "left": 557.12,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb31",
+      "top": 161.08,
+      "left": 489.92,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb32",
+      "top": 189.88,
+      "left": 595.52,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb33",
+      "top": 189.88,
+      "left": 518.72,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb34",
+      "top": 122.68,
+      "left": 489.92,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb35",
+      "top": 84.28,
+      "left": 624.32,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb36",
+      "top": 161.08,
+      "left": 624.32,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb37",
+      "top": 122.68,
+      "left": 624.32,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb38",
+      "top": 218.68,
+      "left": 489.92,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb39",
+      "top": 295.48,
+      "left": 489.92,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb40",
+      "top": 257.08,
+      "left": 489.92,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb41",
+      "top": 218.68,
+      "left": 624.32,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb42",
+      "top": 295.48,
+      "left": 624.32,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb43",
+      "top": 257.08,
+      "left": 624.32,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb44",
+      "top": 324.28,
+      "left": 557.12,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb45",
+      "top": 324.28,
+      "left": 595.52,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb46",
+      "top": 324.28,
+      "left": 518.72,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb47",
+      "top": 55.48,
+      "left": 557.12,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb48",
+      "top": 55.48,
+      "left": 595.52,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb49",
+      "top": 55.48,
+      "left": 518.72,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb50",
+      "top": 91.4,
+      "left": 826.66,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb51",
+      "top": 197,
+      "left": 893.86,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb52",
+      "top": 168.2,
+      "left": 826.66,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb53",
+      "top": 197,
+      "left": 932.26,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb54",
+      "top": 197,
+      "left": 855.46,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb55",
+      "top": 129.8,
+      "left": 826.66,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb56",
+      "top": 91.4,
+      "left": 961.06,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb57",
+      "top": 168.2,
+      "left": 961.06,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb58",
+      "top": 129.8,
+      "left": 961.06,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb59",
+      "top": 225.8,
+      "left": 826.66,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb60",
+      "top": 302.6,
+      "left": 826.66,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb61",
+      "top": 264.2,
+      "left": 826.66,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb62",
+      "top": 225.8,
+      "left": 961.06,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb63",
+      "top": 302.6,
+      "left": 961.06,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb64",
+      "top": 264.2,
+      "left": 961.06,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb65",
+      "top": 331.4,
+      "left": 893.86,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb66",
+      "top": 331.4,
+      "left": 932.26,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb67",
+      "top": 331.4,
+      "left": 855.46,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb68",
+      "top": 62.6,
+      "left": 893.86,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb69",
+      "top": 62.6,
+      "left": 932.26,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb70",
+      "top": 62.6,
+      "left": 855.46,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb71",
+      "top": 90.38,
+      "left": 1064.73,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb72",
+      "top": 195.98,
+      "left": 1131.93,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb73",
+      "top": 167.18,
+      "left": 1064.73,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb74",
+      "top": 195.98,
+      "left": 1170.33,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb75",
+      "top": 195.98,
+      "left": 1093.53,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb76",
+      "top": 128.78,
+      "left": 1064.73,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb77",
+      "top": 90.38,
+      "left": 1199.13,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb78",
+      "top": 167.18,
+      "left": 1199.13,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb79",
+      "top": 128.78,
+      "left": 1199.13,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb80",
+      "top": 224.78,
+      "left": 1064.73,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb81",
+      "top": 301.58,
+      "left": 1064.73,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb82",
+      "top": 263.18,
+      "left": 1064.73,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb83",
+      "top": 224.78,
+      "left": 1199.13,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb84",
+      "top": 301.58,
+      "left": 1199.13,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb85",
+      "top": 263.18,
+      "left": 1199.13,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb86",
+      "top": 330.38,
+      "left": 1131.93,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb87",
+      "top": 330.38,
+      "left": 1170.33,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb88",
+      "top": 330.38,
+      "left": 1093.53,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb89",
+      "top": 61.58,
+      "left": 1131.93,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb90",
+      "top": 61.58,
+      "left": 1170.33,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-neopixel",
+      "id": "rgb91",
+      "top": 61.58,
+      "left": 1093.53,
+      "attrs": {}
     }
   ],
   "connections": [
+    ["esp:TX0", "$serialMonitor:RX", "", []],
+    ["esp:RX0", "$serialMonitor:TX", "", []],
     [
       "rgb7:DIN",
       "rgb3:DOUT",
@@ -476,9 +919,450 @@
     ["rgb25:VSS", "bb1:16t.a", "white", ["v22.37", "h-250.4"]],
     ["bb1:2t.e", "bb1:15t.e", "red", ["v10.09", "h124.8"]],
     ["bb1:3t.e", "bb1:16t.e", "white", ["v17.15", "h124.8"]],
-    ["bb1:16t.e", "uno:GND.2", "green", ["v171.06", "h200.76"]],
-    ["uno:5V", "bb1:15t.e", "red", ["v29.3", "h-197.8"]],
-    ["uno:10", "bb1:14t.a", "green", ["v39.48", "h-1.93"]]
+    ["rgb38:VDD", "rgb40:VDD", "red", ["h-14.74", "v37.39"]],
+    ["rgb40:VDD", "rgb39:VDD", "red", ["h-14.91", "v36.55"]],
+    ["rgb39:VDD", "rgb46:VDD", "red", ["h-14.75", "v-1.13"]],
+    ["rgb46:VDD", "rgb44:VDD", "red", ["h0", "v-7.94", "h37.82"]],
+    ["rgb44:VDD", "rgb45:VDD", "red", ["h-0.05", "v-7.15", "h38.21"]],
+    [
+      "rgb45:VDD",
+      "rgb42:VDD",
+      "red",
+      ["h-0.37", "v-8.07", "h16.08", "v-20.42"]
+    ],
+    ["rgb42:VDD", "rgb43:VDD", "red", ["h-12.53", "v0.23"]],
+    ["rgb43:VDD", "rgb41:VDD", "red", ["h-12.62", "v-38.57"]],
+    ["rgb32:VDD", "rgb41:VDD", "red", ["h-7.02", "v30.88"]],
+    ["rgb33:VDD", "rgb38:VDD", "red", ["h-43.65", "v28.73"]],
+    ["rgb30:VDD", "rgb32:VDD", "red", ["h-8.91", "v-11.8", "h47.18"]],
+    ["rgb32:VDD", "rgb36:VDD", "red", ["v-10.57", "h21.53", "v-18.23"]],
+    ["rgb37:VDD", "rgb36:VDD", "red", ["h-6.75", "v37.59"]],
+    ["rgb35:VDD", "rgb37:VDD", "red", ["h-6.38", "v38.4"]],
+    ["rgb48:VDD", "rgb47:VDD", "red", ["v-21.98", "h-38.4"]],
+    ["rgb47:VDD", "rgb49:VDD", "red", ["v-22.16", "h-38.4"]],
+    ["rgb31:VDD", "rgb34:VDD", "red", ["h-15.21", "v-38.4"]],
+    ["rgb31:VDD", "rgb38:VDD", "red", ["h-14.98", "v57.6"]],
+    ["rgb29:VDD", "rgb34:VDD", "red", ["h-15.49", "v38.4"]],
+    ["rgb29:VDD", "rgb49:VDD", "red", ["h-15.43", "v-50.9", "h44.23"]],
+    ["rgb48:VDD", "rgb35:VDD", "red", ["v-21.25", "h28.8"]],
+    ["rgb38:VSS", "rgb40:VSS", "white", ["v0.17", "h17.13", "v37.41"]],
+    ["rgb40:VSS", "rgb39:VSS", "white", ["v-0.08", "h17.07", "v38.09"]],
+    ["rgb46:VSS", "rgb44:VSS", "white", ["v20.87", "h38.4"]],
+    ["rgb44:VSS", "rgb45:VSS", "white", ["v20.51", "h41.13"]],
+    ["rgb41:VSS", "rgb43:VSS", "white", ["h19.02", "v38.4"]],
+    ["rgb43:VSS", "rgb42:VSS", "white", ["h19.36", "v38.4"]],
+    ["rgb42:VSS", "rgb45:VSS", "white", ["h18.67", "v49.07", "h-47.47"]],
+    [
+      "rgb39:VSS",
+      "rgb46:VSS",
+      "white",
+      ["v21.37", "h-34.75", "v29.03", "h63.55"]
+    ],
+    ["rgb33:VSS", "rgb30:VSS", "white", ["v14.78", "h38.4"]],
+    ["rgb32:VSS", "rgb30:VSS", "white", ["v14.47", "h-38.4"]],
+    ["rgb38:VSS", "rgb33:VSS", "white", ["v-0.15", "h28.8"]],
+    ["rgb29:VSS", "rgb34:VSS", "white", ["h14.01", "v38.4"]],
+    ["rgb34:VSS", "rgb31:VSS", "white", ["h14.03", "v38.4"]],
+    ["rgb49:VSS", "rgb47:VSS", "white", ["v17.75", "h38.4"]],
+    ["rgb47:VSS", "rgb48:VSS", "white", ["v17.17", "h38.4"]],
+    ["rgb29:VSS", "rgb49:VSS", "white", ["v0.83", "h28.32"]],
+    ["rgb35:VSS", "rgb37:VSS", "white", ["h15.08", "v38.4"]],
+    ["rgb37:VSS", "rgb36:VSS", "white", ["h15.52", "v38.4"]],
+    ["rgb48:VSS", "rgb35:VSS", "white", ["v0.07", "h43.9", "v29.49"]],
+    ["rgb32:VSS", "rgb36:VSS", "white", ["v0.41", "h44.57", "v-29.84"]],
+    [
+      "rgb38:DOUT",
+      "rgb40:DIN",
+      "green",
+      ["h-9.35", "v15.91", "h38.5", "v12.13"]
+    ],
+    [
+      "rgb40:DOUT",
+      "rgb39:DIN",
+      "green",
+      ["h-8.65", "v15.9", "h38.33", "v11.98"]
+    ],
+    [
+      "rgb39:DOUT",
+      "rgb46:DIN",
+      "green",
+      ["h-8.78", "v11.85", "h32.89", "v-6.24", "h24.06"]
+    ],
+    [
+      "rgb46:DOUT",
+      "rgb44:DIN",
+      "green",
+      ["h-3.61", "v9.59", "h29.25", "v-31.78", "h33.17"]
+    ],
+    [
+      "rgb44:DOUT",
+      "rgb45:DIN",
+      "green",
+      ["h-7.32", "v9.08", "h34.56", "v-30.89", "h29.5"]
+    ],
+    ["rgb42:DIN", "rgb45:DOUT", "green", ["h13.58", "v55.88", "h-66.76"]],
+    [
+      "rgb42:DOUT",
+      "rgb43:DIN",
+      "green",
+      ["h-7.37", "v-23.69", "h39.93", "v0.65"]
+    ],
+    [
+      "rgb43:DOUT",
+      "rgb41:DIN",
+      "green",
+      ["h-6.56", "v-22.78", "h38.13", "v-25.59"]
+    ],
+    [
+      "rgb41:DOUT",
+      "rgb36:DIN",
+      "green",
+      ["h-6.95", "v-22.83", "h37.52", "v-44.79"]
+    ],
+    [
+      "rgb36:DOUT",
+      "rgb37:DIN",
+      "green",
+      ["h-3.9", "v-21.57", "h32.56", "v-27.33"]
+    ],
+    [
+      "rgb37:DOUT",
+      "rgb35:DIN",
+      "green",
+      ["h-3.42", "v-22.95", "h33.14", "v-25.95"]
+    ],
+    [
+      "rgb35:DOUT",
+      "rgb48:DIN",
+      "green",
+      ["h-8.41", "v-19.26", "h5.61", "v-20.11"]
+    ],
+    ["rgb48:DOUT", "rgb47:DIN", "green", ["h-10.16", "v-10.88"]],
+    ["rgb47:DOUT", "rgb49:DIN", "green", ["h-8.08", "v0.03"]],
+    ["rgb49:DOUT", "rgb29:DIN", "green", ["h0"]],
+    [
+      "rgb29:DOUT",
+      "rgb34:DIN",
+      "green",
+      ["h-7.92", "v15.09", "h34.63", "v13.32"]
+    ],
+    [
+      "rgb34:DOUT",
+      "rgb31:DIN",
+      "green",
+      ["h-8.55", "v16.6", "h36.18", "v11.16"]
+    ],
+    ["rgb31:DOUT", "rgb33:DIN", "green", ["h-7.53", "v9.76", "h57.23"]],
+    [
+      "rgb33:DOUT",
+      "rgb30:DIN",
+      "green",
+      ["h-5.49", "v8.88", "h32.99", "v-35.13", "h30.84"]
+    ],
+    [
+      "rgb30:DOUT",
+      "rgb32:DIN",
+      "green",
+      ["h-5.54", "v8.58", "h33.29", "v-34.37", "h28.54"]
+    ],
+    ["rgb59:VDD", "rgb61:VDD", "red", ["h-14.74", "v37.39"]],
+    ["rgb61:VDD", "rgb60:VDD", "red", ["h-14.91", "v36.55"]],
+    ["rgb60:VDD", "rgb67:VDD", "red", ["h-14.75", "v-1.13"]],
+    ["rgb67:VDD", "rgb65:VDD", "red", ["h0", "v-7.94", "h37.82"]],
+    ["rgb65:VDD", "rgb66:VDD", "red", ["h-0.05", "v-7.15", "h38.21"]],
+    [
+      "rgb66:VDD",
+      "rgb63:VDD",
+      "red",
+      ["h-0.37", "v-8.07", "h16.08", "v-20.42"]
+    ],
+    ["rgb63:VDD", "rgb64:VDD", "red", ["h-12.53", "v0.23"]],
+    ["rgb64:VDD", "rgb62:VDD", "red", ["h-12.62", "v-38.57"]],
+    ["rgb53:VDD", "rgb62:VDD", "red", ["h-7.02", "v30.88"]],
+    ["rgb54:VDD", "rgb59:VDD", "red", ["h-43.65", "v28.73"]],
+    ["rgb51:VDD", "rgb53:VDD", "red", ["h-8.91", "v-11.8", "h47.18"]],
+    ["rgb53:VDD", "rgb57:VDD", "red", ["v-10.57", "h21.53", "v-18.23"]],
+    ["rgb58:VDD", "rgb57:VDD", "red", ["h-6.75", "v37.59"]],
+    ["rgb56:VDD", "rgb58:VDD", "red", ["h-6.38", "v38.4"]],
+    ["rgb69:VDD", "rgb68:VDD", "red", ["v-21.98", "h-38.4"]],
+    ["rgb68:VDD", "rgb70:VDD", "red", ["v-22.16", "h-38.4"]],
+    ["rgb52:VDD", "rgb55:VDD", "red", ["h-15.21", "v-38.4"]],
+    ["rgb52:VDD", "rgb59:VDD", "red", ["h-14.98", "v57.6"]],
+    ["rgb50:VDD", "rgb55:VDD", "red", ["h-15.49", "v38.4"]],
+    ["rgb50:VDD", "rgb70:VDD", "red", ["h-15.43", "v-50.9", "h44.23"]],
+    ["rgb69:VDD", "rgb56:VDD", "red", ["v-21.25", "h28.8"]],
+    ["rgb59:VSS", "rgb61:VSS", "white", ["v0.17", "h17.13", "v37.41"]],
+    ["rgb61:VSS", "rgb60:VSS", "white", ["v-0.08", "h17.07", "v38.09"]],
+    ["rgb67:VSS", "rgb65:VSS", "white", ["v20.87", "h38.4"]],
+    ["rgb65:VSS", "rgb66:VSS", "white", ["v20.51", "h41.13"]],
+    ["rgb62:VSS", "rgb64:VSS", "white", ["h19.02", "v38.4"]],
+    ["rgb64:VSS", "rgb63:VSS", "white", ["h19.36", "v38.4"]],
+    ["rgb63:VSS", "rgb66:VSS", "white", ["h18.67", "v49.07", "h-47.47"]],
+    [
+      "rgb60:VSS",
+      "rgb67:VSS",
+      "white",
+      ["v21.37", "h-34.75", "v29.03", "h63.55"]
+    ],
+    ["rgb54:VSS", "rgb51:VSS", "white", ["v14.78", "h38.4"]],
+    ["rgb53:VSS", "rgb51:VSS", "white", ["v14.47", "h-38.4"]],
+    ["rgb59:VSS", "rgb54:VSS", "white", ["v-0.15", "h28.8"]],
+    ["rgb50:VSS", "rgb55:VSS", "white", ["h14.01", "v38.4"]],
+    ["rgb55:VSS", "rgb52:VSS", "white", ["h14.03", "v38.4"]],
+    ["rgb70:VSS", "rgb68:VSS", "white", ["v17.75", "h38.4"]],
+    ["rgb68:VSS", "rgb69:VSS", "white", ["v17.17", "h38.4"]],
+    ["rgb50:VSS", "rgb70:VSS", "white", ["v0.83", "h28.32"]],
+    ["rgb56:VSS", "rgb58:VSS", "white", ["h15.08", "v38.4"]],
+    ["rgb58:VSS", "rgb57:VSS", "white", ["h15.52", "v38.4"]],
+    ["rgb69:VSS", "rgb56:VSS", "white", ["v0.07", "h43.9", "v29.49"]],
+    ["rgb53:VSS", "rgb57:VSS", "white", ["v0.41", "h44.57", "v-29.84"]],
+    [
+      "rgb59:DOUT",
+      "rgb61:DIN",
+      "green",
+      ["h-9.35", "v15.91", "h38.5", "v12.13"]
+    ],
+    [
+      "rgb61:DOUT",
+      "rgb60:DIN",
+      "green",
+      ["h-8.65", "v15.9", "h38.33", "v11.98"]
+    ],
+    [
+      "rgb60:DOUT",
+      "rgb67:DIN",
+      "green",
+      ["h-8.78", "v11.85", "h32.89", "v-6.24", "h24.06"]
+    ],
+    [
+      "rgb67:DOUT",
+      "rgb65:DIN",
+      "green",
+      ["h-3.61", "v9.59", "h29.25", "v-31.78", "h33.17"]
+    ],
+    [
+      "rgb65:DOUT",
+      "rgb66:DIN",
+      "green",
+      ["h-7.32", "v9.08", "h34.56", "v-30.89", "h29.5"]
+    ],
+    ["rgb63:DIN", "rgb66:DOUT", "green", ["h13.58", "v55.88", "h-66.76"]],
+    [
+      "rgb63:DOUT",
+      "rgb64:DIN",
+      "green",
+      ["h-7.37", "v-23.69", "h39.93", "v0.65"]
+    ],
+    [
+      "rgb64:DOUT",
+      "rgb62:DIN",
+      "green",
+      ["h-6.56", "v-22.78", "h38.13", "v-25.59"]
+    ],
+    [
+      "rgb62:DOUT",
+      "rgb57:DIN",
+      "green",
+      ["h-6.95", "v-22.83", "h37.52", "v-44.79"]
+    ],
+    [
+      "rgb57:DOUT",
+      "rgb58:DIN",
+      "green",
+      ["h-3.9", "v-21.57", "h32.56", "v-27.33"]
+    ],
+    [
+      "rgb58:DOUT",
+      "rgb56:DIN",
+      "green",
+      ["h-3.42", "v-22.95", "h33.14", "v-25.95"]
+    ],
+    [
+      "rgb56:DOUT",
+      "rgb69:DIN",
+      "green",
+      ["h-8.41", "v-19.26", "h5.61", "v-20.11"]
+    ],
+    ["rgb69:DOUT", "rgb68:DIN", "green", ["h-10.16", "v-10.88"]],
+    ["rgb68:DOUT", "rgb70:DIN", "green", ["h-8.08", "v0.03"]],
+    ["rgb70:DOUT", "rgb50:DIN", "green", ["h0"]],
+    [
+      "rgb50:DOUT",
+      "rgb55:DIN",
+      "green",
+      ["h-7.92", "v15.09", "h34.63", "v13.32"]
+    ],
+    [
+      "rgb55:DOUT",
+      "rgb52:DIN",
+      "green",
+      ["h-8.55", "v16.6", "h36.18", "v11.16"]
+    ],
+    ["rgb52:DOUT", "rgb54:DIN", "green", ["h-7.53", "v9.76", "h57.23"]],
+    [
+      "rgb54:DOUT",
+      "rgb51:DIN",
+      "green",
+      ["h-5.49", "v8.88", "h32.99", "v-35.13", "h30.84"]
+    ],
+    [
+      "rgb51:DOUT",
+      "rgb53:DIN",
+      "green",
+      ["h-5.54", "v8.58", "h33.29", "v-34.37", "h28.54"]
+    ],
+    ["rgb80:VDD", "rgb82:VDD", "red", ["h-14.74", "v37.39"]],
+    ["rgb82:VDD", "rgb81:VDD", "red", ["h-14.91", "v36.55"]],
+    ["rgb81:VDD", "rgb88:VDD", "red", ["h-14.75", "v-1.13"]],
+    ["rgb88:VDD", "rgb86:VDD", "red", ["h0", "v-7.94", "h37.82"]],
+    ["rgb86:VDD", "rgb87:VDD", "red", ["h-0.05", "v-7.15", "h38.21"]],
+    [
+      "rgb87:VDD",
+      "rgb84:VDD",
+      "red",
+      ["h-0.37", "v-8.07", "h16.08", "v-20.42"]
+    ],
+    ["rgb84:VDD", "rgb85:VDD", "red", ["h-12.53", "v0.23"]],
+    ["rgb85:VDD", "rgb83:VDD", "red", ["h-12.62", "v-38.57"]],
+    ["rgb74:VDD", "rgb83:VDD", "red", ["h-7.02", "v30.88"]],
+    ["rgb75:VDD", "rgb80:VDD", "red", ["h-43.65", "v28.73"]],
+    ["rgb72:VDD", "rgb74:VDD", "red", ["h-8.91", "v-11.8", "h47.18"]],
+    ["rgb74:VDD", "rgb78:VDD", "red", ["v-10.57", "h21.53", "v-18.23"]],
+    ["rgb79:VDD", "rgb78:VDD", "red", ["h-6.75", "v37.59"]],
+    ["rgb77:VDD", "rgb79:VDD", "red", ["h-6.38", "v38.4"]],
+    ["rgb90:VDD", "rgb89:VDD", "red", ["v-21.98", "h-38.4"]],
+    ["rgb89:VDD", "rgb91:VDD", "red", ["v-22.16", "h-38.4"]],
+    ["rgb73:VDD", "rgb76:VDD", "red", ["h-15.21", "v-38.4"]],
+    ["rgb73:VDD", "rgb80:VDD", "red", ["h-14.98", "v57.6"]],
+    ["rgb71:VDD", "rgb76:VDD", "red", ["h-15.49", "v38.4"]],
+    ["rgb71:VDD", "rgb91:VDD", "red", ["h-15.43", "v-50.9", "h44.23"]],
+    ["rgb90:VDD", "rgb77:VDD", "red", ["v-21.25", "h28.8"]],
+    ["rgb80:VSS", "rgb82:VSS", "white", ["v0.17", "h17.13", "v37.41"]],
+    ["rgb82:VSS", "rgb81:VSS", "white", ["v-0.08", "h17.07", "v38.09"]],
+    ["rgb88:VSS", "rgb86:VSS", "white", ["v20.87", "h38.4"]],
+    ["rgb86:VSS", "rgb87:VSS", "white", ["v20.51", "h41.13"]],
+    ["rgb83:VSS", "rgb85:VSS", "white", ["h19.02", "v38.4"]],
+    ["rgb85:VSS", "rgb84:VSS", "white", ["h19.36", "v38.4"]],
+    ["rgb84:VSS", "rgb87:VSS", "white", ["h18.67", "v49.07", "h-47.47"]],
+    [
+      "rgb81:VSS",
+      "rgb88:VSS",
+      "white",
+      ["v21.37", "h-34.75", "v29.03", "h63.55"]
+    ],
+    ["rgb75:VSS", "rgb72:VSS", "white", ["v14.78", "h38.4"]],
+    ["rgb74:VSS", "rgb72:VSS", "white", ["v14.47", "h-38.4"]],
+    ["rgb80:VSS", "rgb75:VSS", "white", ["v-0.15", "h28.8"]],
+    ["rgb71:VSS", "rgb76:VSS", "white", ["h14.01", "v38.4"]],
+    ["rgb76:VSS", "rgb73:VSS", "white", ["h14.03", "v38.4"]],
+    ["rgb91:VSS", "rgb89:VSS", "white", ["v17.75", "h38.4"]],
+    ["rgb89:VSS", "rgb90:VSS", "white", ["v17.17", "h38.4"]],
+    ["rgb71:VSS", "rgb91:VSS", "white", ["v0.83", "h28.32"]],
+    ["rgb77:VSS", "rgb79:VSS", "white", ["h15.08", "v38.4"]],
+    ["rgb79:VSS", "rgb78:VSS", "white", ["h15.52", "v38.4"]],
+    ["rgb90:VSS", "rgb77:VSS", "white", ["v0.07", "h43.9", "v29.49"]],
+    ["rgb74:VSS", "rgb78:VSS", "white", ["v0.41", "h44.57", "v-29.84"]],
+    [
+      "rgb80:DOUT",
+      "rgb82:DIN",
+      "green",
+      ["h-9.35", "v15.91", "h38.5", "v12.13"]
+    ],
+    [
+      "rgb82:DOUT",
+      "rgb81:DIN",
+      "green",
+      ["h-8.65", "v15.9", "h38.33", "v11.98"]
+    ],
+    [
+      "rgb81:DOUT",
+      "rgb88:DIN",
+      "green",
+      ["h-8.78", "v11.85", "h32.89", "v-6.24", "h24.06"]
+    ],
+    [
+      "rgb88:DOUT",
+      "rgb86:DIN",
+      "green",
+      ["h-3.61", "v9.59", "h29.25", "v-31.78", "h33.17"]
+    ],
+    [
+      "rgb86:DOUT",
+      "rgb87:DIN",
+      "green",
+      ["h-7.32", "v9.08", "h34.56", "v-30.89", "h29.5"]
+    ],
+    ["rgb84:DIN", "rgb87:DOUT", "green", ["h13.58", "v55.88", "h-66.76"]],
+    [
+      "rgb84:DOUT",
+      "rgb85:DIN",
+      "green",
+      ["h-7.37", "v-23.69", "h39.93", "v0.65"]
+    ],
+    [
+      "rgb85:DOUT",
+      "rgb83:DIN",
+      "green",
+      ["h-6.56", "v-22.78", "h38.13", "v-25.59"]
+    ],
+    [
+      "rgb83:DOUT",
+      "rgb78:DIN",
+      "green",
+      ["h-6.95", "v-22.83", "h37.52", "v-44.79"]
+    ],
+    [
+      "rgb78:DOUT",
+      "rgb79:DIN",
+      "green",
+      ["h-3.9", "v-21.57", "h32.56", "v-27.33"]
+    ],
+    [
+      "rgb79:DOUT",
+      "rgb77:DIN",
+      "green",
+      ["h-3.42", "v-22.95", "h33.14", "v-25.95"]
+    ],
+    [
+      "rgb77:DOUT",
+      "rgb90:DIN",
+      "green",
+      ["h-8.41", "v-19.26", "h5.61", "v-20.11"]
+    ],
+    ["rgb90:DOUT", "rgb89:DIN", "green", ["h-10.16", "v-10.88"]],
+    ["rgb89:DOUT", "rgb91:DIN", "green", ["h-8.08", "v0.03"]],
+    ["rgb91:DOUT", "rgb71:DIN", "green", ["h0"]],
+    [
+      "rgb71:DOUT",
+      "rgb76:DIN",
+      "green",
+      ["h-7.92", "v15.09", "h34.63", "v13.32"]
+    ],
+    [
+      "rgb76:DOUT",
+      "rgb73:DIN",
+      "green",
+      ["h-8.55", "v16.6", "h36.18", "v11.16"]
+    ],
+    ["rgb73:DOUT", "rgb75:DIN", "green", ["h-7.53", "v9.76", "h57.23"]],
+    [
+      "rgb75:DOUT",
+      "rgb72:DIN",
+      "green",
+      ["h-5.49", "v8.88", "h32.99", "v-35.13", "h30.84"]
+    ],
+    [
+      "rgb72:DOUT",
+      "rgb74:DIN",
+      "green",
+      ["h-5.54", "v8.58", "h33.29", "v-34.37", "h28.54"]
+    ],
+    ["rgb38:DIN", "rgb12:DOUT", "green", ["v-8.75", "h-136.52"]],
+    ["rgb32:DOUT", "rgb59:DIN", "green", ["v11.42", "h251.14"]],
+    ["rgb53:DOUT", "rgb80:DIN", "green", ["v10.07", "h152.47"]],
+    ["esp:D23", "bb1:14t.b", "green", ["v-20.75", "h-163.5"]],
+    ["esp:GND.2", "bb1:16t.e", "white", ["h0"]],
+    ["esp:VIN", "bb1:15t.e", "red", ["h0"]]
   ],
   "dependencies": {}
 }
