@@ -5,8 +5,8 @@
 #include "FastLED.h"
 
 CRGB leds[NUM_LEDS];
-CRGB Dots[NUM_DOTS];
 bool isBlink = true;
+int ledsLength = NUM_LEDS + NUM_DOTS;
 
 const int Frame[][7] = {
     {1, 1, 1, 1, 1, 1, 0}, // Number 0
@@ -27,8 +27,7 @@ const int Frame[][7] = {
 
 void setupLED()
 {
-    FastLED.addLeds<LED_TYPE, LED_PIN, GRB>(leds, NUM_LEDS);
-    FastLED.addLeds<LED_TYPE, DOTS_PIN, GRB>(Dots, NUM_DOTS);
+    FastLED.addLeds<LED_TYPE, LED_PIN, GRB>(leds, ledsLength);
     FastLED.setBrightness(BRIGHTNESS);
     return;
 }
@@ -187,9 +186,9 @@ void BlinkDots()
 
 void BlankDots()
 {
-    for (int i = 0; i < NUM_DOTS; i++)
+    for (int i = NUM_LEDS; i < ledsLength; i++)
     {
-        Dots[i] = CRGB(0, 0, 0);
+        leds[i] = CRGB(0, 0, 0);
     }
     FastLED.show();
     return;
@@ -197,9 +196,9 @@ void BlankDots()
 
 void ShowDots()
 {
-    for (int i = 0; i < NUM_DOTS; i++)
+    for (int i = NUM_LEDS; i < ledsLength; i++)
     {
-        Dots[i] = CRGB(RED, GREEN, BLUE);
+        leds[i] = CRGB(RED, GREEN, BLUE);
     }
     FastLED.show();
     return;
@@ -207,9 +206,9 @@ void ShowDots()
 
 void ShowDotsRgb(byte Red, byte Green, byte Blue)
 {
-    for (int i = 0; i < NUM_DOTS; i++)
+    for (int i = NUM_LEDS; i < ledsLength; i++)
     {
-        Dots[i] = CRGB(Red, Green, Blue);
+        leds[i] = CRGB(RED, GREEN, BLUE);
     }
     FastLED.show();
     return;
