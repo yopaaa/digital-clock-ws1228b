@@ -1,9 +1,12 @@
-#include <AsyncElegantOTA.h>
 #include "HttpHandler.h"
 #include "EEPROMFunc.h"
 #include "Var.h"
 #include "Led.h"
 #include "WifiFunc.h"
+
+#if defined(ESP32)
+#include <AsyncElegantOTA.h>
+#endif
 
 AsyncWebServer server(3000);
 
@@ -345,7 +348,9 @@ void httpHandler()
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });
 
+  #if defined(ESP32)
   AsyncElegantOTA.begin(&server, APssid, APpassword);
+  #endif
   server.begin();
   Serial.println("Server started");
 }
