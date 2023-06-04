@@ -33,12 +33,12 @@ void checkIsWiFiConnected()
         Serial.println(ssid);
         ShowDotsRgb(255, 0, 0);
 
-        if (digitalRead(WIFI_AP_BTN) == LOW)
-        {
-            BlankDots();
-            startWifiAp();
-            return;
-        };
+        // if (digitalRead(WIFI_AP_BTN) == LOW)
+        // {
+        //     BlankDots();
+        //     startWifiAp();
+        //     return;
+        // };
         if (trying == 100)
         {
             Serial.println("cant connect to network");
