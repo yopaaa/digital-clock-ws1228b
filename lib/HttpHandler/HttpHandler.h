@@ -8,5 +8,6 @@
 #include <ArduinoJson.h>
 
 void httpHandler();
+void startServer();
 
 #endif

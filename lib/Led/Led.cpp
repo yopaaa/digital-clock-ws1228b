@@ -141,11 +141,6 @@ void TestStartUp()
     BlankDisplay(0);
     for (int i = 0; i < NUM_LEDS; i++)
     {
-        int buttonState = digitalRead(WIFI_AP_BTN);
-        if (buttonState == LOW)
-        {
-            startWifiAp();
-        }
         leds[i] = CRGB(RED, GREEN, BLUE);
         FastLED.show();
         delay(200);
