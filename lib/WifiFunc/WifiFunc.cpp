@@ -3,8 +3,8 @@
 #include "Led.h"
 #include "EEPROMFunc.h"
 
-IPAddress softAPLocalIP(192, 168, 0, 1);
-IPAddress softAPGateway(192, 168, 0, 1);
+IPAddress softAPLocalIP(192, 168, 15, 1);
+IPAddress softAPGateway(192, 168, 15, 1);
 IPAddress softAPSubnet(255, 255, 255, 0);
 
 void printIpAddressToDisplay(IPAddress ip)
@@ -31,19 +31,14 @@ void checkIsWiFiConnected()
         Serial.println(String(trying) + "." + "Connecting to WiFi...");
         Serial.print("----- ssid:");
         Serial.println(ssid);
+        Serial.print("----- password:");
+        Serial.println(password);
         ShowDotsRgb(255, 0, 0);
 
-        // if (digitalRead(WIFI_AP_BTN) == LOW)
-        // {
-        //     BlankDots();
-        //     startWifiAp();
-        //     return;
-        // };
         if (trying == 100)
         {
             Serial.println("cant connect to network");
             ESP.restart();
-            return;
         }
         trying++;
         delay(1000);
@@ -66,7 +61,7 @@ void startWifiAp()
 
     IPAddress localIP = WiFi.softAPIP();
     printIpAddressToDisplay(localIP);
-    displayMode = "counter";
+    displayMode = "null";
     return;
 }
 
@@ -75,8 +70,9 @@ void startWifiSta()
     WiFi.mode(WIFI_STA);
     WiFi.setHostname(APssid);                   // define hostname
     WiFi.begin(ssid.c_str(), password.c_str()); // Connect to Wi-Fi using the saved SSID and password
-    checkIsWiFiConnected();
     BlankDots();
+    checkIsWiFiConnected();
+
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 
     Gateway = WiFi.gatewayIP();
