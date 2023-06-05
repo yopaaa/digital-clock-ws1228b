@@ -3,6 +3,14 @@
 #include <EEPROM.h>
 #include "Var.h"
 
+bool isEepromNotEmpty(int address)
+{
+    if (EEPROM.read(address) != 0xFF)
+        return true;
+        
+    return false;
+}
+
 void writeString(int address, String value)
 {
     EEPROM.writeString(address, value);
@@ -17,7 +25,10 @@ void writeBool(int address, bool value)
 
 String readString(int address)
 {
-    return EEPROM.readString(address);
+    if (isEepromNotEmpty(address))
+        return EEPROM.readString(address);
+
+    return "null";
 }
 
 void defaultState()
@@ -68,7 +79,9 @@ void readStaticIp()
 
     for (int i = 0; i < 4; i++)
     {
-        octetIp[i] = EEPROM.read(IP_ADDRESS_START_ADDRESS + i);
+        int address = IP_ADDRESS_START_ADDRESS + i;
+        if (isEepromNotEmpty(address))
+            octetIp[i] = EEPROM.read(address);
     }
     IP = IPAddress(octetIp);
     return;
@@ -77,11 +90,18 @@ void readStaticIp()
 void setupEEPROM()
 {
     EEPROM.begin(512);
+
     if (EEPROM.read(1) == 0)
         defaultState();
 
-    EEPROM.read(TIME_FORMAT_ADDRESS) == 12 ? timeFormat = 12 : timeFormat = 24;
-    isStaticIP = EEPROM.readBool(IS_STATIC_IP_ADDRESS);
+    if (isEepromNotEmpty(TIME_FORMAT_ADDRESS))
+        EEPROM.read(TIME_FORMAT_ADDRESS) == 12
+            ? timeFormat = 12
+            : timeFormat = 24;
+
+    if (isEepromNotEmpty(IS_STATIC_IP_ADDRESS))
+        isStaticIP = EEPROM.readBool(IS_STATIC_IP_ADDRESS);
+
     readStaticIp();
     return;
 }
