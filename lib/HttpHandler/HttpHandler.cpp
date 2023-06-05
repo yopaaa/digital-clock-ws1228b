@@ -8,7 +8,14 @@
 #include <AsyncElegantOTA.h>
 #endif
 
-AsyncWebServer server(3000);
+AsyncWebServer server(80);
+
+void startServer()
+{
+  Serial.println("Starting server...");
+  server.begin();
+  Serial.println("Server started");
+}
 
 void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
@@ -29,6 +36,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
     json["message"] = "OK";
     json["method"] = request->method();
     json["url"] = request->url();
+    // json["url"] = request->url();
 
     const String url = request->url();
 
@@ -330,7 +338,7 @@ void handleTestInternetConnection(AsyncWebServerRequest *request)
 void httpHandler()
 {
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
-  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "content-type");
+  // DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "content-type");
 
   server.onRequestBody(handleRequest);
 
@@ -348,9 +356,8 @@ void httpHandler()
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });
 
-  #if defined(ESP32)
+#if defined(ESP32)
   AsyncElegantOTA.begin(&server, APssid, APpassword);
-  #endif
-  server.begin();
-  Serial.println("Server started");
+#endif
+  startServer();
 }
