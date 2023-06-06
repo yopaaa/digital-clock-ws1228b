@@ -1,33 +1,67 @@
 #include "EEPROMFunc.h"
-#include <Arduino.h>
 #include <EEPROM.h>
 #include "Var.h"
 
 bool isEepromNotEmpty(int address)
 {
+    Serial.print("EEPROM number ");
+    Serial.print(address);
     if (EEPROM.read(address) != 0xFF)
+    {
+        Serial.print("is not empty\n");
         return true;
-        
+    }
+
+    Serial.print(" is empty\n");
     return false;
 }
 
 void writeString(int address, String value)
 {
+    Serial.print("successful writing ");
+    Serial.print(value);
+    Serial.print(" to address ");
+    Serial.print(address);
+    Serial.println();
+
     EEPROM.writeString(address, value);
     EEPROM.commit();
 }
 
 void writeBool(int address, bool value)
 {
+    Serial.print("successful writing ");
+    Serial.print(value);
+    Serial.print(" to address ");
+    Serial.print(address);
+    Serial.println();
+
     EEPROM.writeBool(address, value);
+    EEPROM.commit();
+}
+
+void writeLong(int address, long value)
+{
+    Serial.print("successful writing ");
+    Serial.print(value);
+    Serial.print(" to address ");
+    Serial.print(address);
+    Serial.println();
+
+    EEPROM.writeLong(address, value);
     EEPROM.commit();
 }
 
 String readString(int address)
 {
+    Serial.print("Reading ");
+    Serial.print(address);
+    Serial.print("\n");
     if (isEepromNotEmpty(address))
-        return EEPROM.readString(address);
-
+    {
+        String x = EEPROM.readString(address);
+        return x;
+    }
     return "null";
 }
 
@@ -101,6 +135,14 @@ void setupEEPROM()
 
     if (isEepromNotEmpty(IS_STATIC_IP_ADDRESS))
         isStaticIP = EEPROM.readBool(IS_STATIC_IP_ADDRESS);
+
+    if (isEepromNotEmpty(GMT_OFFSET_ADDRESS))
+        gmtOffset_sec = EEPROM.readLong(GMT_OFFSET_ADDRESS);
+
+    if (isEepromNotEmpty(SEGMENT_1_MODE_ADDRESS))
+        segment1mode = EEPROM.readString(SEGMENT_1_MODE_ADDRESS);
+    if (isEepromNotEmpty(SEGMENT_2_MODE_ADDRESS))
+        segment2mode = EEPROM.readString(SEGMENT_2_MODE_ADDRESS);
 
     readStaticIp();
     return;
