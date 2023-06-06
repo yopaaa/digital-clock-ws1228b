@@ -8,14 +8,7 @@
 #include <AsyncElegantOTA.h>
 #endif
 
-AsyncWebServer server(80);
-
-void startServer()
-{
-  Serial.println("Starting server...");
-  server.begin();
-  Serial.println("Server started");
-}
+AsyncWebServer server(3000);
 
 void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
@@ -36,9 +29,11 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
     json["message"] = "OK";
     json["method"] = request->method();
     json["url"] = request->url();
-    // json["url"] = request->url();
 
     const String url = request->url();
+    Serial.print("New request to ");
+    Serial.print(url);
+    Serial.print("\n");
 
     if (url == "/wifi/set")
     {
@@ -58,22 +53,13 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
-    else if (url == "/restart")
-    {
-      String jsonString;
-      serializeJson(json, jsonString);
-      request->send(json["code"].as<int>(), "application/json", jsonString);
-      delay(500);
-      ESP.restart();
-      return;
-    }
     else if (url == "/mode")
     {
       if ((jsonDoc.containsKey("mode")) && (jsonDoc.containsKey("limit")))
       {
         String mode = jsonDoc["mode"].as<String>();
         int limit = jsonDoc["limit"].as<int>();
-        displayMode = mode;
+        setMode(mode);
 
         if (mode == "counter")
         { // counter mode
@@ -121,6 +107,40 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         settimeofday(&tv, nullptr);
 
         payload["timestamp"] = timestamp;
+      }
+      else
+      {
+        json["code"] = 400;
+        json["message"] = "Bad Request";
+      }
+    }
+    else if (url == "/set/gmtOffset_sec")
+    {
+      if ((jsonDoc.containsKey("gmtOffset_sec")))
+      {
+        long gmtOffset = jsonDoc["gmtOffset_sec"].as<long>();
+        writeLong(GMT_OFFSET_ADDRESS, gmtOffset);
+
+        payload["gmtOffset"] = gmtOffset;
+      }
+      else
+      {
+        json["code"] = 400;
+        json["message"] = "Bad Request";
+      }
+    }
+    else if (url == "/set/segment")
+    {
+      if ((jsonDoc.containsKey("segment1")) && (jsonDoc.containsKey("segment2")))
+      {
+        String segment1 = jsonDoc["segment1"].as<String>();
+        String segment2 = jsonDoc["segment2"].as<String>();
+        writeString(SEGMENT_1_MODE_ADDRESS, segment1);
+        writeString(SEGMENT_2_MODE_ADDRESS, segment2);
+        segment1mode = segment1;
+        segment2mode = segment2;
+        payload["segment1mode"] = segment1;
+        payload["segment2mode"] = segment2;
       }
       else
       {
@@ -260,74 +280,48 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
   }
 }
 
-void handlePing(AsyncWebServerRequest *request)
-{
-  DynamicJsonDocument json(1024);
-  json["message"] = "OK";
-  json["CODE_VERSION"] = CODE_VERSION;
-  json["CycleCount"] = ESP.getCycleCount();
-  // json["ChipModel"] = ESP.getChipModel();
-  json["SketchSize"] = ESP.getSketchSize();
-  json["version"] = request->version();
-  json["method"] = request->method();
-  json["url"] = request->url();
-  json["host"] = request->host();
-  json["contentType"] = request->contentType();
-  json["contentLength"] = request->contentLength();
-  json["multipart"] = request->multipart();
-
-  String jsonString;
-  serializeJson(json, jsonString);
-
-  request->send(200, "application/json", jsonString);
-}
-
 void handleVariable(AsyncWebServerRequest *request)
 {
   DynamicJsonDocument json(1224);
-  JsonObject payload = json.createNestedObject("payload");
+  JsonObject Mutable = json.createNestedObject("mutable");
   json["code"] = 200;
   json["message"] = "OK";
   json["method"] = request->method();
   json["url"] = request->url();
+  json["args"] = request->args();
+  json["params"] = request->params();
+  json["CODE_VERSION"] = CODE_VERSION;
+  json["uptime"] = millis() / 1000;
+  json["isInternetConnection"] = isInternetConnection();
 
-  payload["CODE_VERSION"] = CODE_VERSION;
-  payload["ssid"] = ssid;
-  payload["APssid"] = APssid;
-  payload["APpassword"] = APpassword;
+  Mutable["ssid"] = ssid;
+  Mutable["password"] = password;
+  Mutable["APssid"] = APssid;
+  Mutable["APpassword"] = APpassword;
+  Mutable["ntpServer"] = ntpServer;
+  Mutable["gmtOffset_sec"] = gmtOffset_sec;
+  Mutable["daylightOffset_sec"] = daylightOffset_sec;
 
-  payload["RED"] = RED;
-  payload["GREEN"] = GREEN;
-  payload["BLUE"] = BLUE;
-  payload["BRIGHTNESS"] = BRIGHTNESS;
+  Mutable["RED"] = RED;
+  Mutable["GREEN"] = GREEN;
+  Mutable["BLUE"] = BLUE;
+  Mutable["BRIGHTNESS"] = BRIGHTNESS;
+  Mutable["ColorMode"] = ColorMode;
 
-  payload["timeFormat"] = timeFormat;
-  payload["displayMode"] = displayMode;
-  payload["ColorMode"] = ColorMode;
+  Mutable["Mode"] = Mode;
+  Mutable["RefreshDelay"] = RefreshDelay;
+  Mutable["counterCount"] = counterCount;
+  Mutable["counterLimit"] = counterLimit;
+  Mutable["countDownCount"] = countDownCount;
+  Mutable["timeFormat"] = timeFormat;
+  Mutable["segment1mode"] = segment1mode;
+  Mutable["segment2mode"] = segment2mode;
 
-  payload["isStaticIP"] = isStaticIP;
-  payload["IP"] = IP;
-  payload["Gateway"] = Gateway;
-  payload["Subnet"] = Subnet;
-  payload["DNS1"] = DNS1;
-  payload["uptime"] = millis() / 1000;
-
-  String jsonString;
-  serializeJson(json, jsonString);
-
-  request->send(200, "application/json", jsonString);
-}
-
-void handleTestInternetConnection(AsyncWebServerRequest *request)
-{
-  DynamicJsonDocument json(1224);
-  JsonObject payload = json.createNestedObject("payload");
-  json["code"] = 200;
-  json["message"] = "OK";
-  json["method"] = request->method();
-  json["url"] = request->url();
-
-  payload["isInternetConnection"] = isInternetConnection();
+  Mutable["isStaticIP"] = isStaticIP;
+  Mutable["IP"] = IP;
+  Mutable["Gateway"] = Gateway;
+  Mutable["Subnet"] = Subnet;
+  Mutable["DNS1"] = DNS1;
 
   String jsonString;
   serializeJson(json, jsonString);
@@ -349,9 +343,16 @@ void httpHandler()
     delay(500);
     ESP.restart(); });
 
-  server.on("/ping", HTTP_GET, handlePing);
+  server.on("/restart", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+    request->send(200, "application/json", "{}"); 
+    delay(500);
+    ESP.restart(); });
+
   server.on("/variable", HTTP_GET, handleVariable);
-  server.on("/isInternetConnection", HTTP_GET, handleTestInternetConnection);
+  server.on(
+      "/ping", HTTP_GET, [](AsyncWebServerRequest *request)
+      { request->send(200, "application/json", "{\"status\": \"OK\"}"); });
 
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });
@@ -359,5 +360,7 @@ void httpHandler()
 #if defined(ESP32)
   AsyncElegantOTA.begin(&server, APssid, APpassword);
 #endif
-  startServer();
+  Serial.println("Starting server...");
+  server.begin();
+  Serial.println("Server started");
 }
