@@ -19,7 +19,7 @@ void SetNumber(int segment, int num);
 void PrintNumber(int num, String segment);
 
 void printLocalTime();
-void printCounter();
-void printCountDown();
+void setMode(String mode);
+void CLI();
 
 #endif
