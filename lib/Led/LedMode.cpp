@@ -42,6 +42,7 @@ void printLocalTime()
     PrintNumber(timeinfoJson[segment2mode].as<int>(), "right");
     // SetNumber(3, second / 10);
     // SetNumber(4, second % 10);
+    delay(RefreshDelay);
 }
 
 void printCounter()
@@ -52,6 +53,7 @@ void printCounter()
         counterCount++;
         return;
     }
+    delay(1000);
     return;
 }
 
@@ -63,5 +65,29 @@ void printCountDown()
         countDownCount--;
         return;
     }
+    delay(1000);
+    return;
+}
+
+
+void setMode(String mode)
+{
+    if (mode == "clock")
+    {
+        mainLoop = &printLocalTime;
+    }
+    else if (mode == "counter")
+    {
+        mainLoop = &printCounter;
+    }
+    else if (mode == "countdown")
+    {
+        mainLoop = &printCountDown;
+    }
+    else if (mode == "CLI")
+    {
+        mainLoop = &CLI;
+    }
+    Mode = mode;
     return;
 }
