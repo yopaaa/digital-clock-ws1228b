@@ -2,7 +2,6 @@
 #define VAR
 
 #include <Arduino.h>
-#include <ESPAsyncWebServer.h>
 
 #define LED_TYPE WS2812B
 #define NUMBER_SEGMENT 4
@@ -13,7 +12,7 @@
 #define LED_PIN 23    // Seven segment pin
 #define WIFI_AP_BTN 4 // Start wifi mode AP pin button
 
-#define CODE_VERSION "v3.5.25" // tahun 202'3', bulan .., tanggal ..
+#define CODE_VERSION "v3.6.6" // tahun 202'3', bulan .., tanggal ..
 
 #define SSID_ADDRESS 400
 #define PASSWORD_ADDRESS 415
@@ -27,15 +26,19 @@
 #define IP_ADDRESS_START_ADDRESS 200
 #define IS_STATIC_IP_ADDRESS 205
 
+#define GMT_OFFSET_ADDRESS 130
+#define SEGMENT_1_MODE_ADDRESS 140
+#define SEGMENT_2_MODE_ADDRESS 145
+
 extern String ssid;
 extern String password;
 
-extern const char *APssid;
-extern const char *APpassword;
+extern char *APssid;
+extern char *APpassword;
 
-extern const char *ntpServer;
-extern const long gmtOffset_sec; // UTC+7
-extern const int daylightOffset_sec;
+extern char *ntpServer;
+extern long gmtOffset_sec; // UTC+7
+extern int daylightOffset_sec;
 
 extern byte RED;
 extern byte GREEN;
@@ -44,7 +47,7 @@ extern byte BRIGHTNESS;
 
 extern String ColorMode;
 
-extern String displayMode;
+extern String Mode;
 extern int RefreshDelay;
 extern int counterCount;
 extern int counterLimit;
@@ -58,5 +61,7 @@ extern IPAddress IP;
 extern IPAddress Gateway;
 extern IPAddress Subnet;
 extern IPAddress DNS1;
+
+extern void (*mainLoop)();
 
 #endif
