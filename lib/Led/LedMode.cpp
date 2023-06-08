@@ -4,12 +4,6 @@
 
 void printLocalTime()
 {
-    if (ColorMode == "random")
-    {
-        RED = random(1, 255);
-        GREEN = random(1, 255);
-        BLUE = random(1, 255);
-    }
     BlinkDots();
     struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
@@ -45,6 +39,15 @@ void printLocalTime()
     delay(RefreshDelay);
 }
 
+void printScors()
+{
+    BlinkDots();
+
+    PrintNumber(scors1, "left");
+    PrintNumber(scors2, "right");
+    delay(RefreshDelay);
+}
+
 void printCounter()
 {
     if (counterCount <= counterLimit)
@@ -69,7 +72,6 @@ void printCountDown()
     return;
 }
 
-
 void setMode(String mode)
 {
     if (mode == "clock")
@@ -83,6 +85,10 @@ void setMode(String mode)
     else if (mode == "countdown")
     {
         mainLoop = &printCountDown;
+    }
+    else if (mode == "scors")
+    {
+        mainLoop = &printScors;
     }
     else if (mode == "CLI")
     {
