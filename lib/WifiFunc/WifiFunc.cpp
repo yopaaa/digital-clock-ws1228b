@@ -22,8 +22,30 @@ void printIpAddressToDisplay(IPAddress ip)
     return;
 }
 
-void checkIsWiFiConnected()
+void startWifiAp()
 {
+    WiFi.mode(WIFI_AP);
+    WiFi.softAPConfig(softAPLocalIP, softAPGateway, softAPSubnet);
+    WiFi.softAP(APssid.c_str(), APpassword.c_str());
+
+    Serial.println("Access Point started");
+    Serial.print("----- ssid:");
+    Serial.println(APssid);
+    Serial.print("----- pwd:");
+    Serial.println(APpassword);
+
+    IPAddress localIP = WiFi.softAPIP();
+    printIpAddressToDisplay(localIP);
+    setMode("CLI");
+    ShowDotsRgb(0, 0, 255);
+    return;
+}
+
+void startWifiSta()
+{
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(ssid.c_str(), password.c_str()); // Connect to Wi-Fi using the saved SSID and password
+    BlankDots();
     int trying = 1;
 
     while (WiFi.status() != WL_CONNECTED)
@@ -44,36 +66,7 @@ void checkIsWiFiConnected()
         delay(1000);
     }
     Serial.println("Connected to WiFi");
-    return;
-}
-
-void startWifiAp()
-{
-    WiFi.mode(WIFI_AP);
-    WiFi.softAPConfig(softAPLocalIP, softAPGateway, softAPSubnet);
-    WiFi.softAP(APssid, APpassword);
-
-    Serial.println("Access Point started");
-    Serial.print("----- ssid:");
-    Serial.println(APssid);
-    Serial.print("----- pwd:");
-    Serial.println(APpassword);
-
-    IPAddress localIP = WiFi.softAPIP();
-    printIpAddressToDisplay(localIP);
-    displayMode = "null";
-    return;
-}
-
-void startWifiSta()
-{
-    WiFi.mode(WIFI_STA);
-    WiFi.setHostname(APssid);                   // define hostname
-    WiFi.begin(ssid.c_str(), password.c_str()); // Connect to Wi-Fi using the saved SSID and password
-    BlankDots();
-    checkIsWiFiConnected();
-
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer.c_str());
 
     Gateway = WiFi.gatewayIP();
     Subnet = WiFi.subnetMask();
