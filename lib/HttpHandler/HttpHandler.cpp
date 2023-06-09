@@ -35,7 +35,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
     Serial.print(url);
     Serial.print("\n");
 
-    if (url == "/wifi/set")
+    if (url == "/set/wifi/sta")
     {
       if ((jsonDoc.containsKey("ssid")) && (jsonDoc.containsKey("password")))
       {
@@ -43,9 +43,12 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         String password = jsonDoc["password"].as<String>();
         IPAddress nullIP(0, 0, 0, 0);
 
-        saveWifiCredentials(ssid, password);
+        writeString(SSID_ADDRESS, ssid);
+        writeString(PASSWORD_ADDRESS, password);
         writeStaticIp(nullIP);
+
         payload["ssid"] = ssid;
+        payload["password"] = password;
       }
       else
       {
@@ -53,7 +56,26 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
-    else if (url == "/mode")
+    else if (url == "/set/wifi/ap")
+    {
+      if ((jsonDoc.containsKey("ssid")) && (jsonDoc.containsKey("password")))
+      {
+        String ssid = jsonDoc["ssid"].as<String>();
+        String password = jsonDoc["password"].as<String>();
+
+        writeString(AP_SSID_ADDRESS, ssid);
+        writeString(AP_PASSWORD_ADDRESS, password);
+
+        payload["ssid"] = ssid;
+        payload["password"] = password;
+      }
+      else
+      {
+        json["code"] = 400;
+        json["message"] = "Bad Request";
+      }
+    }
+    else if (url == "/set/mode")
     {
       if ((jsonDoc.containsKey("mode")) && (jsonDoc.containsKey("limit")))
       {
@@ -81,7 +103,26 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
-    else if (url == "/timeformat")
+    else if (url == "/set/scors")
+    {
+      if ((jsonDoc.containsKey("scors1")) && (jsonDoc.containsKey("scors2")))
+      {
+        int scorsOne = jsonDoc["scors1"].as<int>();
+        int scorsTwo = jsonDoc["scors2"].as<int>();
+
+        scors1 = scorsOne;
+        scors2 = scorsTwo;
+
+        payload["scors1"] = scors1;
+        payload["scors2"] = scors2;
+      }
+      else
+      {
+        json["code"] = 400;
+        json["message"] = "Bad Request";
+      }
+    }
+    else if (url == "/set/time/format")
     {
       if ((jsonDoc.containsKey("format")))
       {
@@ -98,7 +139,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
-    else if (url == "/settime")
+    else if (url == "/set/time")
     {
       if ((jsonDoc.containsKey("timestamp")))
       {
@@ -148,7 +189,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
-    else if (url == "/brightness")
+    else if (url == "/set/brightness")
     {
       if ((jsonDoc.containsKey("brightness")))
       {
@@ -163,7 +204,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
-    else if (url == "/color/change")
+    else if (url == "/set/color")
     {
       if ((jsonDoc.containsKey("red")) && (jsonDoc.containsKey("green")) && (jsonDoc.containsKey("blue")))
       {
@@ -194,7 +235,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
-    else if (url == "/color/mode")
+    else if (url == "/set/color/mode")
     {
       if ((jsonDoc.containsKey("mode")))
       {
@@ -209,7 +250,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
-    else if (url == "/staticIp")
+    else if (url == "/set/staticIp")
     {
       if ((jsonDoc.containsKey("isStaticIP")))
       {
@@ -241,26 +282,6 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         }
 
         payload["isStaticIP"] = extractisStaticIP;
-      }
-      else
-      {
-        json["code"] = 400;
-        json["message"] = "Bad Request";
-      }
-    }
-    else if (url == "/segment/mode")
-    {
-      bool isValid = (jsonDoc.containsKey("segment1")) && (jsonDoc.containsKey("segment2"));
-      if (isValid)
-      {
-        String segment1 = jsonDoc["segment1"].as<String>();
-        String segment2 = jsonDoc["segment2"].as<String>();
-
-        segment1mode = segment1;
-        segment2mode = segment2;
-
-        payload["segment1"] = segment1;
-        payload["segment2"] = segment2;
       }
       else
       {
@@ -358,7 +379,7 @@ void httpHandler()
                     { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });
 
 #if defined(ESP32)
-  AsyncElegantOTA.begin(&server, APssid, APpassword);
+  AsyncElegantOTA.begin(&server, APssid.c_str(), APpassword.c_str());
 #endif
   Serial.println("Starting server...");
   server.begin();
