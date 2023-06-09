@@ -5,7 +5,6 @@
 
 void setupEEPROM();
 
-void saveWifiCredentials(String ssid, String password);
 void defaultState();
 void readWifiCredentials();
 
