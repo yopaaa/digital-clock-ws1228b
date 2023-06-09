@@ -57,12 +57,9 @@ String readString(int address)
     Serial.print("Reading ");
     Serial.print(address);
     Serial.print("\n");
-    if (isEepromNotEmpty(address))
-    {
-        String x = EEPROM.readString(address);
-        return x;
-    }
-    return "null";
+
+    String x = EEPROM.readString(address);
+    return x;
 }
 
 void defaultState()
@@ -78,16 +75,19 @@ void defaultState()
     Serial.println("all state is been reset...");
 }
 
-void saveWifiCredentials(String ssid = "max-Length-15", String password = "max-Length-32")
-{
-    writeString(SSID_ADDRESS, ssid);
-    writeString(PASSWORD_ADDRESS, password);
-}
-
 void readWifiCredentials()
 {
-    ssid = readString(SSID_ADDRESS);
-    password = readString(PASSWORD_ADDRESS);
+    if (isEepromNotEmpty(SSID_ADDRESS))
+        ssid = readString(SSID_ADDRESS);
+
+    if (isEepromNotEmpty(PASSWORD_ADDRESS))
+        password = readString(PASSWORD_ADDRESS);
+
+    if (isEepromNotEmpty(AP_SSID_ADDRESS))
+        APssid = readString(AP_SSID_ADDRESS);
+
+    if (isEepromNotEmpty(AP_PASSWORD_ADDRESS))
+        APpassword = readString(AP_PASSWORD_ADDRESS);
 }
 
 void readColor()
