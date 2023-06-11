@@ -39,6 +39,8 @@ void writeString(int address, String value)
     Serial.println();
 
     int length = value.length();
+    if (length > 30)
+        return;
 
     // Write length of string
     EEPROM.write(address, length);
@@ -53,7 +55,6 @@ void writeString(int address, String value)
     // Commit changes to EEPROM
     EEPROM.commit();
 }
-
 String readString(int address)
 {
     Serial.print("Reading Strings on address ");
@@ -63,8 +64,6 @@ String readString(int address)
     int length = EEPROM.read(address);
 
     address++;
-    Serial.println(length);
-    Serial.println(address);
 
     // Read string characters
     char charData[length + 1];
@@ -92,7 +91,6 @@ void writeBool(int address, bool value)
     Serial.print(address);
     Serial.println();
 }
-
 bool readBool(int address)
 {
     byte boolValue = EEPROM.read(address);
@@ -115,7 +113,6 @@ void writeLong(int address, long value)
     Serial.print(address);
     Serial.println();
 }
-
 long readLong(int address)
 {
     long value = 0;
@@ -132,7 +129,6 @@ void writeByte(int address, byte value)
     EEPROM.write(address, value);
     EEPROM.commit();
 }
-
 byte readByte(int address)
 {
     return EEPROM.read(address);
