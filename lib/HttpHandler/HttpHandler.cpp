@@ -3,6 +3,7 @@
 #include "Var.h"
 #include "Led.h"
 #include "WifiFunc.h"
+#include "Buzzer.h"
 
 #if defined(ESP32)
 #include <AsyncElegantOTA.h>
@@ -129,8 +130,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         int format = jsonDoc["format"].as<int>();
 
         timeFormat = format;
-        EEPROM.put(TIME_FORMAT_ADDRESS, format); // BLUE COLOR
-        EEPROM.commit();
+        write(TIME_FORMAT_ADDRESS, format);
         payload["format"] = format;
       }
       else
@@ -219,10 +219,9 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
           FastLED.show();
           payload["brightness"] = brightness;
         }
-        EEPROM.put(RED_ADDRESS, red);
-        EEPROM.put(GREEN_ADDRESS, green);
-        EEPROM.put(BLUE_ADDRESS, blue);
-        EEPROM.commit();
+        write(RED_ADDRESS,red);
+        write(GREEN_ADDRESS, green);
+        write(BLUE_ADDRESS, blue);
         readColor();
 
         payload["red"] = red;
@@ -359,7 +358,7 @@ void httpHandler()
 
   server.on("/resetall", HTTP_POST, [](AsyncWebServerRequest *request)
             {
-    defaultState();
+    resetEEPROM();
     request->send(200, "application/json", "{}"); 
     delay(500);
     ESP.restart(); });
@@ -371,6 +370,12 @@ void httpHandler()
     ESP.restart(); });
 
   server.on("/variable", HTTP_GET, handleVariable);
+
+  server.on("/test/buzzer", HTTP_GET, [](AsyncWebServerRequest *request)
+            { 
+        myBuzzer.beep(1000);
+        request->send(200, "application/json", "{\"status\": \"OK\"}"); });
+
   server.on(
       "/ping", HTTP_GET, [](AsyncWebServerRequest *request)
       { request->send(200, "application/json", "{\"status\": \"OK\"}"); });
