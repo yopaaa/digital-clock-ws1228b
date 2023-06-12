@@ -1,9 +1,9 @@
 #include "HttpHandler.h"
 #include "EEPROMFunc.h"
-#include "Var.h"
-#include "Led.h"
 #include "WifiFunc.h"
 #include "Buzzer.h"
+#include "Var.h"
+#include "Led.h"
 
 #if defined(ESP32)
 #include <AsyncElegantOTA.h>
