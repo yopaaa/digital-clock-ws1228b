@@ -1,7 +1,8 @@
+#include "EEPROMFunc.h"
 #include "WifiFunc.h"
+#include "Buzzer.h"
 #include "Var.h"
 #include "Led.h"
-#include "EEPROMFunc.h"
 
 IPAddress softAPLocalIP(192, 168, 15, 1);
 IPAddress softAPGateway(192, 168, 15, 1);
@@ -28,6 +29,7 @@ void startWifiAp()
     WiFi.softAPConfig(softAPLocalIP, softAPGateway, softAPSubnet);
     WiFi.softAP(APssid.c_str(), APpassword.c_str());
 
+    myBuzzer.beep(50);
     Serial.println("Access Point started");
     Serial.print("----- ssid:");
     Serial.println(APssid);
