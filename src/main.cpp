@@ -11,11 +11,15 @@ void setup()
   setupEEPROM();
   Wire.begin();
   setupLED();
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
+
 #if defined(ESP32)
   pinMode(WIFI_AP_BTN, INPUT_PULLDOWN);
 #elif defined(ESP8266)
   pinMode(WIFI_AP_BTN, INPUT_PULLDOWN_16);
 #endif
+
   TestStartUp();
   readWifiCredentials();
   digitalRead(WIFI_AP_BTN) == HIGH ? startWifiAp() : startWifiSta();
