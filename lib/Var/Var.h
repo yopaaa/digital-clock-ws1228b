@@ -10,16 +10,24 @@
 #define NUM_LEDS 28
 #define NUM_DOTS 2
 
-#define LED_PIN 23    // Seven segment pin
-#define WIFI_AP_BTN 4 // Start wifi mode AP pin button
+#if defined(ESP8266)
+#define LED_PIN 0
+#define WIFI_AP_BTN 4
+#define BUZZER_PIN 2
+#elif defined(ESP32)
+#define LED_PIN 23
+#define WIFI_AP_BTN 4
+#define BUZZER_PIN 22
+#endif
+
 
 #define SSID_ADDRESS 400
 #define PASSWORD_ADDRESS 415
 extern String ssid;
 extern String password;
 
-#define AP_SSID_ADDRESS 430
-#define AP_PASSWORD_ADDRESS 445
+#define AP_SSID_ADDRESS 450
+#define AP_PASSWORD_ADDRESS 465
 extern String APssid;
 extern String APpassword;
 

@@ -4,10 +4,10 @@
 String ssid = "";
 String password = "";
 
-char *APssid = "digital_clock";
-char *APpassword = "12345678zxcvbnm";
+String APssid = "digital_clock";
+String APpassword = "12345678zxcvbnm";
 
-char *ntpServer = "pool.ntp.org";
+String ntpServer = "pool.ntp.org";
 long gmtOffset_sec = 7 * 3600; // UTC+7
 int daylightOffset_sec = 0;
 
@@ -24,6 +24,9 @@ int counterCount = 0;
 int counterLimit = 120;
 int countDownCount = 100;
 int timeFormat = 24;
+
+int scors1 = 0;
+int scors2 = 0;
 
 String segment1mode = "hour";
 String segment2mode = "min";
