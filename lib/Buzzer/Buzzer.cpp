@@ -1,11 +1,11 @@
 #include "Buzzer.h"
+#include "Var.h"
 
 Buzzer myBuzzer(BUZZER_PIN);
 
 Buzzer::Buzzer(int pin)
 {
     this->pin = pin;
-    pinMode(pin, OUTPUT);
 }
 
 void Buzzer::on()

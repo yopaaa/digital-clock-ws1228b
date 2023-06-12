@@ -2,7 +2,6 @@
 #define BUZZER_H
 
 #include <Arduino.h>
-#include "Var.h"
 
 class Buzzer
 {
