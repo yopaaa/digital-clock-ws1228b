@@ -13,6 +13,7 @@ void printLocalTime()
             ESP.restart();
 
         Serial.println("Failed to obtain time");
+        configTime(gmtOffset_sec, daylightOffset_sec, ntpServer.c_str());
         ErrorDisplay(0, 2);
         return;
     }
@@ -54,7 +55,6 @@ void printCounter()
     {
         PrintNumber(counterCount, "full");
         counterCount++;
-        return;
     }
     delay(1000);
     return;
@@ -66,34 +66,33 @@ void printCountDown()
     {
         PrintNumber(countDownCount, "full");
         countDownCount--;
-        return;
     }
     delay(1000);
     return;
 }
 
+struct KeyValue
+{
+    String key;
+    void (*value)();
+};
+
+KeyValue existMode[4] = {
+    {"clock", &printLocalTime},
+    {"counter", &printCounter},
+    {"countdown", &printCountDown},
+    {"CLI", &CLI}};
+
 void setMode(String mode)
 {
-    if (mode == "clock")
+    for (int i = 0; i < 4; i++)
     {
-        mainLoop = &printLocalTime;
+        if (existMode[i].key == mode)
+        {
+            mainLoop = existMode[i].value;
+            Mode = mode;
+            break;
+        }
     }
-    else if (mode == "counter")
-    {
-        mainLoop = &printCounter;
-    }
-    else if (mode == "countdown")
-    {
-        mainLoop = &printCountDown;
-    }
-    else if (mode == "scors")
-    {
-        mainLoop = &printScors;
-    }
-    else if (mode == "CLI")
-    {
-        mainLoop = &CLI;
-    }
-    Mode = mode;
     return;
 }
