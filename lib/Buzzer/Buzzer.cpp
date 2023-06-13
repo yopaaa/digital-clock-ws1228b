@@ -18,6 +18,11 @@ void Buzzer::off()
     digitalWrite(pin, LOW);
 }
 
+void Buzzer::toggle()
+{
+    digitalWrite(pin, !digitalRead(pin));
+}
+
 void Buzzer::beep(int timeout)
 {
     digitalWrite(pin, HIGH);
