@@ -1,21 +1,6 @@
 #include "EEPROMFunc.h"
 #include <EEPROM.h>
 
-void resetEEPROM()
-{
-    int size = EEPROM.length();
-    for (int i = 0; i < size; i++)
-    {
-        EEPROM.write(i, 0xFF);
-    }
-    EEPROM.put(RED_ADDRESS, 255);
-    EEPROM.put(GREEN_ADDRESS, 0);
-    EEPROM.put(BLUE_ADDRESS, 0);
-    EEPROM.put(TIME_FORMAT_ADDRESS, 24);
-    EEPROM.commit();
-    Serial.println("all state is been reset...");
-}
-
 bool isEepromNotEmpty(int address)
 {
     Serial.print("EEPROM number ");
@@ -134,9 +119,36 @@ byte readByte(int address)
     return EEPROM.read(address);
 }
 
+int read(int address)
+{
+    return EEPROM.read(address);
+}
 void write(int address, int value)
 {
-    EEPROM.put(address, value); // RED COLOR
+    EEPROM.put(address, value);
     EEPROM.commit();
     return;
+}
+
+void beginEEPROM(int size)
+{
+    EEPROM.begin(size);
+}
+
+void resetEEPROM()
+{
+    int size = EEPROM.length();
+    for (int i = 0; i < size; i++)
+    {
+        EEPROM.write(i, 0xFF);
+    }
+    EEPROM.put(RED_ADDRESS, 255);
+    EEPROM.put(GREEN_ADDRESS, 0);
+    EEPROM.put(BLUE_ADDRESS, 0);
+    EEPROM.put(TIME_FORMAT_ADDRESS, 24);
+    EEPROM.commit();
+
+    writeString(AP_SSID_ADDRESS, "digital_clock");
+    writeString(AP_PASSWORD_ADDRESS, "12345678zxcvbnm");
+    Serial.println("all state is been reset...");
 }
