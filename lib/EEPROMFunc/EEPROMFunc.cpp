@@ -1,5 +1,4 @@
 #include "EEPROMFunc.h"
-#include <EEPROM.h>
 
 void readWifiCredentials()
 {
@@ -28,9 +27,8 @@ void writeStaticIp(const IPAddress &ip)
 {
     for (int i = 0; i < 4; i++)
     {
-        EEPROM.write(IP_ADDRESS_START_ADDRESS + i, ip[i]);
+        write(IP_ADDRESS_START_ADDRESS + i, ip[i]);
     }
-    EEPROM.commit();
 }
 
 void readStaticIp()
@@ -41,7 +39,7 @@ void readStaticIp()
     {
         int address = IP_ADDRESS_START_ADDRESS + i;
         if (isEepromNotEmpty(address))
-            octetIp[i] = EEPROM.read(address);
+            octetIp[i] = read(address);
     }
     IP = IPAddress(octetIp);
     return;
@@ -49,10 +47,9 @@ void readStaticIp()
 
 void setupEEPROM()
 {
-    EEPROM.begin(512);
-
+    beginEEPROM(512);
     if (isEepromNotEmpty(TIME_FORMAT_ADDRESS))
-        EEPROM.read(TIME_FORMAT_ADDRESS) == 12
+        read(TIME_FORMAT_ADDRESS) == 12
             ? timeFormat = 12
             : timeFormat = 24;
 
