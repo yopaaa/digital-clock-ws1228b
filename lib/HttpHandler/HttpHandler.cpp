@@ -4,6 +4,7 @@
 #include "Buzzer.h"
 #include "Var.h"
 #include "Led.h"
+#include "Alarm.h"
 
 #if defined(ESP32)
 #include <AsyncElegantOTA.h>
@@ -155,6 +156,23 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         json["message"] = "Bad Request";
       }
     }
+    else if (url == "/set/alarm")
+    {
+      if ((jsonDoc.containsKey("hour")) && (jsonDoc.containsKey("min")))
+      {
+        int index = jsonDoc["index"].as<int>();
+        int hour = jsonDoc["hour"].as<int>();
+        int min = jsonDoc["min"].as<int>();
+        int alertIndex = jsonDoc["alertIndex"].as<int>();
+
+        setAlarm(index, hour, min, alertIndex);
+      }
+      else
+      {
+        json["code"] = 400;
+        json["message"] = "Bad Request";
+      }
+    }
     else if (url == "/set/gmtOffset_sec")
     {
       if ((jsonDoc.containsKey("gmtOffset_sec")))
@@ -219,7 +237,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
           FastLED.show();
           payload["brightness"] = brightness;
         }
-        write(RED_ADDRESS,red);
+        write(RED_ADDRESS, red);
         write(GREEN_ADDRESS, green);
         write(BLUE_ADDRESS, blue);
         readColor();
@@ -329,7 +347,6 @@ void handleVariable(AsyncWebServerRequest *request)
   Mutable["ColorMode"] = ColorMode;
 
   Mutable["Mode"] = Mode;
-  Mutable["RefreshDelay"] = RefreshDelay;
   Mutable["counterCount"] = counterCount;
   Mutable["counterLimit"] = counterLimit;
   Mutable["countDownCount"] = countDownCount;
@@ -343,6 +360,15 @@ void handleVariable(AsyncWebServerRequest *request)
   Mutable["Subnet"] = Subnet;
   Mutable["DNS1"] = DNS1;
 
+  JsonArray alarams = Mutable.createNestedArray("alarms");
+
+  for (int i = 0; i < MAX_ALARMS; i++)
+  {
+    JsonObject alarmJson = alarams.createNestedObject();
+    alarmJson["hour"] = alarms[i].hour;
+    alarmJson["minute"] = alarms[i].min;
+    alarmJson["alertIndex"] = alarms[i].alertIndex;
+  }
   String jsonString;
   serializeJson(json, jsonString);
 
