@@ -96,7 +96,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
           countDownCount = limit;
         }
         BlankDots();
-        payload["mode"] = mode;
+        payload["mode"] = Mode;
         payload["limit"] = limit;
       }
       else
@@ -163,9 +163,20 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         int index = jsonDoc["index"].as<int>();
         int hour = jsonDoc["hour"].as<int>();
         int min = jsonDoc["min"].as<int>();
-        int alertIndex = jsonDoc["alertIndex"].as<int>();
+        int alarmDelay = jsonDoc["alarmDelay"].as<int>();
 
-        setAlarm(index, hour, min, alertIndex);
+        setAlarm(index, hour, min, alarmDelay);
+        writeAlarmsToEEPROM();
+
+        JsonArray alarams = payload.createNestedArray("alarms");
+
+        for (int i = 0; i < MAX_ALARMS; i++)
+        {
+          JsonObject alarmJson = alarams.createNestedObject();
+          alarmJson["hour"] = alarms[i].hour;
+          alarmJson["minute"] = alarms[i].min;
+          alarmJson["alarmDelay"] = alarms[i].alarmDelay;
+        }
       }
       else
       {
@@ -367,7 +378,7 @@ void handleVariable(AsyncWebServerRequest *request)
     JsonObject alarmJson = alarams.createNestedObject();
     alarmJson["hour"] = alarms[i].hour;
     alarmJson["minute"] = alarms[i].min;
-    alarmJson["alertIndex"] = alarms[i].alertIndex;
+    alarmJson["alarmDelay"] = alarms[i].alarmDelay;
   }
   String jsonString;
   serializeJson(json, jsonString);
