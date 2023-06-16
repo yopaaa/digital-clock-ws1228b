@@ -19,8 +19,7 @@ void writeAlarmsToEEPROM()
 
         EEPROM.write(address, alarms[i].hour);
         EEPROM.write(address + 1, alarms[i].min);
-        EEPROM.write(address + 2, alarms[i].alarmDelay / 100);
-        address += 3;
+        address += 2;
     }
     EEPROM.commit();
 }
@@ -39,13 +38,12 @@ void readAlarmsFromEEPROM()
 
         alarms[i].hour = EEPROM.read(address);
         alarms[i].min = EEPROM.read(address + 1);
-        alarms[i].alarmDelay = EEPROM.read(address + 2) * 100;
-        address += 3;
+        address += 2;
     }
 }
 
 // Fungsi untuk mengatur alarm pada indeks tertentu
-void setAlarm(int index, int hour, int min, int alarmDelay)
+void setAlarm(int index, int hour, int min)
 {
     Serial.print("\nset alarms ");
     Serial.print(index);
@@ -54,7 +52,6 @@ void setAlarm(int index, int hour, int min, int alarmDelay)
 
     alarms[index].hour = hour;
     alarms[index].min = min;
-    alarms[index].alarmDelay = alarmDelay;
 }
 
 int indexOfHour(int hour)
@@ -93,8 +90,7 @@ void checkAlarm(int hour, int minute)
         {
             Serial.print("\nAlert alarm ");
             Serial.print(i);
-            Serial.print("\n");
-            playAlarm(alarms[i].alarmDelay);
+            playAlarm(0);
             return;
         }
     }
