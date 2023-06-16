@@ -163,9 +163,8 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         int index = jsonDoc["index"].as<int>();
         int hour = jsonDoc["hour"].as<int>();
         int min = jsonDoc["min"].as<int>();
-        int alarmDelay = jsonDoc["alarmDelay"].as<int>();
 
-        setAlarm(index, hour, min, alarmDelay);
+        setAlarm(index, hour, min);
         writeAlarmsToEEPROM();
 
         JsonArray alarams = payload.createNestedArray("alarms");
@@ -175,7 +174,6 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
           JsonObject alarmJson = alarams.createNestedObject();
           alarmJson["hour"] = alarms[i].hour;
           alarmJson["minute"] = alarms[i].min;
-          alarmJson["alarmDelay"] = alarms[i].alarmDelay;
         }
       }
       else
@@ -378,7 +376,6 @@ void handleVariable(AsyncWebServerRequest *request)
     JsonObject alarmJson = alarams.createNestedObject();
     alarmJson["hour"] = alarms[i].hour;
     alarmJson["minute"] = alarms[i].min;
-    alarmJson["alarmDelay"] = alarms[i].alarmDelay;
   }
   String jsonString;
   serializeJson(json, jsonString);
