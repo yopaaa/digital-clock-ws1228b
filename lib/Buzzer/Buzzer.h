@@ -13,6 +13,7 @@ public:
     void on();
     void off();
     void beep(int timeout);
+    void toggle();
 };
 
 extern Buzzer myBuzzer;
