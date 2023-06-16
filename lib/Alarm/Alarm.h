@@ -9,7 +9,6 @@ struct Alarm
 {
     int hour;
     int min;
-    int alarmDelay;
 };
 
 // array to store alarm
@@ -18,6 +17,6 @@ extern int numAlarms;
 void readAlarmsFromEEPROM();
 void writeAlarmsToEEPROM();
 void checkAlarm(int hour, int minute);
-void setAlarm(int index, int hour, int min, int alarmDelay);
+void setAlarm(int index, int hour, int min);
 void playAlarm(int gap);
 #endif
