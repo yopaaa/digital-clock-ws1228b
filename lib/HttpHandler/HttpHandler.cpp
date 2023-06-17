@@ -163,8 +163,14 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
         int index = jsonDoc["index"].as<int>();
         int hour = jsonDoc["hour"].as<int>();
         int min = jsonDoc["min"].as<int>();
+        int days = jsonDoc["days"].as<int>();
+        int alertIndex = jsonDoc["alertIndex"].as<int>();
 
-        setAlarm(index, hour, min);
+        int binaryArray[7] = {0};
+
+        hexToBinaryArray(days, binaryArray);
+
+        setAlarm(index, binaryArray, hour, min, alertIndex);
         writeAlarmsToEEPROM();
 
         JsonArray alarams = payload.createNestedArray("alarms");
@@ -174,6 +180,13 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
           JsonObject alarmJson = alarams.createNestedObject();
           alarmJson["hour"] = alarms[i].hour;
           alarmJson["minute"] = alarms[i].min;
+          alarmJson["alertIndex"] = alarms[i].alertIndex;
+
+          JsonArray daysArray = alarmJson.createNestedArray("days");
+          for (int j = 0; j < 7; j++)
+          {
+            daysArray.add(alarms[i].days[j]);
+          }
         }
       }
       else
@@ -309,6 +322,7 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
 
         payload["isStaticIP"] = extractisStaticIP;
       }
+
       else
       {
         json["code"] = 400;
@@ -376,6 +390,13 @@ void handleVariable(AsyncWebServerRequest *request)
     JsonObject alarmJson = alarams.createNestedObject();
     alarmJson["hour"] = alarms[i].hour;
     alarmJson["minute"] = alarms[i].min;
+    alarmJson["alertIndex"] = alarms[i].alertIndex;
+
+    JsonArray daysArray = alarmJson.createNestedArray("days");
+    for (int j = 0; j < 7; j++)
+    {
+      daysArray.add(alarms[i].days[j]);
+    }
   }
   String jsonString;
   serializeJson(json, jsonString);
