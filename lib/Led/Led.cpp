@@ -6,7 +6,7 @@
 
 CRGB leds[NUM_LEDS];
 bool isBlink = true;
-int ledsLength = NUM_LEDS + NUM_DOTS;
+int ledsLength = NUM_LEDS + NUM_DOTS; // NUM_LEDS + NUM_DOTS
 
 const int Frame[][7] = {
     {1, 1, 1, 1, 1, 1, 0}, // Number 0
@@ -58,7 +58,7 @@ void PrintNumber(int num, String segment)
 {
     if (segment == "full")
     {
-        BlankDisplay(1);
+        BlankDisplay(0);
         if (num < 10) // 0-9
         {
             SetNumber(4, num);
@@ -165,7 +165,7 @@ void BlankSegment(int no)
     SetNumber(no, 10);
 }
 
-void BlinkDots()
+bool BlinkDots()
 {
     if (isBlink == true)
     {
@@ -176,7 +176,7 @@ void BlinkDots()
         BlankDots();
     }
     isBlink = !isBlink;
-    return;
+    return isBlink;
 }
 
 void BlankDots()
@@ -184,8 +184,8 @@ void BlankDots()
     for (int i = NUM_LEDS; i < ledsLength; i++)
     {
         leds[i] = CRGB(0, 0, 0);
+        FastLED.show();
     }
-    FastLED.show();
     return;
 }
 
@@ -194,8 +194,8 @@ void ShowDots()
     for (int i = NUM_LEDS; i < ledsLength; i++)
     {
         leds[i] = CRGB(RED, GREEN, BLUE);
+        FastLED.show();
     }
-    FastLED.show();
     return;
 }
 
@@ -203,7 +203,7 @@ void ShowDotsRgb(byte Red, byte Green, byte Blue)
 {
     for (int i = NUM_LEDS; i < ledsLength; i++)
     {
-        leds[i] = CRGB(RED, GREEN, BLUE);
+        leds[i] = CRGB(Red, Green, Blue);
     }
     FastLED.show();
     return;
