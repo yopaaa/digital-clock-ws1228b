@@ -1,11 +1,11 @@
 #include <EEPROM.h>
-#include <Var.h>
 #include "Alarm.h"
 #include "Buzzer.h"
+#include "ADDRESS.h"
 
 Alarm alarms[MAX_ALARMS] = {};
-int day = 0x11;
 
+// function to convert binary array to hexadecimal like {0,1,1,1,1,1,0} > 62
 void hexToBinaryArray(unsigned int hexValue, int *binaryArray)
 {
     for (int i = 7 - 1; i >= 0; i--)
@@ -15,6 +15,7 @@ void hexToBinaryArray(unsigned int hexValue, int *binaryArray)
     }
 }
 
+// function to convert hexadecimal to binary array like 62 > {0,1,1,1,1,1,0}
 unsigned int binaryArrayToHex(const int *binaryArray)
 {
     unsigned int hexValue = 0;
@@ -27,7 +28,7 @@ unsigned int binaryArrayToHex(const int *binaryArray)
     return hexValue;
 }
 
-// Fungsi untuk menulis data alarm ke EEPROM
+// function to write/saved alarm to eeprom.
 void writeAlarmsToEEPROM()
 {
     int address = ALARM_LIST_ADDRESS;
@@ -48,7 +49,7 @@ void writeAlarmsToEEPROM()
     EEPROM.commit();
 }
 
-// Fungsi untuk membaca data alarm dari EEPROM
+// function to read saved alarm from eeprom.
 void readAlarmsFromEEPROM()
 {
     int address = ALARM_LIST_ADDRESS;
@@ -78,7 +79,7 @@ void readAlarmsFromEEPROM()
     }
 }
 
-// Fungsi untuk mengatur alarm pada indeks tertentu
+// function to update or create a new alarm.
 void setAlarm(int index, int days[7], int hour, int min, int alertIndex)
 {
     Serial.print("\nset alarms ");
@@ -100,7 +101,7 @@ void setAlarm(int index, int days[7], int hour, int min, int alertIndex)
 }
 
 bool buzzerState = true;
-void playAlarm(int gap)
+void playAlarm(int gap) // function to play alarm
 {
     if (buzzerState)
     {
@@ -115,6 +116,7 @@ void playAlarm(int gap)
     delay(gap);
 }
 
+// function to check if there is an alarm at the current time.
 void checkAlarm(int day, int hour, int minute)
 {
     for (int i = 0; i < MAX_ALARMS; i++)
