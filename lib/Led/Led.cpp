@@ -1,8 +1,15 @@
 #include "Led.h"
-#include "Var.h"
 #include "WifiFunc.h"
-#include "EEPROMFunc.h"
-#include "FastLED.h"
+#include "Storage.h"
+#include <FastLED.h>
+
+#define LED_TYPE WS2812B
+
+byte RED = 255;        // value is 0 - 255
+byte GREEN = 0;        // value is 0 - 255
+byte BLUE = 0;         // value is 0 - 255
+byte BRIGHTNESS = 100; // value is 0 - 255
+
 
 CRGB leds[NUM_LEDS];
 bool isBlink = true;
@@ -205,6 +212,14 @@ void ShowDotsRgb(byte Red, byte Green, byte Blue)
     {
         leds[i] = CRGB(Red, Green, Blue);
     }
+    FastLED.show();
+    return;
+}
+
+void SetBrightness(byte val)
+{
+    BRIGHTNESS = val;
+    FastLED.setBrightness(val);
     FastLED.show();
     return;
 }
