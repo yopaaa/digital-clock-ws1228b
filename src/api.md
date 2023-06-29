@@ -6,119 +6,16 @@ This API provides endpoints for controlling a device.
 
 ### Endpoints
 
-## GET /ping
+
+
+
+## GET /info
 
 #### Example Request:
 
 ```bash
-GET /ping HTTP/1.1
-Host: <target ip>:3000
-```
-
-#### Example Response:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "message": "OK",
-    "CODE_VERSION": "v3",
-    "CycleCount": 172085510,
-    "SketchSize": 870976,
-    "version": 1,
-    "method": 1,
-    "url": "/ping",
-    "host": "<target ip>:3000",
-    "contentType": "",
-    "contentLength": 0,
-    "multipart": false
-}
-```
-
----
-## GET /variable
-
-#### Example Request:
-
-```bash
-GET /variable HTTP/1.1
-Host: <target ip>:3000
-```
-
-#### Example Response:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "payload": {
-        "CODE_VERSION": "v3",
-        "ssid": "ssid",
-        "APssid": "digital_clock",
-        "APpassword": "12345678zxcvbnm",
-        "RED": 255,
-        "GREEN": 255,
-        "BLUE": 0,
-        "BRIGHTNESS": 100,
-        "timeFormat": 12,
-        "displayMode": "clock",
-        "ColorMode": "",
-        "isStaticIP": true,
-        "IP": "1.1.0.1"
-    },
-    "code": 200,
-    "message": "OK",
-    "method": 1,
-    "url": "/variable"
-}
-```
-
----
-
-## POST /wifi/set
-
-#### Example Request:
-
-```bash
-POST /wifi/set HTTP/1.1
-Host: <target ip>:3000
-Content-Type: application/json
-
-{
-    "ssid": "your_ssid" ,
-    "password": "your_password"
-}
-```
-
-#### Example Response:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "payload": {
-        "ssid": "your_ssid"
-    },
-    "code": 200,
-    "message": "OK",
-    "method": 2,
-    "url": "/wifi/set"
-}
-```
-
----
-
-## POST /restart
-
-#### Example Request:
-
-```bash
-POST /restart HTTP/1.1
-Host: <target ip>:3000
-Content-Type: application/json
+GET http://{{host}}/info HTTP/1.1
+Content-Type: "application/json"
 
 {}
 ```
@@ -127,14 +24,112 @@ Content-Type: application/json
 
 ```bash
 HTTP/1.1 200 OK
+Content-Length: 325
+Content-Type: application/json
+Access-Control-Allow-Origin: *
+Connection: close
+Accept-Ranges: none
+
+{
+  "code": 200,
+  "message": "OK",
+  "endpoint": [
+    "192.168.18.62:3000/wifi",
+    "192.168.18.62:3000/color",
+    "192.168.18.62:3000/mode",
+    "192.168.18.62:3000/time",
+    "192.168.18.62:3000/info"
+  ],
+  "method": 1,
+  "url": "/info",
+  "args": 0,
+  "params": 0,
+  "CODE_VERSION": "v3.6.6",
+  "uptime": 286,
+  "isInternetConnection": true,
+  "flashChipSize": 4194304,
+  "SketchSize": 895488
+}
+
+```
+
+---
+## POST /wifi
+
+#### Example Request:
+
+```bash
+POST http://{{host}}/wifi HTTP/1.1
 Content-Type: application/json
 
 {
-    "payload": {},
-    "code": 200,
-    "message": "OK",
-    "method": 2,
-    "url": "/restart"
+}
+
+```
+
+#### Example Response:
+
+```bash
+HTTP/1.1 200 OK
+Content-Length: 258
+Content-Type: application/json
+Access-Control-Allow-Origin: *
+Connection: close
+Accept-Ranges: none
+
+{
+  "code": 200,
+  "message": "OK",
+  "payload": {
+    "STAssid": "Biznet_Store",
+    "STApassword": "",
+    "APssid": "digital_clock",
+    "APpassword": "12345678zxcvbnm",
+    "isStaticIP": false,
+    "ip": "192.168.18.62"
+  },
+  "info": {
+    "Gateway": "192.168.18.1",
+    "Subnet": "255.255.255.0",
+    "DNS1": "192.168.18.1"
+  }
+}
+```
+
+---
+
+## POST /color
+
+#### Example Request:
+
+```bash
+POST http://{{host}}/color HTTP/1.1
+Content-Type: application/json
+
+{
+}
+```
+
+#### Example Response:
+
+```bash
+HTTP/1.1 200 OK
+Content-Length: 110
+Content-Type: application/json
+Access-Control-Allow-Origin: *
+Connection: close
+Accept-Ranges: none
+
+{
+  "code": 200,
+  "message": "OK",
+  "payload": {
+    "red": 255,
+    "green": 0,
+    "blue": 0,
+    "brightness": 100,
+  },
+  "info": {}
 }
 ```
 
@@ -145,13 +140,10 @@ Content-Type: application/json
 #### Example Request:
 
 ```bash
-POST /mode HTTP/1.1
-Host: <target ip>:3000
+POST http://{{host}}/mode HTTP/1.1
 Content-Type: application/json
 
 {
-    "mode": "counter",
-    "limit": 100
 }
 ```
 
@@ -159,228 +151,175 @@ Content-Type: application/json
 
 ```bash
 HTTP/1.1 200 OK
+Content-Length: 170
 Content-Type: application/json
+Access-Control-Allow-Origin: *
+Connection: close
+Accept-Ranges: none
 
 {
-    "payload": {
-        "mode": "counter",
-        "limit": 100
-    },
-    "code": 200,
-    "message": "OK",
-    "method": 2,
-    "url": "/mode"
-}
-```
-
----
-
-## POST /timeformat
-
-#### Example Request:
-
-```bash
-POST /timeformat HTTP/1.1
-Host: <target ip>:3000
-Content-Type: application/json
-
-{
-    "format": 12
-}
-```
-
-#### Example Response:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "payload": {
-        "format": 12
-    },
-    "code": 200,
-    "message": "OK",
-    "method": 2,
-    "url": "/timeformat"
-}
-```
-
----
-
-## POST /brightness
-
-#### Example Request:
-
-```bash
-POST /brightness HTTP/1.1
-Host: <target ip>:3000
-Content-Type: application/json
-
-{
-    "brightness": 20
-}
-```
-
-#### Example Response:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "payload": {
-        "brightness": 20
-    },
-    "code": 200,
-    "message": "OK",
-    "method": 2,
-    "url": "/brightness"
-}
-```
-
----
-
-## POST /color/change
-
-#### Example Request:
-
-```bash
-POST /color/change HTTP/1.1
-Host: <target ip>:3000
-Content-Type: application/json
-
-{
-    "red": 0,
-    "green": 110,
-    "blue": 0,
-    "brightness": 10
-}
-```
-
-#### Example Response:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "payload": {
-        "red": 0,
-        "green": 110,
-        "blue": 0,
-    },
-    "code": 200,
-    "message": "OK",
-    "method": 2,
-    "url": "/color/change"
-}
-```
-
----
-
-## POST /color/mode
-
-#### Example Request:
-
-```bash
-POST /color/mode HTTP/1.1
-Host: <target ip>:3000
-Content-Type: application/json
-
-{
-    "mode": "random"
-}
-```
-
-#### Example Response:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "payload": {
-        "mode": "random"
-    },
-    "code": 200,
-    "message": "OK",
-    "method": 2,
-    "url": "/color/mode"
-}
-```
-
----
-
-## POST /staticIp
-
-#### Example Request:
-
-```bash
-POST /staticIp HTTP/1.1
-Host: <target ip>:3000
-Content-Type: application/json
-
-{
-    "isStaticIP": true,
-    "ip1": 192,
-    "ip2": 168,
-    "ip3": 0,
-    "ip4": 1
-}
-```
-
-#### Example Response:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-    "payload": {
-        "ip": "192.168.0.1",
-        "isStaticIP": true
-    },
-    "code": 200,
-    "message": "OK",
-    "method": 2,
-    "url": "/staticIp"
-}
-```
-
----
-
-## POST /settime
-
-#### Example Request:
-
-```bash
-POST /settime HTTP/1.1
-Host: <target ip>:3000
-Content-Type: application/json
-
-{
-  "timestamp": 1682478266
-}
-```
-
-#### Example Response:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "payload": {
-    "timestamp": 1682478266
-  },
   "code": 200,
   "message": "OK",
-  "method": 2,
-  "url": "/settime"
+  "payload": {
+    "mode": "clock",
+    "segment1": "hour",
+    "segment2": "min",
+    "scors1": 0,
+    "scors2": 0,
+    "limit": 120
+  },
+  "info": {
+    "counterCount": 0,
+    "countDownCount": 100
+  }
+}
+
+```
+
+---
+
+## POST /time
+
+curl -X POST -H "Content-Type: application/json" -d '{"timestamp":"'"$(date +%s)"'"}' http://10.10.10.50:3000/time
+
+#### Example Request:
+
+```bash
+POST http://{{host}}/time HTTP/1.1
+Content-Type: application/json
+
+{
+}
+
+```
+
+#### Example Response:
+
+```bash
+HTTP/1.1 200 OK
+Content-Length: 453
+Content-Type: application/json
+Access-Control-Allow-Origin: *
+Connection: close
+Accept-Ranges: none
+
+{
+  "code": 200,
+  "message": "OK",
+  "payload": {
+    "format": 24,
+    "gmtOffset_sec": 25200,
+    "timestamp": 1687335491,
+    "alarms": [
+      {
+        "hour": 0,
+        "minute": 0,
+        "alertIndex": 0,
+        "days": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "hour": 0,
+        "minute": 0,
+        "alertIndex": 0,
+        "days": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "hour": 0,
+        "minute": 0,
+        "alertIndex": 0,
+        "days": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "hour": 0,
+        "minute": 0,
+        "alertIndex": 0,
+        "days": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "hour": 0,
+        "minute": 0,
+        "alertIndex": 0,
+        "days": []
+      }
+    ]
+  },
+  "info": {
+    "ntpServer": "pool.ntp.org",
+    "daylightOffset_sec": 0
+  }
 }
 ```
 
 ---
 
+## DELETE /restart
 
+#### Example Request:
+
+```bash
+DELETE  http://{{host}}/restart HTTP/1.1
+Content-Type: application/json
+
+{
+}
+```
+
+#### Example Response:
+
+```bash
+{}
+```
+
+---
+
+## DELETE /reset
+
+#### Example Request:
+
+```bash
+DELETE  http://{{host}}/reset HTTP/1.1
+Content-Type: application/json
+
+{
+}
+```
+
+#### Example Response:
+
+```bash
+{}
+```
+
+---
