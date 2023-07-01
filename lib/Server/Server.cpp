@@ -12,7 +12,7 @@ Route routes[] = {
     {"/color", HTTP_POST, HandleColor},
     {"/mode", HTTP_POST, HandleMode},
     {"/time", HTTP_POST, HandleTime},
-    {"/info", HTTP_GET, HandleInfo}};
+    {"/info", HTTP_POST, HandleInfo}}; // harusnya HTTP_GET tapi ketika mengunakan mthod get mendapatkan masalah
 int numRoutes = sizeof(routes) / sizeof(Route);
 
 void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
@@ -63,7 +63,7 @@ void httpServer()
   server.onRequestBody(handleRequest);
 
   server.on(
-      "/", HTTP_GET, [](AsyncWebServerRequest *request)
+      "/", HTTP_GET, [](AsyncWebServerRequest *request )
       { request->send(200, "text/plain", DEVICES_NAME); });
 
   server.on(
