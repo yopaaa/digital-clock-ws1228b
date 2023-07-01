@@ -2,6 +2,7 @@
 #define EEPROM_FUNC
 
 #include <Arduino.h>
+#include <IPAddress.h>
 
 void setupEEPROM();
 void readWifiCredentials();
@@ -25,6 +26,7 @@ bool readBool(int address);
 void writeLong(int address, long value);
 long readLong(int address);
 
+void writeByte(int address, byte value);
 byte readByte(int address);
 
 #endif
