@@ -177,6 +177,7 @@ void readColor()
     RED = readByte(RED_ADDRESS);
     GREEN = readByte(GREEN_ADDRESS);
     BLUE = readByte(BLUE_ADDRESS);
+    BRIGHTNESS = readByte(BRIGHTNESS_ADDRESS);
     return;
 }
 
@@ -205,6 +206,8 @@ void readStaticIp()
 void setupEEPROM()
 {
     beginEEPROM(512);
+
+    readColor();
 
     if (!isEepromNotEmpty(511))
         resetEEPROM();
