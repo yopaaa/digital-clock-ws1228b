@@ -7,6 +7,7 @@ String segment1mode = "hour"; //value = | hour | isdst | mday | min | mon | sec 
 String segment2mode = "min";  //value = | hour | isdst | mday | min | mon | sec | wday | yday | year |
 
 String Mode = "clock";
+String colorMode = "solid";
 int counterCount = 0;
 int counterLimit = 120;
 int countDownCount = 100;
