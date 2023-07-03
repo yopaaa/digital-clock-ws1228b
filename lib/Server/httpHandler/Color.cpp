@@ -32,6 +32,7 @@ void HandleColor(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, D
     if (jsonDoc.containsKey("brightness"))
     {
         int brightness = jsonDoc["brightness"].as<int>();
+        writeByte(BRIGHTNESS_ADDRESS, brightness);
         SetBrightness(brightness);
     }
 
