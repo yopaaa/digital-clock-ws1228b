@@ -7,11 +7,17 @@ void HandleMode(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, Dy
 
     json["code"] = 200;
     json["message"] = "OK";
-    
+
     if (jsonDoc.containsKey("mode"))
     {
         String mode = jsonDoc["mode"].as<String>();
         setMode(mode);
+    }
+
+    if (jsonDoc.containsKey("colorMode"))
+    {
+        String colormode = jsonDoc["colorMode"].as<String>();
+        colorMode = colormode;
     }
 
     if (jsonDoc.containsKey("limit"))
@@ -57,6 +63,7 @@ void HandleMode(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, Dy
     }
 
     payload["mode"] = Mode;
+    payload["colorMode"] = colorMode;
     payload["segment1"] = segment1mode;
     payload["segment2"] = segment2mode;
     payload["scors1"] = scors1;
