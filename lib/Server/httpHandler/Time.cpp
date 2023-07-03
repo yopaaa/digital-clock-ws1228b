@@ -32,38 +32,34 @@ void HandleTime(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, Dy
 
     if (jsonDoc.containsKey("alarms"))
     {
-        JsonArray alarmsArray = jsonDoc["alarms"]; // Dapatkan array "alarms"
+        JsonObject alarmsArray = jsonDoc["alarms"];
 
-        for (JsonObject alarm : alarmsArray)
+        bool isValidSetAlarm = (alarmsArray.containsKey("index")) && (alarmsArray.containsKey("min")) && (alarmsArray.containsKey("hour")) && (alarmsArray.containsKey("days")) && (alarmsArray.containsKey("alertIndex"));
+        if (isValidSetAlarm)
         {
-            bool isValidSetAlarm = (jsonDoc.containsKey("index")) && (jsonDoc.containsKey("min")) && (jsonDoc.containsKey("hour")) && (jsonDoc.containsKey("days")) && (jsonDoc.containsKey("alertIndex"));
-            if (isValidSetAlarm)
-            {
-                int index = alarm["index"].as<int>();
-                int hour = alarm["hour"].as<int>();
-                int min = alarm["min"].as<int>();
-                int days = alarm["days"].as<int>();
-                int alertIndex = alarm["alertIndex"].as<int>();
+            int index = alarmsArray["index"].as<int>();
+            int hour = alarmsArray["hour"].as<int>();
+            int min = alarmsArray["min"].as<int>();
+            int days = alarmsArray["days"].as<int>();
+            int alertIndex = alarmsArray["alertIndex"].as<int>();
 
-                int binaryArray[7] = {0};
+            int binaryArray[7] = {0};
 
-                hexToBinaryArray(days, binaryArray);
-                setAlarm(index, binaryArray, hour, min, alertIndex);
-                writeAlarmsToEEPROM();
-            }
-            else
-            {
-                json["code"] = 400;
-                json["message"] = "Bad Request";
-            }
+            hexToBinaryArray(days, binaryArray);
+            setAlarm(index, binaryArray, hour, min, alertIndex);
+            writeAlarmsToEEPROM();
+        }
+        else
+        {
+            json["code"] = 400;
+            json["message"] = "Bad Request";
         }
     }
-    
+
     payload["format"] = timeFormat;
     payload["gmtOffset_sec"] = gmtOffset_sec;
 
     time_t now;
-    struct tm timeinfo;
     time(&now);
     payload["timestamp"] = now;
 
@@ -75,7 +71,7 @@ void HandleTime(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, Dy
     {
         JsonObject alarmJson = alarams.createNestedObject();
         alarmJson["hour"] = alarms[i].hour;
-        alarmJson["minute"] = alarms[i].min;
+        alarmJson["min"] = alarms[i].min;
         alarmJson["alertIndex"] = alarms[i].alertIndex;
 
         JsonArray daysArray = alarmJson.createNestedArray("days");
