@@ -1,9 +1,6 @@
 #include "HttpHandle.h"
 #include "Server.h"
-
-#if defined(ESP32)
 #include <AsyncElegantOTA.h>
-#endif
 
 AsyncWebServer server(3000);
 
@@ -88,9 +85,7 @@ void httpServer()
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });
 
-#if defined(ESP32)
   AsyncElegantOTA.begin(&server, APssid.c_str(), APpassword.c_str());
-#endif
   Serial.println("Starting server...");
   server.begin();
   Serial.println("Server started");
