@@ -5,7 +5,6 @@
 
 void printLocalTime()
 {
-    BlinkDots();
     struct tm timeinfo;
 
     if (!getLocalTime(&timeinfo))
@@ -21,6 +20,7 @@ void printLocalTime()
     }
 
     checkAlarm(timeinfo.tm_wday, timeinfo.tm_hour, timeinfo.tm_min);
+    BlinkDots();
 
     // Segmtnt 1 left
     if (segment1mode == "hour")
