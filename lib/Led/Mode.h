@@ -9,6 +9,7 @@ extern String segment2mode;
 extern int interval;
 
 extern String Mode;
+extern String colorMode;
 extern int counterCount;
 extern int counterLimit;
 extern int countDownCount;
@@ -22,6 +23,7 @@ extern String ntpServer;
 extern long gmtOffset_sec; // UTC+7
 extern int daylightOffset_sec;
 
+void setMode(String mode);
 void printCountDown();
 void printLocalTime();
 void printCounter();
