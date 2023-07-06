@@ -2,18 +2,19 @@
 #include "WifiFunc.h"
 #include "Storage.h"
 #include <FastLED.h>
+#include "Mode.h"
 
 #define LED_TYPE WS2812B
-
+String CODE_VERSION = "v4.0.0";
 byte RED = 255;        // value is 0 - 255
 byte GREEN = 0;        // value is 0 - 255
 byte BLUE = 0;         // value is 0 - 255
 byte BRIGHTNESS = 100; // value is 0 - 255
 
-
 CRGB leds[NUM_LEDS];
+CRGB dots[NUM_LEDS];
 bool isBlink = true;
-int ledsLength = NUM_LEDS + NUM_DOTS; // NUM_LEDS + NUM_DOTS
+// int ledsLength = NUM_LEDS + NUM_DOTS; // NUM_LEDS + NUM_DOTS
 
 const int Frame[][7] = {
     {1, 1, 1, 1, 1, 1, 0}, // Number 0
@@ -34,7 +35,8 @@ const int Frame[][7] = {
 
 void setupLED()
 {
-    FastLED.addLeds<LED_TYPE, LED_PIN, GRB>(leds, ledsLength);
+    FastLED.addLeds<LED_TYPE, LED_PIN, GRB>(leds, NUM_LEDS);
+    FastLED.addLeds<LED_TYPE, DOTS_PIN, GRB>(dots, NUM_DOTS);
     FastLED.setBrightness(BRIGHTNESS);
     return;
 }
@@ -144,7 +146,6 @@ void TestStartUp()
     Serial.println("");
     Serial.print("Code Version : ");
     Serial.println(CODE_VERSION);
-    readColor();
     BlankDisplay(0);
     for (int i = 0; i < NUM_LEDS; i++)
     {
@@ -174,23 +175,16 @@ void BlankSegment(int no)
 
 bool BlinkDots()
 {
-    if (isBlink == true)
-    {
-        ShowDots();
-    }
-    else
-    {
-        BlankDots();
-    }
+    isBlink == true ? ShowDots() : BlankDots();
     isBlink = !isBlink;
     return isBlink;
 }
 
 void BlankDots()
 {
-    for (int i = NUM_LEDS; i < ledsLength; i++)
+    for (int i = 0; i < NUM_LEDS; i++)
     {
-        leds[i] = CRGB(0, 0, 0);
+        dots[i] = CRGB(0, 0, 0);
         FastLED.show();
     }
     return;
@@ -198,9 +192,9 @@ void BlankDots()
 
 void ShowDots()
 {
-    for (int i = NUM_LEDS; i < ledsLength; i++)
+    for (int i = 0; i < NUM_LEDS; i++)
     {
-        leds[i] = CRGB(RED, GREEN, BLUE);
+        dots[i] = CRGB(RED, GREEN, BLUE);
         FastLED.show();
     }
     return;
@@ -208,11 +202,11 @@ void ShowDots()
 
 void ShowDotsRgb(byte Red, byte Green, byte Blue)
 {
-    for (int i = NUM_LEDS; i < ledsLength; i++)
+    for (int i = 0; i < NUM_LEDS; i++)
     {
-        leds[i] = CRGB(Red, Green, Blue);
+        dots[i] = CRGB(Red, Green, Blue);
+        FastLED.show();
     }
-    FastLED.show();
     return;
 }
 
