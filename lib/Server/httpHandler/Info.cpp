@@ -13,15 +13,9 @@ void HandleInfo(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, Dy
     json["params"] = request->params();
     json["CODE_VERSION"] = CODE_VERSION;
     json["uptime"] = millis() / 1000;
-    json["isInternetConnection"] = isInternetConnection();
-    json["flashChipSize"] = ESP.getFlashChipSize();
-    json["SketchSize"] = ESP.getSketchSize();
-
-    for (int i = 0; i < numRoutes; i++)
-    {
-        endpoint.add(host + routes[i].path);
-    }
-
+    // json["isInternetConnection"] = isInternetConnection();
+    // json["flashChipSize"] = ESP.getFlashChipSize();
+    // json["SketchSize"] = ESP.getSketchSize();
     String jsonString;
     serializeJson(json, jsonString);
     request->send(200, "application/json", jsonString);
