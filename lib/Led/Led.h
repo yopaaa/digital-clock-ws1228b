@@ -22,6 +22,8 @@ extern String CODE_VERSION;
 #define BUZZER_PIN 21
 #endif
 
+// #define for esp32 ship stand alone LED_PIN 26 DOTS_PIN 27 WIFI_AP_BTN 14 BUZZER_PIN 12
+
 extern byte RED;
 extern byte GREEN;
 extern byte BLUE;
