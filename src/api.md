@@ -24,7 +24,7 @@ Content-Type: "application/json"
 
 ```bash
 HTTP/1.1 200 OK
-Content-Length: 325
+Content-Length: 123
 Content-Type: application/json
 Access-Control-Allow-Origin: *
 Connection: close
@@ -33,22 +33,13 @@ Accept-Ranges: none
 {
   "code": 200,
   "message": "OK",
-  "endpoint": [
-    "192.168.18.62:3000/wifi",
-    "192.168.18.62:3000/color",
-    "192.168.18.62:3000/mode",
-    "192.168.18.62:3000/time",
-    "192.168.18.62:3000/info"
-  ],
-  "method": 1,
+  "endpoint": [],
+  "method": 2,
   "url": "/info",
   "args": 0,
   "params": 0,
-  "CODE_VERSION": "v3.6.6",
-  "uptime": 286,
-  "isInternetConnection": true,
-  "flashChipSize": 4194304,
-  "SketchSize": 895488
+  "CODE_VERSION": "v4.1.0",
+  "uptime": 928
 }
 
 ```
@@ -71,7 +62,7 @@ Content-Type: application/json
 
 ```bash
 HTTP/1.1 200 OK
-Content-Length: 258
+Content-Length: 259
 Content-Type: application/json
 Access-Control-Allow-Origin: *
 Connection: close
@@ -86,7 +77,7 @@ Accept-Ranges: none
     "APssid": "digital_clock",
     "APpassword": "12345678zxcvbnm",
     "isStaticIP": false,
-    "ip": "192.168.18.62"
+    "ip": "192.168.18.136"
   },
   "info": {
     "Gateway": "192.168.18.1",
@@ -151,7 +142,7 @@ Content-Type: application/json
 
 ```bash
 HTTP/1.1 200 OK
-Content-Length: 170
+Content-Length: 206
 Content-Type: application/json
 Access-Control-Allow-Origin: *
 Connection: close
@@ -162,10 +153,12 @@ Accept-Ranges: none
   "message": "OK",
   "payload": {
     "mode": "clock",
+    "colorMode": "solid",
     "segment1": "hour",
     "segment2": "min",
     "scors1": 0,
     "scors2": 0,
+    "isPause": false,
     "limit": 120
   },
   "info": {
@@ -173,7 +166,6 @@ Accept-Ranges: none
     "countDownCount": 100
   }
 }
-
 ```
 
 ---
