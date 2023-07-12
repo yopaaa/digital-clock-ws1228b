@@ -6,7 +6,7 @@
 #define BLUE_ADDRESS 3
 #define BRIGHTNESS_ADDRESS 4
 
-#define TIME_FORMAT_ADDRESS 6 // this address use to store time format 12 | 24
+#define TIME_FORMAT_ADDRESS 8 // this address use to store time format 12 | 24
 #define GMT_OFFSET_ADDRESS 10  // this address use to store gmt offset variable type is long, to store in eeprom he use 4 address
 
 #define SEGMENT_1_MODE_ADDRESS 15 // this address use to store string segment mode 1
