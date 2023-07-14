@@ -5,11 +5,12 @@
 #include "Mode.h"
 
 #define LED_TYPE WS2812B
-String CODE_VERSION = "v4.0.0";
+String CODE_VERSION = "v4.1.0";
 byte RED = 255;        // value is 0 - 255
 byte GREEN = 0;        // value is 0 - 255
 byte BLUE = 0;         // value is 0 - 255
 byte BRIGHTNESS = 100; // value is 0 - 255
+bool isPause = false;
 
 CRGB leds[NUM_LEDS];
 CRGB dots[NUM_LEDS];
