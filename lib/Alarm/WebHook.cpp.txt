@@ -1,0 +1,31 @@
+#include <HTTPClient.h>
+
+String webHookTargetURL = "https://example.com/webhook";
+
+void sendWebhook()
+{
+    if (webHookTargetURL.length() > 10)
+    {
+        // Buat objek HTTPClient
+        HTTPClient http;
+
+        // Kirim permintaan POST ke URL webhook
+        http.begin(webHookTargetURL);
+        int httpResponseCode = http.POST("");
+
+        // Periksa respons HTTP
+        if (httpResponseCode > 0)
+        {
+            Serial.print("Webhook sent successfully. Response code: ");
+            Serial.println(httpResponseCode);
+        }
+        else
+        {
+            Serial.print("Webhook failed. Error code: ");
+            Serial.println(httpResponseCode);
+        }
+
+        // Hentikan koneksi HTTP
+        http.end();
+    }
+}
