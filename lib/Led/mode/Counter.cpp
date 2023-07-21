@@ -3,19 +3,26 @@
 #include "Alarm.h"
 #include "Mode.h"
 
+unsigned long previousMillisCounter = 0;
+
 void printCounter()
 {
-    if (counterCount <= counterLimit)
+    unsigned long currentMillis = millis();
+
+    if ((currentMillis - previousMillisCounter >= interval) && (counterCount <= counterLimit))
     {
+        previousMillisCounter = currentMillis;
+
         PrintNumber(counterCount, "full");
-        counterCount++;
+        if (!isPause)
+            counterCount++;
         myBuzzer.off();
-        delay(interval);
     }
-    else
+
+    if ((currentMillis - previousMillisCounter >= (interval / 5)) && (counterCount >= counterLimit))
     {
-        playAlarm(200);
+        previousMillisCounter = currentMillis;
+
+        myBuzzer.toggle();
     }
 }
-
-
