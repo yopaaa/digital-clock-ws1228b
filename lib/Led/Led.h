@@ -29,6 +29,7 @@ extern byte GREEN;
 extern byte BLUE;
 extern byte BRIGHTNESS;
 
+extern bool isPause;
 
 void setupLED();
 void TestStartUp();
