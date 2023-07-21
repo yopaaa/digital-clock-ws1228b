@@ -144,9 +144,10 @@ void ErrorDisplay(int one, int two)
 
 void TestStartUp()
 {
-    Serial.println("");
-    Serial.print("Code Version : ");
-    Serial.println(CODE_VERSION);
+    Serial.print("\nCode Version : ");
+    Serial.print(CODE_VERSION);
+    Serial.print("\nDevices ID : ");
+    Serial.println(DEVICES_ID);
     BlankDisplay(0);
     for (int i = 0; i < NUM_LEDS; i++)
     {
