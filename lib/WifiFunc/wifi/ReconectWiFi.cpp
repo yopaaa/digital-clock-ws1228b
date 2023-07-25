@@ -16,8 +16,9 @@ void reconnectWiFiSTA()
 {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str()); // Connect to Wi-Fi using the saved SSID and password
-    String hostName = DEVICES_NAME + CODE_VERSION;
+    String hostName = DEVICES_NAME + DEVICES_ID;
     WiFi.setHostname(hostName.c_str());
+    WiFi.config(IP, Gateway, Subnet, DNS1);
     Serial.print("\nConnecting to WiFi....");
     return;
 }
@@ -28,7 +29,7 @@ void reconnectWiFi()
 {
     unsigned long currentMillis = millis();
 
-    if ((currentMillis - previousMillis1 >= (interval * 20)) && WiFi.getMode() == WIFI_STA)
+    if ((currentMillis - previousMillis1 >= (interval * 30)) && WiFi.getMode() == WIFI_STA)
     {
         previousMillis1 = currentMillis;
 
