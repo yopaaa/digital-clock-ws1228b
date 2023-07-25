@@ -1,9 +1,10 @@
 #include <Wire.h>
-#include "Var.h"
-#include "HttpHandler.h"
 #include "Led.h"
-#include "EEPROMFunc.h"
+#include "Storage.h"
 #include "WifiFunc.h"
+#include "Alarm.h"
+#include "Mode.h"
+#include "mqtt.h"
 
 void setup()
 {
@@ -17,18 +18,22 @@ void setup()
 #if defined(ESP32)
   pinMode(WIFI_AP_BTN, INPUT_PULLDOWN);
 #elif defined(ESP8266)
-  pinMode(WIFI_AP_BTN, INPUT_PULLDOWN_16);
+  pinMode(WIFI_AP_BTN, INPUT);
 #endif
-
+  BlankDots();
   TestStartUp();
   readWifiCredentials();
   digitalRead(WIFI_AP_BTN) == HIGH ? startWifiAp() : startWifiSta();
-  httpHandler();
+
+  // setAlarm
+  if (isEepromNotEmpty(ALARM_LIST_ADDRESS))
+    readAlarmsFromEEPROM();
 }
 
 void loop()
 {
-  if (ColorMode == "random")
+  mqttLoop();
+  if (colorMode == "random")
   {
     RED = random(1, 255);
     GREEN = random(1, 255);

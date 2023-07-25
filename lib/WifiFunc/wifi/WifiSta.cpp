@@ -1,6 +1,7 @@
 #include "WifiFunc.h"
 #include "Led.h"
 #include "Mode.h"
+#include "mqtt.h"
 
 #if defined(ESP8266)
 #include <ESP8266WiFi.h>
@@ -20,28 +21,29 @@ void startWifiSta()
 
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str()); // Connect to Wi-Fi using the saved SSID and password
-    WiFi.setHostname(DEVICES_NAME);
+    String hostName = DEVICES_NAME + DEVICES_ID;
+    WiFi.setHostname(hostName.c_str());
     BlankDots();
     int trying = 1;
 
     while (WiFi.status() != WL_CONNECTED)
     {
-        Serial.println(String(trying) + "." + "Connecting to WiFi...");
-        Serial.print("----- ssid:");
-        Serial.println(ssid);
-        Serial.print("----- password:");
-        Serial.println(password);
+        Serial.print("\n"+String(trying) + "." + "Connecting to WiFi...");
+        Serial.print("\n----- ssid:");
+        Serial.print(ssid);
+        Serial.print("\n----- password:");
+        Serial.print(password);
         ShowDotsRgb(255, 0, 0);
 
         if (trying == 100)
         {
-            Serial.println("cant connect to network");
+            Serial.print("\ncant connect to network");
             ESP.restart();
         }
         trying++;
         delay(1000);
     }
-    Serial.println("Connected to WiFi");
+    Serial.print("\nConnected to WiFi");
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer.c_str());
 
     Gateway = WiFi.gatewayIP();
@@ -50,14 +52,15 @@ void startWifiSta()
     if (isStaticIP)
     {
         WiFi.config(IP, Gateway, Subnet, DNS1);
-        Serial.println("Use static ip");
+        Serial.print("\nUse static ip");
     }
     else
     {
         IP = WiFi.localIP();
     }
 
-    IPAddress localIP = WiFi.localIP();
-    printIpAddressToDisplay(localIP);
+    Serial.print("\nIp address : ");
+    Serial.print(IP);
+    setupMqtt();
     return;
 }

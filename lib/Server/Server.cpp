@@ -24,18 +24,17 @@ void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, si
       return;
     }
 
-    DynamicJsonDocument json(1024);
+    DynamicJsonDocument json(2024);
 
     json["code"] = 404;
     json["message"] = "NOT FOUND";
 
     const String url = request->url();
     const int httpMethod = request->method(); // HTTP_GET: 1 | HTTP_POST: 2 | HTTP_DELETE: 4 | HTTP_PUT: 8 | HTTP_PATCH: 16
-    Serial.print("New request to ");
+    Serial.print("\nNew request to ");
     Serial.print(url);
     Serial.print(" with method : ");
     Serial.print(httpMethod);
-    Serial.print("\n");
 
     for (int i = 0; i < numRoutes; i++)
     {
@@ -86,7 +85,7 @@ void httpServer()
                     { request->send(404, "application/json", "{\"status\": \"Not found\"}"); });
 
   AsyncElegantOTA.begin(&server, APssid.c_str(), APpassword.c_str());
-  Serial.println("Starting server...");
+  Serial.print("\nStarting server...");
   server.begin();
-  Serial.println("Server started");
+  Serial.print("\nServer started");
 }

@@ -4,13 +4,10 @@
 #include <Arduino.h>
 #include "ADDRESS.h"
 
-#define DEVICES_NAME "Digital_clock"
-
+extern String DEVICES_NAME;
+extern String DEVICES_ID;
 
 #include <IPAddress.h>
-// #if defined(ESP8266)
-// #include <IPAddress.h>
-// #endif
 
 extern String ssid;
 extern String password;
@@ -26,7 +23,6 @@ extern IPAddress DNS1;    // auto asign on connect wifi network
 
 void startWifiAp();
 void startWifiSta();
-bool isInternetConnection();
-void printIpAddressToDisplay(IPAddress ip);
+void reconnectWiFi();
 
 #endif

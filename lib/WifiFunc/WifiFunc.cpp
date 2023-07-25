@@ -11,3 +11,6 @@ IPAddress IP(0, 0, 0, 0);
 IPAddress Gateway(0, 0, 0, 0);
 IPAddress Subnet(0, 0, 0, 0);
 IPAddress DNS1(0, 0, 0, 0);
+
+String DEVICES_NAME = "Digital_clock";
+String DEVICES_ID = "";

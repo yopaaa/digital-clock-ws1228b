@@ -23,4 +23,6 @@
 
 #define ALARM_LIST_ADDRESS 200 // this address use to store alarm list
 
+#define DEVICESS_ID_ADDRESS 400 // this address use to store alarm list
+
 #endif

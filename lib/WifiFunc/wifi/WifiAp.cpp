@@ -2,6 +2,7 @@
 #include "Buzzer.h"
 #include "Led.h"
 #include "Mode.h"
+#include "Server.h"
 
 #if defined(ESP8266)
 #include <ESP8266WiFi.h>
@@ -22,16 +23,18 @@ void startWifiAp()
     WiFi.softAP(APssid.c_str(), APpassword.c_str());
 
     myBuzzer.beep(50);
-    Serial.println("Access Point started");
+    Serial.print("\nAccess Point started");
     Serial.print("----- ssid:");
-    Serial.println(APssid);
-    Serial.print("----- pwd:");
-    Serial.println(APpassword);
+    Serial.print(APssid);
+    Serial.print("\n----- pwd:");
+    Serial.print(APpassword);
 
     IPAddress localIP = WiFi.softAPIP();
-    printIpAddressToDisplay(localIP);
+    Serial.print("\nIp address : ");
+    Serial.print(localIP);
     setMode("CLI");
     ShowDotsRgb(0, 0, 255);
+    httpServer();
     return;
 }
 

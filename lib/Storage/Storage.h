@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <IPAddress.h>
+#define PRINT_VARIABLE_NAME(var) Serial.print(#var)
 
 void setupEEPROM();
 void readWifiCredentials();
