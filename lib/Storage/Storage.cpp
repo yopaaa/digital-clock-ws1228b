@@ -17,19 +17,18 @@ bool isEepromNotEmpty(int address)
     {
         return true;
     }
-    Serial.print("EEPROM number ");
+    Serial.print("\nEEPROM number ");
     Serial.print(address);
-    Serial.print(" is empty\n");
+    Serial.print(" is empty");
     return false;
 }
 
 void writeString(int address, String value)
 {
-    Serial.print("successful writing ");
+    Serial.print("\nsuccessful writing ");
     Serial.print(value);
     Serial.print(" to address ");
     Serial.print(address);
-    Serial.println();
 
     int length = value.length();
     if (length > 30)
@@ -50,9 +49,8 @@ void writeString(int address, String value)
 }
 String readString(int address)
 {
-    Serial.print("Reading Strings on address ");
+    Serial.print("\nReading Strings on address ");
     Serial.print(address);
-    Serial.print("\n");
 
     int length = EEPROM.read(address);
 
@@ -78,11 +76,10 @@ void writeBool(int address, bool value)
     EEPROM.write(address, boolValue);
     EEPROM.commit();
 
-    Serial.print("successful writing ");
+    Serial.print("\nsuccessful writing ");
     Serial.print(value);
     Serial.print(" to address ");
     Serial.print(address);
-    Serial.println();
 }
 bool readBool(int address)
 {
@@ -99,11 +96,10 @@ void writeLong(int address, long value)
     }
     EEPROM.commit();
 
-    Serial.print("successful writing ");
+    Serial.print("\nsuccessful writing ");
     Serial.print(value);
     Serial.print(" to address ");
     Serial.print(address);
-    Serial.println();
 }
 long readLong(int address)
 {
@@ -137,6 +133,21 @@ void write(int address, int value)
     return;
 }
 
+String generateRandomID(int length)
+{
+    String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Karakter yang digunakan untuk menghasilkan ID
+    int charactersCount = characters.length();
+    String randomID = "";
+
+    for (int i = 0; i < length; i++)
+    {
+        int randomIndex = random(0, charactersCount);
+        randomID += characters[randomIndex];
+    }
+
+    return randomID;
+}
+
 void resetEEPROM()
 {
     int size = EEPROM.length();
@@ -154,7 +165,8 @@ void resetEEPROM()
     writeLong(GMT_OFFSET_ADDRESS, 7 * 3600);
     writeString(AP_SSID_ADDRESS, "digital_clock");
     writeString(AP_PASSWORD_ADDRESS, "12345678zxcvbnm");
-    Serial.println("all state is been reset...");
+    writeString(DEVICESS_ID_ADDRESS, generateRandomID(10));
+    Serial.print("\nall state is been reset...");
 }
 
 void readWifiCredentials()
@@ -209,27 +221,28 @@ void setupEEPROM()
 
     readColor();
 
-    if (!isEepromNotEmpty(511))
+    if ((!isEepromNotEmpty(511)) || (!isEepromNotEmpty(DEVICESS_ID_ADDRESS)))
         resetEEPROM();
 
     if (isEepromNotEmpty(TIME_FORMAT_ADDRESS))
-        read(TIME_FORMAT_ADDRESS) == 12
-            ? timeFormat = 12
-            : timeFormat = 24;
+        read(TIME_FORMAT_ADDRESS) >= 24
+            ? timeFormat = 24
+            : timeFormat = 12;
 
     if (isEepromNotEmpty(IS_STATIC_IP_ADDRESS))
         isStaticIP = readBool(IS_STATIC_IP_ADDRESS);
 
-    if (isEepromNotEmpty(GMT_OFFSET_ADDRESS))
-        gmtOffset_sec = readLong(GMT_OFFSET_ADDRESS);
+    gmtOffset_sec = readLong(GMT_OFFSET_ADDRESS);
 
     if (isEepromNotEmpty(SEGMENT_1_MODE_ADDRESS))
         segment1mode = readString(SEGMENT_1_MODE_ADDRESS);
     if (isEepromNotEmpty(SEGMENT_2_MODE_ADDRESS))
         segment2mode = readString(SEGMENT_2_MODE_ADDRESS);
 
+    DEVICES_ID = readString(DEVICESS_ID_ADDRESS);
+
     if (isStaticIP)
         readStaticIp();
-    
+
     return;
 }
