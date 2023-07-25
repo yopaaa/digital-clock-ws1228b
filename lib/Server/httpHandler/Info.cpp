@@ -12,6 +12,7 @@ void HandleInfo(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, Dy
     json["args"] = request->args();
     json["params"] = request->params();
     json["CODE_VERSION"] = CODE_VERSION;
+    json["DEVICES_ID"] = DEVICES_ID;
     json["uptime"] = millis() / 1000;
     // json["isInternetConnection"] = isInternetConnection();
     // json["flashChipSize"] = ESP.getFlashChipSize();

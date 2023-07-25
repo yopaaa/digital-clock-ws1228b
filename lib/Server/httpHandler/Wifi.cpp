@@ -70,7 +70,7 @@ void HandleWifi(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, Dy
         bool extractisStaticIP = jsonDoc["isStaticIP"].as<bool>();
         writeBool(IS_STATIC_IP_ADDRESS, extractisStaticIP);
     }
-    
+
     payload["STAssid"] = ssid;
     payload["STApassword"] = password;
     payload["APssid"] = APssid;

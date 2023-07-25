@@ -20,7 +20,7 @@ void printLocalTime()
             if (currentMillis >= 100)
                 ESP.restart();
 
-            Serial.println("Failed to obtain time");
+            Serial.print("\nFailed to obtain time");
             configTime(gmtOffset_sec, daylightOffset_sec, ntpServer.c_str());
             ErrorDisplay(0, 2);
             return;

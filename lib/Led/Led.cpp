@@ -10,7 +10,7 @@ byte RED = 255;        // value is 0 - 255
 byte GREEN = 0;        // value is 0 - 255
 byte BLUE = 0;         // value is 0 - 255
 byte BRIGHTNESS = 100; // value is 0 - 255
-bool isPause = false;
+bool isPause = true;
 
 CRGB leds[NUM_LEDS];
 CRGB dots[NUM_LEDS];

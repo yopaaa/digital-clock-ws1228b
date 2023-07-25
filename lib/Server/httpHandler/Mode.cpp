@@ -62,12 +62,19 @@ void HandleMode(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, Dy
         segment2mode = segment2;
     }
 
+    if (jsonDoc.containsKey("isPause"))
+    {
+        bool ispause = jsonDoc["isPause"].as<bool>();
+        isPause = ispause;
+    }
+
     payload["mode"] = Mode;
     payload["colorMode"] = colorMode;
     payload["segment1"] = segment1mode;
     payload["segment2"] = segment2mode;
     payload["scors1"] = scors1;
     payload["scors2"] = scors2;
+    payload["isPause"] = isPause;
     payload["limit"] = counterLimit;
 
     info["counterCount"] = counterCount;
