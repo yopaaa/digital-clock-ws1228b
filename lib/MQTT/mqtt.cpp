@@ -10,13 +10,18 @@
 #include "Mode.h"
 #include <ArduinoJson.h>
 
+const char *mqtt_server = "public.mqtthq.com";
+const int mqtt_port = 1883;
+WiFiClient espClient;
+PubSubClient client(espClient);
+
 void handleColor(byte *payload, unsigned int length)
 {
     char payloadBuffer[length + 1];
     memcpy(payloadBuffer, payload, length);
     payloadBuffer[length] = '\0';
 
-    DynamicJsonDocument jsonDoc(128);
+    DynamicJsonDocument jsonDoc(64);
     DeserializationError error = deserializeJson(jsonDoc, payloadBuffer);
 
     if (error)
@@ -53,77 +58,17 @@ void handleColor(byte *payload, unsigned int length)
         writeByte(BRIGHTNESS_ADDRESS, brightness);
         SetBrightness(brightness);
     }
-}
 
-void handleWiFi(byte *payload, unsigned int length)
-{
-    char payloadBuffer[length + 1];
-    memcpy(payloadBuffer, payload, length);
-    payloadBuffer[length] = '\0';
+    DynamicJsonDocument jsonPayload(64);
+    jsonPayload["red"] = RED;
+    jsonPayload["green"] = GREEN;
+    jsonPayload["blue"] = BLUE;
+    jsonPayload["brightness"] = BRIGHTNESS;
+    String jsonString;
+    serializeJson(jsonPayload, jsonString);
 
-    DynamicJsonDocument jsonDoc(128);
-    DeserializationError error = deserializeJson(jsonDoc, payloadBuffer);
-
-    if (error)
-    {
-        Serial.print("\ndeserializeJson() failed: ");
-        Serial.print(error.c_str());
-        return;
-    }
-
-    if (jsonDoc.containsKey("STAssid"))
-    {
-        String ssid = jsonDoc["STAssid"].as<String>();
-        IPAddress nullIP(0, 0, 0, 0);
-
-        writeString(SSID_ADDRESS, ssid);
-        writeStaticIp(nullIP);
-    }
-
-    if (jsonDoc.containsKey("STApassword"))
-    {
-        String password = jsonDoc["STApassword"].as<String>();
-        writeString(PASSWORD_ADDRESS, password);
-    }
-
-    if (jsonDoc.containsKey("APssid"))
-    {
-        String ssid = jsonDoc["APssid"].as<String>();
-        writeString(AP_SSID_ADDRESS, ssid);
-    }
-
-    if (jsonDoc.containsKey("APpassword"))
-    {
-        String password = jsonDoc["APpassword"].as<String>();
-        writeString(AP_PASSWORD_ADDRESS, password);
-    }
-
-    if (jsonDoc.containsKey("ip"))
-    {
-        String ip = jsonDoc["ip"].as<String>();
-
-        int octetIp[4];
-
-        int dot1 = ip.indexOf(".");
-        octetIp[0] = ip.substring(0, dot1).toInt();
-
-        int dot2 = ip.indexOf(".", dot1 + 1);
-        octetIp[1] = ip.substring(dot1 + 1, dot2).toInt();
-
-        int dot3 = ip.indexOf(".", dot2 + 1);
-        octetIp[2] = ip.substring(dot2 + 1, dot3).toInt();
-
-        octetIp[3] = ip.substring(dot3 + 1).toInt();
-
-        IPAddress combineIp(octetIp[0], octetIp[1], octetIp[2], octetIp[3]);
-        writeStaticIp(combineIp);
-    }
-
-    if (jsonDoc.containsKey("isStaticIP"))
-    {
-        bool extractisStaticIP = jsonDoc["isStaticIP"].as<bool>();
-        writeBool(IS_STATIC_IP_ADDRESS, extractisStaticIP);
-    }
+    String path = DEVICES_NAME + "-" + DEVICES_ID + "-info-color";
+    client.publish(path.c_str(), jsonString.c_str());
 }
 
 void handleTime(byte *payload, unsigned int length)
@@ -132,7 +77,7 @@ void handleTime(byte *payload, unsigned int length)
     memcpy(payloadBuffer, payload, length);
     payloadBuffer[length] = '\0';
 
-    DynamicJsonDocument jsonDoc(128);
+    DynamicJsonDocument jsonDoc(512);
     DeserializationError error = deserializeJson(jsonDoc, payloadBuffer);
 
     if (error)
@@ -182,6 +127,44 @@ void handleTime(byte *payload, unsigned int length)
             writeAlarmsToEEPROM();
         }
     }
+
+    DynamicJsonDocument jsonPayload(512);
+    jsonPayload["format"] = timeFormat;
+    jsonPayload["gmtOffset_sec"] = gmtOffset_sec;
+
+    time_t now;
+    time(&now);
+    jsonPayload["timestamp"] = now;
+
+    jsonPayload["ntpServer"] = ntpServer;
+    jsonPayload["daylightOffset_sec"] = daylightOffset_sec;
+
+    DynamicJsonDocument alarmsPayload(512);
+    JsonArray alarams = alarmsPayload.createNestedArray("alarms");
+
+    for (int i = 0; i < MAX_ALARMS; i++)
+    {
+        JsonObject alarmJson = alarams.createNestedObject();
+        alarmJson["hour"] = alarms[i].hour;
+        alarmJson["min"] = alarms[i].min;
+        alarmJson["alertIndex"] = alarms[i].alertIndex;
+
+        JsonArray daysArray = alarmJson.createNestedArray("days");
+        for (int j = 0; j < 7; j++)
+        {
+            daysArray.add(alarms[i].days[j]);
+        }
+    }
+
+    String jsonString;
+    String path = DEVICES_NAME + "-" + DEVICES_ID + "-info-time";
+    serializeJson(jsonPayload, jsonString);
+    client.publish(path.c_str(), jsonString.c_str());
+
+    String alaramsString;
+    String pathAlarms = DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms";
+    serializeJson(alarmsPayload, alaramsString);
+    client.publish(pathAlarms.c_str(), alaramsString.c_str());
 }
 
 void handleMode(byte *payload, unsigned int length)
@@ -190,7 +173,7 @@ void handleMode(byte *payload, unsigned int length)
     memcpy(payloadBuffer, payload, length);
     payloadBuffer[length] = '\0';
 
-    DynamicJsonDocument jsonDoc(128);
+    DynamicJsonDocument jsonDoc(300);
     DeserializationError error = deserializeJson(jsonDoc, payloadBuffer);
 
     if (error)
@@ -259,12 +242,26 @@ void handleMode(byte *payload, unsigned int length)
         bool ispause = jsonDoc["isPause"].as<bool>();
         isPause = ispause;
     }
-}
 
-const char *mqtt_server = "public.mqtthq.com";
-const int mqtt_port = 1883;
-WiFiClient espClient;
-PubSubClient client(espClient);
+    DynamicJsonDocument jsonPayload(300);
+    jsonPayload["mode"] = Mode;
+    jsonPayload["colorMode"] = colorMode;
+    jsonPayload["segment1"] = segment1mode;
+    jsonPayload["segment2"] = segment2mode;
+    jsonPayload["scors1"] = scors1;
+    jsonPayload["scors2"] = scors2;
+    jsonPayload["isPause"] = isPause;
+    jsonPayload["limit"] = counterLimit;
+
+    jsonPayload["counterCount"] = counterCount;
+    jsonPayload["countDownCount"] = countDownCount;
+
+    String jsonString;
+    serializeJson(jsonPayload, jsonString);
+
+    String path = DEVICES_NAME + "-" + DEVICES_ID + "-info-mode";
+    client.publish(path.c_str(), jsonString.c_str());
+}
 
 struct MqttTopicHandler
 {
@@ -274,7 +271,6 @@ struct MqttTopicHandler
 
 MqttTopicHandler topicHandlers[] = {
     {"-color", handleColor},
-    {"-wifi", handleWiFi},
     {"-time", handleTime},
     {"-mode", handleMode}};
 
@@ -304,7 +300,7 @@ void callback(char *topic, byte *payload, unsigned int length)
 
 void reconnect()
 {
-    while (!client.connected())
+    if (!client.connected())
     {
         Serial.print("\nAttempting MQTT connection...");
         if (client.connect("ESP32Client"))
@@ -314,8 +310,8 @@ void reconnect()
             {
                 String path = DEVICES_NAME + "-" + DEVICES_ID + topicHandlers[i].path;
                 client.subscribe(path.c_str());
-                Serial.print("\nMQTT Client subscribe to: ");
-                Serial.print(path);
+                // Serial.print("\nMQTT Client subscribe to: ");
+                // Serial.print(path);
             }
         }
         else
@@ -335,9 +331,12 @@ void setupMqtt()
 
 void mqttLoop()
 {
-    if (!client.connected())
+    if (WiFi.getMode() == WIFI_STA)
     {
-        reconnect();
+        if (!client.connected())
+        {
+            reconnect();
+        }
+        client.loop();
     }
-    client.loop();
 }
