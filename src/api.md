@@ -4,9 +4,7 @@
 
 This API provides endpoints for controlling a device.
 
-### Endpoints
-
-## POST /wifi
+### POST /wifi
 
 #### Example Request:
 
@@ -53,7 +51,7 @@ Accept-Ranges: none
 
 ---
 
-## DELETE /restart
+### DELETE /restart
 
 #### Example Request:
 
@@ -73,7 +71,7 @@ Content-Type: application/json
 
 ---
 
-## DELETE /reset
+### DELETE /reset
 
 #### Example Request:
 
@@ -115,6 +113,7 @@ Example Payload:
   "brightness": 130
 }
 ```
+>This payload can be used when sending data to the topics above.
 
 #### DEVICES_NAME + "-" + DEVICES_ID + "-time"
 Topic Description:
@@ -130,6 +129,8 @@ Example Payload:
 "gmtOffset_sec": 25200
 }
 ```
+>This payload can be used when sending data to the topics above, except for properties ntpServer and daylightOffset_sec.
+
 Additionally, ESP32 will also send data to the topic DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms" in the following format:
 
 ```json
@@ -142,6 +143,7 @@ Additionally, ESP32 will also send data to the topic DEVICES_NAME + "-" + DEVICE
 }
 ```
 This data will be sent five times consecutively, according to the maximum alarms.
+>This payload can be used when sending data to the topics above.
 
 #### DEVICES_NAME + "-" + DEVICES_ID + "-wifi"
 Topic Description:
@@ -158,6 +160,7 @@ Example Payload:
 "ip": "10.10.10.11"
 }
 ```
+>This payload can be used when sending data to the topics above.
 
 #### DEVICES_NAME + "-" + DEVICES_ID + "-mode"
 Topic Description:
@@ -179,6 +182,7 @@ Example Payload:
 }
 ```
 Additionally, the ESP32 will send data to the topic DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms" in the same format as mentioned in the DEVICES_NAME + "-" + DEVICES_ID + "-time" topic.
+> This payload can be used when sending data to the topics above, except for properties counterCount and countDownCount.
 
 #### DEVICES_NAME + "-" + DEVICES_ID + "-restart"
 Topic Description:
