@@ -68,7 +68,15 @@ void handleColor(byte *payload, unsigned int length)
     serializeJson(jsonPayload, jsonString);
 
     String path = DEVICES_NAME + "-" + DEVICES_ID + "-info-color";
-    client.publish(path.c_str(), jsonString.c_str());
+    if (client.publish(path.c_str(), jsonString.c_str()))
+    {
+        Serial.print("\nSuccess to publish to topic: " + path);
+    }
+    else
+    {
+        Serial.print("\nFailed to publish to topic: " + path + "with package size: ");
+        Serial.print(jsonString.length());
+    }
 }
 
 void handleTime(byte *payload, unsigned int length)
@@ -128,43 +136,56 @@ void handleTime(byte *payload, unsigned int length)
         }
     }
 
-    DynamicJsonDocument jsonPayload(512);
-    jsonPayload["format"] = timeFormat;
-    jsonPayload["gmtOffset_sec"] = gmtOffset_sec;
-
+    DynamicJsonDocument jsonPayload(256);
     time_t now;
     time(&now);
     jsonPayload["timestamp"] = now;
-
     jsonPayload["ntpServer"] = ntpServer;
     jsonPayload["daylightOffset_sec"] = daylightOffset_sec;
-
-    DynamicJsonDocument alarmsPayload(512);
-    JsonArray alarams = alarmsPayload.createNestedArray("alarms");
-
-    for (int i = 0; i < MAX_ALARMS; i++)
-    {
-        JsonObject alarmJson = alarams.createNestedObject();
-        alarmJson["hour"] = alarms[i].hour;
-        alarmJson["min"] = alarms[i].min;
-        alarmJson["alertIndex"] = alarms[i].alertIndex;
-
-        JsonArray daysArray = alarmJson.createNestedArray("days");
-        for (int j = 0; j < 7; j++)
-        {
-            daysArray.add(alarms[i].days[j]);
-        }
-    }
+    jsonPayload["format"] = timeFormat;
+    jsonPayload["gmtOffset_sec"] = gmtOffset_sec;
 
     String jsonString;
     String path = DEVICES_NAME + "-" + DEVICES_ID + "-info-time";
     serializeJson(jsonPayload, jsonString);
-    client.publish(path.c_str(), jsonString.c_str());
+    if (client.publish(path.c_str(), jsonString.c_str()))
+    {
+        Serial.print("\nSuccess to publish to topic: " + path);
+    }
+    else
+    {
+        Serial.print("\nFailed to publish to topic: " + path + "with package size: ");
+        Serial.print(jsonString.length());
+    }
 
-    String alaramsString;
-    String pathAlarms = DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms";
-    serializeJson(alarmsPayload, alaramsString);
-    client.publish(pathAlarms.c_str(), alaramsString.c_str());
+    DynamicJsonDocument alarmsPayload(512);
+
+    for (int i = 0; i < MAX_ALARMS; i++)
+    {
+        alarmsPayload["index"] = i;
+        alarmsPayload["hour"] = alarms[i].hour;
+        alarmsPayload["min"] = alarms[i].min;
+        alarmsPayload["alertIndex"] = alarms[i].alertIndex;
+
+        JsonArray daysArray = alarmsPayload.createNestedArray("days");
+        for (int j = 0; j < 7; j++)
+        {
+            daysArray.add(alarms[i].days[j]);
+        }
+
+        String alaramsString;
+        String pathAlarms = DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms";
+        serializeJson(alarmsPayload, alaramsString);
+        if (client.publish(pathAlarms.c_str(), alaramsString.c_str()))
+        {
+            Serial.print("\nSuccess to publish to topic: " + pathAlarms);
+        }
+        else
+        {
+            Serial.print("\nFailed to publish to topic: " + pathAlarms + "with package size: ");
+            Serial.print(pathAlarms.length());
+        }
+    }
 }
 
 void handleMode(byte *payload, unsigned int length)
@@ -260,7 +281,120 @@ void handleMode(byte *payload, unsigned int length)
     serializeJson(jsonPayload, jsonString);
 
     String path = DEVICES_NAME + "-" + DEVICES_ID + "-info-mode";
-    client.publish(path.c_str(), jsonString.c_str());
+    if (client.publish(path.c_str(), jsonString.c_str()))
+    {
+        Serial.print("\nSuccess to publish to topic: " + path);
+    }
+    else
+    {
+        Serial.print("\nFailed to publish to topic: " + path + "with package size: ");
+        Serial.print(jsonString.length());
+    }
+}
+
+void handleRestart(byte *payload, unsigned int length)
+{
+    delay(500);
+    ESP.restart();
+}
+
+void handleWiFi(byte *payload, unsigned int length)
+{
+    char payloadBuffer[length + 1];
+    memcpy(payloadBuffer, payload, length);
+    payloadBuffer[length] = '\0';
+
+    DynamicJsonDocument jsonDoc(300);
+    DeserializationError error = deserializeJson(jsonDoc, payloadBuffer);
+
+    if (error)
+    {
+        Serial.print("\ndeserializeJson() failed: ");
+        Serial.print(error.c_str());
+        return;
+    }
+
+    if (jsonDoc.containsKey("STAssid"))
+    {
+        String ssid = jsonDoc["STAssid"].as<String>();
+        IPAddress nullIP(0, 0, 0, 0);
+
+        writeString(SSID_ADDRESS, ssid);
+        writeStaticIp(nullIP);
+    }
+
+    if (jsonDoc.containsKey("STApassword"))
+    {
+        String password = jsonDoc["STApassword"].as<String>();
+        writeString(PASSWORD_ADDRESS, password);
+    }
+
+    if (jsonDoc.containsKey("APssid"))
+    {
+        String ssid = jsonDoc["APssid"].as<String>();
+        writeString(AP_SSID_ADDRESS, ssid);
+    }
+
+    if (jsonDoc.containsKey("APpassword"))
+    {
+        String password = jsonDoc["APpassword"].as<String>();
+        writeString(AP_PASSWORD_ADDRESS, password);
+    }
+
+    if (jsonDoc.containsKey("ip"))
+    {
+        String ip = jsonDoc["ip"].as<String>();
+
+        int octetIp[4];
+
+        int dot1 = ip.indexOf(".");
+        octetIp[0] = ip.substring(0, dot1).toInt();
+
+        int dot2 = ip.indexOf(".", dot1 + 1);
+        octetIp[1] = ip.substring(dot1 + 1, dot2).toInt();
+
+        int dot3 = ip.indexOf(".", dot2 + 1);
+        octetIp[2] = ip.substring(dot2 + 1, dot3).toInt();
+
+        octetIp[3] = ip.substring(dot3 + 1).toInt();
+
+        IPAddress combineIp(octetIp[0], octetIp[1], octetIp[2], octetIp[3]);
+        writeStaticIp(combineIp);
+    }
+
+    if (jsonDoc.containsKey("isStaticIP"))
+    {
+        bool extractisStaticIP = jsonDoc["isStaticIP"].as<bool>();
+        writeBool(IS_STATIC_IP_ADDRESS, extractisStaticIP);
+    }
+
+    DynamicJsonDocument jsonPayload(300);
+
+    jsonPayload["STAssid"] = ssid;
+    jsonPayload["STApassword"] = password;
+    jsonPayload["APssid"] = APssid;
+    jsonPayload["APpassword"] = APpassword;
+    jsonPayload["isStaticIP"] = isStaticIP;
+    jsonPayload["ip"] = IP;
+
+    String jsonString;
+    serializeJson(jsonPayload, jsonString);
+
+    String path = DEVICES_NAME + "-" + DEVICES_ID + "-info-wifi";
+    if (client.publish(path.c_str(), jsonString.c_str()))
+    {
+        Serial.print("\nSuccess to publish to topic: " + path);
+    }
+    else
+    {
+        Serial.print("\nFailed to publish to topic: " + path + "with package size: ");
+        Serial.print(jsonString.length());
+    }
+}
+
+void handlePING(byte *payload, unsigned int length)
+{
+    myBuzzer.beep(10);
 }
 
 struct MqttTopicHandler
@@ -272,6 +406,9 @@ struct MqttTopicHandler
 MqttTopicHandler topicHandlers[] = {
     {"-color", handleColor},
     {"-time", handleTime},
+    {"-restart", handleRestart},
+    {"-wifi", handleWiFi},
+    {"-ping", handlePING},
     {"-mode", handleMode}};
 
 const int numTopicHandlers = sizeof(topicHandlers) / sizeof(topicHandlers[0]);
@@ -303,9 +440,13 @@ void reconnect()
     if (!client.connected())
     {
         Serial.print("\nAttempting MQTT connection...");
-        if (client.connect("ESP32Client"))
+        String path = DEVICES_NAME + "-" + DEVICES_ID;
+
+        if (client.connect(path.c_str()))
         {
-            Serial.print("connected");
+            Serial.print("connected with id: ");
+            Serial.print(path);
+
             for (int i = 0; i < numTopicHandlers; i++)
             {
                 String path = DEVICES_NAME + "-" + DEVICES_ID + topicHandlers[i].path;
@@ -327,6 +468,8 @@ void setupMqtt()
 {
     client.setServer(mqtt_server, mqtt_port);
     client.setCallback(callback);
+    Serial.print("\nMax mqtt package size is: ");
+    Serial.print(MQTT_MAX_PACKET_SIZE);
 }
 
 void mqttLoop()
