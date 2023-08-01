@@ -1,4 +1,4 @@
-# @hostname = 192.168.0.5
+@hostname = 192.168.15.1
 @port = 3000
 @host = {{hostname}}:{{port}}
 
@@ -6,118 +6,23 @@
 GET http://{{host}}/ping HTTP/1.1
 
 
-
 ###
-GET http://{{host}}/variable HTTP/1.1
-
+GET http://{{host}}/ HTTP/1.1
 
 
 ###
-GET http://{{host}}/isInternetConnection HTTP/1.1
-
-
-
-###
-POST http://{{host}}/wifi/set HTTP/1.1
+POST http://{{host}}/wifi HTTP/1.1
 Content-Type: application/json
 
 {
-    "ssid": "your_ssid" ,
-    "password": "your_password"
-}
-
-
-###
-POST http://{{host}}/restart HTTP/1.1
-Content-Type: application/json
-
-{
-
+    "STAssid": "Biznet",
+    "STApassword": "Connecting!ndones1@"
 }
 
 ###
-POST http://{{host}}/test HTTP/1.1
+DELETE  http://{{host}}/restart HTTP/1.1
 Content-Type: application/json
 
 {
-
 }
-
-###
-POST http://{{host}}/mode HTTP/1.1
-Content-Type: application/json
-
-{
-    "mode": "counter",
-    "limit": 100
-}
-
-###
-POST http://{{host}}/segment/mode HTTP/1.1
-Content-Type: application/json
-
-{
-   "segment1": "hour",
-   "segment2": "min"
-}
-
-###
-POST http://{{host}}/timeformat HTTP/1.1
-Content-Type: application/json
-
-{
-    "format": 12
-}
-
-
-###
-POST http://{{host}}/brightness HTTP/1.1
-Content-Type: application/json
-
-{
-    "brightness": 100
-}
-
-
-###
-POST http://{{host}}/color/change HTTP/1.1
-Content-Type: application/json
-
-{
-    "red": 220,
-    "green": 50,
-    "blue": 0,
-    "brightness": 150
-}
-
-
-###
-POST http://{{host}}/color/mode HTTP/1.1
-Content-Type: application/json
-
-{
-    "mode": "random"
-}
-
-
-###
-POST http://{{host}}/staticIp HTTP/1.1
-Content-Type: application/json
-
-{
-  "isStaticIP": true,
-  "ip": "10.10.10.50"
-}
-
-
-
-###
-POST http://{{host}}/settime HTTP/1.1
-Content-Type: application/json
-
-{
-  "timestamp": 1682478266
-}
-
-
 
