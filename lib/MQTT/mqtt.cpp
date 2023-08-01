@@ -1,5 +1,9 @@
 #include "PubSubClient.h"
-#include "WiFi.h"
+#if defined(ESP8266)
+#include <ESP8266WiFi.h>
+#elif defined(ESP32)
+#include <WiFi.h>
+#endif
 #include "WifiFunc.h"
 
 #include "Storage.h"
@@ -112,28 +116,9 @@ void handleTime(byte *payload, unsigned int length)
     if ((jsonDoc.containsKey("gmtOffset_sec")))
     {
         long gmtOffset = jsonDoc["gmtOffset_sec"].as<long>();
+        gmtOffset_sec = gmtOffset;
         writeLong(GMT_OFFSET_ADDRESS, gmtOffset);
-    }
-
-    if (jsonDoc.containsKey("alarms"))
-    {
-        JsonObject alarmsArray = jsonDoc["alarms"];
-
-        bool isValidSetAlarm = (alarmsArray.containsKey("index")) && (alarmsArray.containsKey("min")) && (alarmsArray.containsKey("hour")) && (alarmsArray.containsKey("days")) && (alarmsArray.containsKey("alertIndex"));
-        if (isValidSetAlarm)
-        {
-            int index = alarmsArray["index"].as<int>();
-            int hour = alarmsArray["hour"].as<int>();
-            int min = alarmsArray["min"].as<int>();
-            int days = alarmsArray["days"].as<int>();
-            int alertIndex = alarmsArray["alertIndex"].as<int>();
-
-            int binaryArray[7] = {0};
-
-            hexToBinaryArray(days, binaryArray);
-            setAlarm(index, binaryArray, hour, min, alertIndex);
-            writeAlarmsToEEPROM();
-        }
+        configTime(gmtOffset_sec, daylightOffset_sec, ntpServer.c_str());
     }
 
     DynamicJsonDocument jsonPayload(256);
@@ -157,33 +142,66 @@ void handleTime(byte *payload, unsigned int length)
         Serial.print("\nFailed to publish to topic: " + path + "with package size: ");
         Serial.print(jsonString.length());
     }
+}
 
-    DynamicJsonDocument alarmsPayload(512);
+void handleAlarms(byte *payload, unsigned int length)
+{
+    char payloadBuffer[length + 1];
+    memcpy(payloadBuffer, payload, length);
+    payloadBuffer[length] = '\0';
+
+    DynamicJsonDocument jsonDoc(512);
+    DeserializationError error = deserializeJson(jsonDoc, payloadBuffer);
+
+    if (error)
+    {
+        Serial.print("\ndeserializeJson() failed: ");
+        Serial.print(error.c_str());
+        return;
+    }
+
+    if (jsonDoc.containsKey("alarms"))
+    {
+        JsonObject alarmsArray = jsonDoc["alarms"];
+
+        bool isValidSetAlarm = (alarmsArray.containsKey("index")) && (alarmsArray.containsKey("min")) && (alarmsArray.containsKey("hour")) && (alarmsArray.containsKey("days")) && (alarmsArray.containsKey("alertIndex"));
+        if (isValidSetAlarm)
+        {
+            int index = alarmsArray["index"].as<int>();
+            int hour = alarmsArray["hour"].as<int>();
+            int min = alarmsArray["min"].as<int>();
+            int days = alarmsArray["days"].as<int>();
+            int alertIndex = alarmsArray["alertIndex"].as<int>();
+
+            int binaryArray[7] = {0};
+
+            hexToBinaryArray(days, binaryArray);
+            setAlarm(index, binaryArray, hour, min, alertIndex);
+            writeAlarmsToEEPROM();
+        }
+    }
+
+    DynamicJsonDocument jsonPayload(512);
 
     for (int i = 0; i < MAX_ALARMS; i++)
     {
-        alarmsPayload["index"] = i;
-        alarmsPayload["hour"] = alarms[i].hour;
-        alarmsPayload["min"] = alarms[i].min;
-        alarmsPayload["alertIndex"] = alarms[i].alertIndex;
+        jsonPayload["index"] = i;
+        jsonPayload["hour"] = alarms[i].hour;
+        jsonPayload["min"] = alarms[i].min;
+        jsonPayload["alertIndex"] = alarms[i].alertIndex;
+        jsonPayload["days"] = binaryArrayToHex(alarms[i].days);
 
-        JsonArray daysArray = alarmsPayload.createNestedArray("days");
-        for (int j = 0; j < 7; j++)
+        String jsonString;
+        String path = DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms";
+        serializeJson(jsonPayload, jsonString);
+        if (client.publish(path.c_str(), jsonString.c_str()))
         {
-            daysArray.add(alarms[i].days[j]);
-        }
-
-        String alaramsString;
-        String pathAlarms = DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms";
-        serializeJson(alarmsPayload, alaramsString);
-        if (client.publish(pathAlarms.c_str(), alaramsString.c_str()))
-        {
-            Serial.print("\nSuccess to publish to topic: " + pathAlarms);
+            Serial.print("\nSuccess to publish to topic: " + path);
         }
         else
         {
-            Serial.print("\nFailed to publish to topic: " + pathAlarms + "with package size: ");
-            Serial.print(pathAlarms.length());
+            Serial.print("\nFailed to publish to topic: " + path + "with package size: ");
+            Serial.print(path.length());
         }
     }
 }
@@ -262,6 +280,18 @@ void handleMode(byte *payload, unsigned int length)
     {
         bool ispause = jsonDoc["isPause"].as<bool>();
         isPause = ispause;
+    }
+
+    if (jsonDoc.containsKey("counterCount"))
+    {
+        int numbers = jsonDoc["counterCount"].as<int>();
+        counterCount = numbers;
+    }
+
+    if (jsonDoc.containsKey("countDownCount"))
+    {
+        int numbers = jsonDoc["countDownCount"].as<int>();
+        countDownCount = numbers;
     }
 
     DynamicJsonDocument jsonPayload(300);
@@ -371,7 +401,7 @@ void handleWiFi(byte *payload, unsigned int length)
     DynamicJsonDocument jsonPayload(300);
 
     jsonPayload["STAssid"] = ssid;
-    jsonPayload["STApassword"] = password;
+    jsonPayload["STApassword"] = "*********";
     jsonPayload["APssid"] = APssid;
     jsonPayload["APpassword"] = APpassword;
     jsonPayload["isStaticIP"] = isStaticIP;
@@ -394,7 +424,7 @@ void handleWiFi(byte *payload, unsigned int length)
 
 void handlePING(byte *payload, unsigned int length)
 {
-    myBuzzer.beep(10);
+    myBuzzer.beep(50);
 }
 
 struct MqttTopicHandler
@@ -406,6 +436,7 @@ struct MqttTopicHandler
 MqttTopicHandler topicHandlers[] = {
     {"-color", handleColor},
     {"-time", handleTime},
+    {"-alarms", handleAlarms},
     {"-restart", handleRestart},
     {"-wifi", handleWiFi},
     {"-ping", handlePING},
@@ -440,16 +471,16 @@ void reconnect()
     if (!client.connected())
     {
         Serial.print("\nAttempting MQTT connection...");
-        String path = DEVICES_NAME + "-" + DEVICES_ID;
+        String ID = DEVICES_NAME + "-" + DEVICES_ID;
 
-        if (client.connect(path.c_str()))
+        if (client.connect(ID.c_str()))
         {
             Serial.print("connected with id: ");
-            Serial.print(path);
+            Serial.print(ID);
 
             for (int i = 0; i < numTopicHandlers; i++)
             {
-                String path = DEVICES_NAME + "-" + DEVICES_ID + topicHandlers[i].path;
+                String path = ID + topicHandlers[i].path;
                 client.subscribe(path.c_str());
                 // Serial.print("\nMQTT Client subscribe to: ");
                 // Serial.print(path);
