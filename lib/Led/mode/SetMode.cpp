@@ -9,7 +9,7 @@ String segment2mode = "min";  //value = | hour | isdst | mday | min | mon | sec 
 String Mode = "clock";
 String colorMode = "solid";
 int counterCount = 0;
-int counterLimit = 120;
+int counterLimit = 180;
 int countDownCount = 100;
 int timeFormat = 24;
 
