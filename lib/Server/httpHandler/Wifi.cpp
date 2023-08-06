@@ -1,14 +1,5 @@
 #include "HttpHandle.h"
 
-/*
-when making a request, it can contain JSON:
-{
-    "STAssid": <value>,
-    "STApassword": <value>,
-    "APssid": <value>,
-    "APpassword": <value>,
-}
-*/
 void HandleWifi(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, DynamicJsonDocument &json)
 {
     JsonObject payload = json.createNestedObject("payload");
@@ -77,6 +68,11 @@ void HandleWifi(AsyncWebServerRequest *request, DynamicJsonDocument &jsonDoc, Dy
     payload["APpassword"] = APpassword;
     payload["isStaticIP"] = isStaticIP;
     payload["ip"] = IP;
+
+    json["CODE_VERSION"] = CODE_VERSION;
+
+    json["DEVICES_ID"] = DEVICES_NAME + "-" + DEVICES_ID;
+    json["uptime"] = millis() / 1000;
 
     info["Gateway"] = Gateway;
     info["Subnet"] = Subnet;
