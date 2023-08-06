@@ -6,10 +6,11 @@ AsyncWebServer server(3000);
 
 Route routes[] = {
     {"/wifi", HTTP_POST, HandleWifi},
-    {"/color", HTTP_POST, HandleColor},
-    {"/mode", HTTP_POST, HandleMode},
-    {"/time", HTTP_POST, HandleTime},
-    {"/info", HTTP_POST, HandleInfo}}; // harusnya HTTP_GET tapi ketika mengunakan mthod get mendapatkan masalah
+    // {"/color", HTTP_POST, HandleColor},
+    // {"/mode", HTTP_POST, HandleMode},
+    // {"/time", HTTP_POST, HandleTime},
+    // {"/info", HTTP_POST, HandleInfo}
+};
 int numRoutes = sizeof(routes) / sizeof(Route);
 
 void handleRequest(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
@@ -59,8 +60,8 @@ void httpServer()
   server.onRequestBody(handleRequest);
 
   server.on(
-      "/", HTTP_GET, [](AsyncWebServerRequest *request )
-      { request->send(200, "text/plain", DEVICES_NAME); });
+      "/", HTTP_GET, [](AsyncWebServerRequest *request)
+      { request->send(200, "text/plain", DEVICES_NAME + "-" + DEVICES_ID); });
 
   server.on(
       "/ping", HTTP_GET, [](AsyncWebServerRequest *request)
