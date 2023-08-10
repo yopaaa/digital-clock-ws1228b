@@ -13,10 +13,10 @@ void printCountDown()
     {
         previousMillisCountDown = currentMillis;
 
-        PrintNumber(countDownCount, "full");
         if (!isPause)
             countDownCount--;
         myBuzzer.off();
+        PrintNumber(countDownCount, "full");
     }
 
     if ((currentMillis - previousMillisCountDown >= (interval / 5)) && (countDownCount <= 0))
