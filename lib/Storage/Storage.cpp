@@ -158,6 +158,7 @@ void resetEEPROM()
     EEPROM.put(RED_ADDRESS, 255);
     EEPROM.put(GREEN_ADDRESS, 0);
     EEPROM.put(BLUE_ADDRESS, 0);
+    EEPROM.put(BRIGHTNESS_ADDRESS, 100);
     EEPROM.put(TIME_FORMAT_ADDRESS, 24);
     EEPROM.commit();
 
@@ -165,7 +166,10 @@ void resetEEPROM()
     writeLong(GMT_OFFSET_ADDRESS, 7 * 3600);
     writeString(AP_SSID_ADDRESS, "digital_clock");
     writeString(AP_PASSWORD_ADDRESS, "12345678zxcvbnm");
-    writeString(DEVICESS_ID_ADDRESS, generateRandomID(10));
+
+    if (!isEepromNotEmpty(DEVICESS_ID_ADDRESS))
+        writeString(DEVICESS_ID_ADDRESS, generateRandomID(14));
+
     Serial.print("\nall state is been reset...");
 }
 
@@ -190,6 +194,10 @@ void readColor()
     GREEN = readByte(GREEN_ADDRESS);
     BLUE = readByte(BLUE_ADDRESS);
     BRIGHTNESS = readByte(BRIGHTNESS_ADDRESS);
+
+    if (BRIGHTNESS == 0)
+        BRIGHTNESS = 1;
+
     return;
 }
 
@@ -233,6 +241,9 @@ void setupEEPROM()
         isStaticIP = readBool(IS_STATIC_IP_ADDRESS);
 
     gmtOffset_sec = readLong(GMT_OFFSET_ADDRESS);
+
+    if (gmtOffset_sec == 0)
+        gmtOffset_sec = 7 * 3600;
 
     if (isEepromNotEmpty(SEGMENT_1_MODE_ADDRESS))
         segment1mode = readString(SEGMENT_1_MODE_ADDRESS);
