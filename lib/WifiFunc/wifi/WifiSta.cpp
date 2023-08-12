@@ -19,16 +19,16 @@ void startWifiSta()
         return;
     }
 
+    String hostName = DEVICES_NAME + "-" + DEVICES_ID;
+    WiFi.setHostname(hostName.c_str());
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str()); // Connect to Wi-Fi using the saved SSID and password
-    String hostName = DEVICES_NAME + DEVICES_ID;
-    WiFi.setHostname(hostName.c_str());
     BlankDots();
     int trying = 1;
 
     while (WiFi.status() != WL_CONNECTED)
     {
-        Serial.print("\n"+String(trying) + "." + "Connecting to WiFi...");
+        Serial.print("\n" + String(trying) + "." + "Connecting to WiFi...");
         Serial.print("\n----- ssid:");
         Serial.print(ssid);
         Serial.print("\n----- password:");
@@ -44,7 +44,6 @@ void startWifiSta()
         delay(1000);
     }
     Serial.print("\nConnected to WiFi");
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer.c_str());
 
     Gateway = WiFi.gatewayIP();
     Subnet = WiFi.subnetMask();
@@ -61,6 +60,8 @@ void startWifiSta()
 
     Serial.print("\nIp address : ");
     Serial.print(IP);
+
+    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer.c_str());
     setupMqtt();
     return;
 }

@@ -24,7 +24,7 @@ void startWifiAp()
 
     myBuzzer.beep(50);
     Serial.print("\nAccess Point started");
-    Serial.print("----- ssid:");
+    Serial.print("\n----- ssid:");
     Serial.print(APssid);
     Serial.print("\n----- pwd:");
     Serial.print(APpassword);
