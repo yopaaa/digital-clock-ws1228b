@@ -30,15 +30,19 @@ void setup()
     readAlarmsFromEEPROM();
 }
 
-void loop()
+void isRandomColorMode()
 {
-  mqttLoop();
   if (colorMode == "random")
   {
     RED = random(1, 255);
     GREEN = random(1, 255);
     BLUE = random(1, 255);
   }
+}
 
+void loop()
+{
+  mqttLoop();
+  isRandomColorMode();
   mainLoop();
 }
