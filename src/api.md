@@ -131,7 +131,9 @@ Example Payload:
 ```
 >This payload can be used when sending data to the topics above, except for properties ntpServer and daylightOffset_sec.
 
-Additionally, ESP32 will also send data to the topic DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms" in the following format:
+#### DEVICES_NAME + "-" + DEVICES_ID + "-alarms"
+Topic Description:
+When a message is published to this topic, the ESP32 will send data to the topic __DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms"__ in the following format:
 
 ```json
 {
@@ -139,7 +141,7 @@ Additionally, ESP32 will also send data to the topic DEVICES_NAME + "-" + DEVICE
 "hour": 0,
 "min": 0,
 "alertIndex": 0,
-"days": [0, 0, 0, 0, 0, 0, 0]
+"days": 127
 }
 ```
 This data will be sent five times consecutively, according to the maximum alarms.
@@ -181,15 +183,14 @@ Example Payload:
 "countDownCount": 100
 }
 ```
-Additionally, the ESP32 will send data to the topic DEVICES_NAME + "-" + DEVICES_ID + "-info-alarms" in the same format as mentioned in the DEVICES_NAME + "-" + DEVICES_ID + "-time" topic.
-> This payload can be used when sending data to the topics above, except for properties counterCount and countDownCount.
+> This payload can be used when sending data to the topics above
 
 #### DEVICES_NAME + "-" + DEVICES_ID + "-restart"
 Topic Description:
 When a message is published to this topic, the ESP32 will restart the device.
 
-## Note
-- The properties from the -info-color, -info-time, -info-wifi, and -info-mode topics can be used when sending data to the corresponding -color, -time, -wifi, and -mode topics.
-- The properties ntpServer and daylightOffset_sec are not used when sending data to the -color and -wifi topics, respectively.
-- The properties counterCount and countDownCount are not used when sending data to the -color topic.
-- The properties ntpServer and daylightOffset_sec in the -info-time topic and counterCount and countDownCount in the -info-mode topic are not used when sending data to the corresponding -time and -mode topics.
+#### DEVICES_NAME + "-" + DEVICES_ID + "-restart"
+Topic Description:
+When a message is published to this topic, the ESP32 will bepp the buzzer.
+
+---
