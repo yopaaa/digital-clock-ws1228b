@@ -2,6 +2,7 @@
 #include "Led.h"
 #include "Mode.h"
 #include "mqtt.h"
+#include "Server.h"
 
 #if defined(ESP8266)
 #include <ESP8266WiFi.h>
@@ -63,5 +64,6 @@ void startWifiSta()
 
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer.c_str());
     setupMqtt();
+    httpServer();
     return;
 }
